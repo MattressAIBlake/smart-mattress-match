@@ -13,7 +13,7 @@ const Index = () => {
           <div className="flex items-center gap-2">
             <Moon className="h-8 w-8 text-primary" />
             <div>
-              <h1 className="text-2xl font-bold">3Z Mattress</h1>
+              <h1 className="text-2xl font-bold">Mattress Wizard</h1>
               <p className="text-xs text-muted-foreground">Premium Sleep Solutions</p>
             </div>
           </div>
@@ -62,7 +62,7 @@ const Index = () => {
             Premium Brands You Trust
           </h2>
           <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            All mattresses from the renowned 3Z family of brands
+            All mattresses from renowned premium brands
           </p>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
             {["Helix", "Leesa", "Birch", "Plank", "Brooklyn Bedding"].map((brand) => (
@@ -93,7 +93,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t py-8 bg-muted/50">
         <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>&copy; 2024 3Z Mattress. All rights reserved.</p>
+          <p>&copy; 2024 Mattress Wizard. All rights reserved.</p>
           <p className="text-sm mt-2">Helix • Leesa • Birch • Plank • Brooklyn Bedding</p>
         </div>
       </footer>

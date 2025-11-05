@@ -74,7 +74,7 @@ const ProductDetail = () => {
           <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <Moon className="h-8 w-8 text-primary" />
             <div>
-              <h1 className="text-2xl font-bold">3Z Mattress</h1>
+              <h1 className="text-2xl font-bold">Mattress Wizard</h1>
               <p className="text-xs text-muted-foreground">Premium Sleep Solutions</p>
             </div>
           </Link>
@@ -151,7 +151,7 @@ const ProductDetail = () => {
                 <li>✓ Premium materials for lasting comfort</li>
                 <li>✓ Advanced support technology</li>
                 <li>✓ Temperature regulation</li>
-                <li>✓ Made by trusted 3Z brands</li>
+                <li>✓ Made by trusted premium brands</li>
               </ul>
             </div>
           </div>
