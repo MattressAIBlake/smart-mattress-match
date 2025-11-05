@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Loader2, MessageCircle } from "lucide-react";
+import { Send, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -111,27 +110,41 @@ export const MattressAIChat = () => {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto h-[700px] flex flex-col shadow-lg border-primary/10 backdrop-blur-sm bg-card/95">
-      <div className="p-6 border-b border-primary/10 bg-gradient-to-b from-primary/5 to-transparent">
-        <h2 className="text-xl font-bold text-foreground">Your AI Sleep Expert</h2>
-        <p className="text-sm text-muted-foreground mt-1 font-medium">No sales pitch. Just science.</p>
+    <div className="w-full min-h-[800px] flex flex-col bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30 rounded-3xl p-8 md:p-12">
+      {/* Header Badge */}
+      <div className="flex justify-center mb-8">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/20">
+          <Sparkles className="h-4 w-4 text-primary" />
+          <span className="text-sm font-medium text-foreground">AI-Powered Sleep Matching</span>
+        </div>
       </div>
 
-      <ScrollArea className="flex-1 p-6" ref={scrollRef}>
-        <div className="space-y-5">
+      {/* Hero Title */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+          Find Your Perfect Mattress
+        </h1>
+        <p className="text-lg text-muted-foreground">
+          No showrooms. No pushy sales. Just honest recommendations.
+        </p>
+      </div>
+
+      {/* Messages Area */}
+      <ScrollArea className="flex-1 mb-8 px-4" ref={scrollRef}>
+        <div className="space-y-6 max-w-3xl mx-auto">
           {messages.map((message, idx) => (
             <div
               key={idx}
               className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
             >
               <div
-                className={`max-w-[85%] rounded-2xl p-5 transition-all duration-300 ${
+                className={`max-w-[80%] rounded-3xl px-6 py-4 transition-all duration-300 ${
                   message.role === "user"
-                    ? "bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-md"
-                    : "bg-muted/50 border border-border/50 shadow-sm hover:shadow-md hover:scale-[1.01]"
+                    ? "bg-primary text-primary-foreground shadow-lg"
+                    : "bg-white/70 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/20 shadow-md"
                 }`}
               >
-                <p className="text-[15px] whitespace-pre-wrap leading-relaxed" style={{ WebkitFontSmoothing: 'antialiased' }}>
+                <p className="text-base leading-relaxed" style={{ WebkitFontSmoothing: 'antialiased' }}>
                   {message.content}
                 </p>
               </div>
@@ -139,7 +152,7 @@ export const MattressAIChat = () => {
           ))}
           {isLoading && messages[messages.length - 1]?.role === "user" && (
             <div className="flex justify-start animate-fade-in">
-              <div className="bg-muted/50 border border-border/50 rounded-2xl p-5 shadow-sm">
+              <div className="bg-white/70 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/20 rounded-3xl px-6 py-4 shadow-md">
                 <Loader2 className="h-5 w-5 animate-spin text-primary" />
               </div>
             </div>
@@ -147,26 +160,29 @@ export const MattressAIChat = () => {
         </div>
       </ScrollArea>
 
-      <div className="p-6 border-t border-primary/10">
-        <div className="flex gap-3">
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Ask me anything..."
-            disabled={isLoading}
-            className="flex-1 h-14 text-[15px] bg-background/50 border-border/50 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 shadow-inner"
-          />
-          <Button 
-            onClick={sendMessage} 
-            disabled={isLoading || !input.trim()} 
-            size="icon"
-            className="h-14 w-14 transition-transform hover:scale-105 shadow-md"
-          >
-            {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
-          </Button>
+      {/* Input Area */}
+      <div className="max-w-4xl mx-auto w-full">
+        <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl border border-white/40 dark:border-white/20 p-4">
+          <div className="flex items-center gap-3">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Ask about firmness, cooling, back pain..."
+              disabled={isLoading}
+              className="flex-1 border-0 bg-transparent text-base placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:ring-offset-0 h-12"
+            />
+            <Button 
+              onClick={sendMessage} 
+              disabled={isLoading || !input.trim()} 
+              size="icon"
+              className="h-12 w-12 rounded-full transition-transform hover:scale-110 shadow-lg"
+            >
+              {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
+            </Button>
+          </div>
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
