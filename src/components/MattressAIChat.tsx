@@ -94,11 +94,14 @@ export const MattressAIChat = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const scrollToBottom = () => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  };
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    scrollToBottom();
   }, [messages]);
 
   const sendMessage = async () => {
@@ -119,6 +122,7 @@ export const MattressAIChat = () => {
         }
         return [...prev, { role: "assistant", content: assistantContent }];
       });
+      scrollToBottom();
     };
 
     try {
@@ -172,10 +176,12 @@ export const MattressAIChat = () => {
       }
 
       setIsLoading(false);
+      inputRef.current?.focus();
     } catch (error) {
       console.error("Chat error:", error);
       toast.error("Failed to send message. Please try again.");
       setIsLoading(false);
+      inputRef.current?.focus();
     }
   };
 
@@ -242,6 +248,7 @@ export const MattressAIChat = () => {
         <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl border border-white/40 dark:border-white/20 p-4">
           <div className="flex items-center gap-3">
             <Input
+              ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
