@@ -1,3 +1,5 @@
+import { toast } from "sonner";
+
 export const SHOPIFY_API_VERSION = '2025-07';
 export const SHOPIFY_STORE_PERMANENT_DOMAIN = 'smart-mattress-match-4z87c.myshopify.com';
 export const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
@@ -9,6 +11,7 @@ export interface ShopifyProduct {
     title: string;
     description: string;
     handle: string;
+    vendor: string;
     priceRange: {
       minVariantPrice: {
         amount: string;
@@ -56,6 +59,7 @@ const STOREFRONT_QUERY = `
           title
           description
           handle
+          vendor
           priceRange {
             minVariantPrice {
               amount
@@ -97,6 +101,53 @@ const STOREFRONT_QUERY = `
   }
 `;
 
+const PRODUCT_BY_HANDLE_QUERY = `
+  query GetProductByHandle($handle: String!) {
+    productByHandle(handle: $handle) {
+      id
+      title
+      description
+      handle
+      vendor
+      priceRange {
+        minVariantPrice {
+          amount
+          currencyCode
+        }
+      }
+      images(first: 10) {
+        edges {
+          node {
+            url
+            altText
+          }
+        }
+      }
+      variants(first: 20) {
+        edges {
+          node {
+            id
+            title
+            price {
+              amount
+              currencyCode
+            }
+            availableForSale
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
+      }
+      options {
+        name
+        values
+      }
+    }
+  }
+`;
+
 export async function storefrontApiRequest(query: string, variables: any = {}) {
   const response = await fetch(SHOPIFY_STOREFRONT_URL, {
     method: 'POST',
@@ -109,6 +160,13 @@ export async function storefrontApiRequest(query: string, variables: any = {}) {
       variables,
     }),
   });
+
+  if (response.status === 402) {
+    toast.error("Shopify: Payment required", {
+      description: "Shopify API access requires an active Shopify billing plan. Your store needs to be upgraded to a paid plan. Visit https://admin.shopify.com to upgrade.",
+    });
+    return;
+  }
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
@@ -126,4 +184,12 @@ export async function storefrontApiRequest(query: string, variables: any = {}) {
 export async function fetchProducts(limit = 20, query?: string) {
   const data = await storefrontApiRequest(STOREFRONT_QUERY, { first: limit, query });
   return data.data.products.edges as ShopifyProduct[];
+}
+
+export async function fetchProductByHandle(handle: string) {
+  const data = await storefrontApiRequest(PRODUCT_BY_HANDLE_QUERY, {
+    handle,
+  });
+
+  return data.data.productByHandle;
 }
