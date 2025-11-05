@@ -89,10 +89,14 @@ export const FeaturedProduct = () => {
                   ))}
                   <span className="text-sm text-muted-foreground">(2,847 reviews)</span>
                 </div>
-                <p className="text-3xl font-bold text-primary mb-4">
-                  {price.currencyCode} {parseFloat(price.amount).toFixed(2)}
-                  <span className="text-base text-muted-foreground ml-2">from</span>
-                </p>
+                <div className="space-y-1">
+                  <p className="text-3xl font-bold text-primary">
+                    ${parseFloat(price.amount).toFixed(0)}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Queen size price
+                  </p>
+                </div>
               </div>
 
               <div className="space-y-3 mb-6 text-sm">
@@ -115,17 +119,9 @@ export const FeaturedProduct = () => {
               </div>
 
               <div className="flex gap-3">
-                <Button
-                  onClick={handleAddToCart}
-                  className="flex-1"
-                  size="lg"
-                >
-                  <ShoppingCart className="w-4 h-4 mr-2" />
-                  Add to Cart
-                </Button>
                 <Link to={`/product/${product.handle}`} className="flex-1">
-                  <Button variant="outline" className="w-full" size="lg">
-                    View Details
+                  <Button className="w-full" size="lg">
+                    Select Size & Checkout
                   </Button>
                 </Link>
               </div>

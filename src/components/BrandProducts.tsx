@@ -136,23 +136,29 @@ export const BrandProducts = () => {
                             {product.node.title}
                           </CardTitle>
                         </Link>
-                        <CardDescription className="line-clamp-2 text-sm">
+                        <CardDescription className="line-clamp-2 text-sm mb-4">
                           {product.node.description || "Premium mattress for exceptional sleep"}
                         </CardDescription>
-                        <p className="text-xl font-bold text-primary mt-3">
-                          {price.currencyCode} {parseFloat(price.amount).toFixed(2)}
-                        </p>
+                        <div className="space-y-1">
+                          <p className="text-xl font-bold text-primary">
+                            ${parseFloat(price.amount).toFixed(0)}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Queen size price
+                          </p>
+                        </div>
                       </CardContent>
 
                       <CardFooter className="p-4 pt-0">
-                        <Button
-                          onClick={() => handleAddToCart(product)}
-                          className="w-full"
-                          size="sm"
-                        >
-                          <ShoppingCart className="w-4 h-4 mr-2" />
-                          Add to Cart
-                        </Button>
+                        <Link to={`/product/${product.node.handle}`} className="w-full">
+                          <Button
+                            variant="outline"
+                            className="w-full"
+                            size="sm"
+                          >
+                            View Details
+                          </Button>
+                        </Link>
                       </CardFooter>
                     </Card>
                   );
