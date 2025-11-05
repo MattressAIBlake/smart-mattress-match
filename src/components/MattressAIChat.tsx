@@ -12,7 +12,7 @@ export const MattressAIChat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hi! I'm your personal mattress expert. I'll help you find the perfect mattress from our premium brands: Helix, Leesa, Birch, Plank, and Brooklyn Bedding. Let's start - what's your primary sleep position?",
+      content: "Forget the showroom. Forget the sales pitch. I know every mattress inside and out—Helix, Leesa, Birch, Plank, Brooklyn Bedding. Let's find your perfect match. What's your primary sleep position?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -111,55 +111,59 @@ export const MattressAIChat = () => {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto h-[600px] flex flex-col shadow-card">
-      <div className="p-4 border-b bg-muted">
-        <div className="flex items-center gap-2">
-          <MessageCircle className="h-5 w-5 text-primary" />
-          <h2 className="text-lg font-semibold text-foreground">AI Mattress Expert</h2>
-        </div>
-        <p className="text-sm text-muted-foreground mt-1">Find your perfect mattress match</p>
+    <Card className="w-full max-w-2xl mx-auto h-[700px] flex flex-col shadow-lg border-primary/10 backdrop-blur-sm bg-card/95">
+      <div className="p-6 border-b border-primary/10 bg-gradient-to-b from-primary/5 to-transparent">
+        <h2 className="text-xl font-bold text-foreground">Your AI Sleep Expert</h2>
+        <p className="text-sm text-muted-foreground mt-1 font-medium">No sales pitch. Just science.</p>
       </div>
 
-      <ScrollArea className="flex-1 p-4" ref={scrollRef}>
-        <div className="space-y-4">
+      <ScrollArea className="flex-1 p-6" ref={scrollRef}>
+        <div className="space-y-5">
           {messages.map((message, idx) => (
             <div
               key={idx}
-              className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+              className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
             >
               <div
-                className={`max-w-[80%] rounded-lg p-3 ${
+                className={`max-w-[85%] rounded-2xl p-5 transition-all duration-300 ${
                   message.role === "user"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted"
+                    ? "bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-md"
+                    : "bg-muted/50 border border-border/50 shadow-sm hover:shadow-md hover:scale-[1.01]"
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                <p className="text-[15px] whitespace-pre-wrap leading-relaxed" style={{ WebkitFontSmoothing: 'antialiased' }}>
+                  {message.content}
+                </p>
               </div>
             </div>
           ))}
           {isLoading && messages[messages.length - 1]?.role === "user" && (
-            <div className="flex justify-start">
-              <div className="bg-muted rounded-lg p-3">
-                <Loader2 className="h-4 w-4 animate-spin" />
+            <div className="flex justify-start animate-fade-in">
+              <div className="bg-muted/50 border border-border/50 rounded-2xl p-5 shadow-sm">
+                <Loader2 className="h-5 w-5 animate-spin text-primary" />
               </div>
             </div>
           )}
         </div>
       </ScrollArea>
 
-      <div className="p-4 border-t">
-        <div className="flex gap-2">
+      <div className="p-6 border-t border-primary/10">
+        <div className="flex gap-3">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Type your message..."
+            placeholder="Ask me anything..."
             disabled={isLoading}
-            className="flex-1"
+            className="flex-1 h-14 text-[15px] bg-background/50 border-border/50 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 shadow-inner"
           />
-          <Button onClick={sendMessage} disabled={isLoading || !input.trim()} size="icon">
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+          <Button 
+            onClick={sendMessage} 
+            disabled={isLoading || !input.trim()} 
+            size="icon"
+            className="h-14 w-14 transition-transform hover:scale-105 shadow-md"
+          >
+            {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
           </Button>
         </div>
       </div>
