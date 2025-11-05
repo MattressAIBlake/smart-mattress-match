@@ -88,7 +88,7 @@ export const MattressAIChat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Forget the showroom. Forget the sales pitch. I know every mattress inside and out—Helix, Leesa, Birch, Plank, Brooklyn Bedding. Let's find your perfect match. What's your primary sleep position?",
+      content: "I'll help you find the perfect mattress. What's your primary sleep position?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -208,7 +208,7 @@ export const MattressAIChat = () => {
           Find Your Perfect Mattress
         </h1>
         <p className="text-xl md:text-2xl text-muted-foreground font-light max-w-3xl mx-auto">
-          No showrooms. No pushy sales. Just honest recommendations.
+          Expert guidance. Real recommendations.
         </p>
       </div>
 
@@ -263,7 +263,7 @@ export const MattressAIChat = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Ask about firmness, cooling, back pain..."
+              placeholder="Tell me about your sleep needs..."
               disabled={isLoading}
               className="flex-1 border-0 bg-transparent text-lg placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:ring-offset-0 h-14"
             />
@@ -277,7 +277,7 @@ export const MattressAIChat = () => {
             </Button>
           </div>
           <p className="text-xs text-muted-foreground/70 mt-3 text-center">
-            Try: "I sleep on my side and get hot at night" or "Best for back pain?"
+            Try: "I sleep on my side" or "I run hot at night"
           </p>
         </div>
 
