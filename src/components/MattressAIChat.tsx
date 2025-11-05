@@ -112,7 +112,7 @@ export const MattressAIChat = () => {
   return (
     <div className="w-full min-h-[800px] flex flex-col bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30 rounded-3xl p-8 md:p-12">
       {/* Header Badge */}
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center mb-6">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/20">
           <Sparkles className="h-4 w-4 text-primary" />
           <span className="text-sm font-medium text-foreground">AI-Powered Sleep Matching</span>
@@ -120,7 +120,7 @@ export const MattressAIChat = () => {
       </div>
 
       {/* Hero Title */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-6">
         <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
           Find Your Perfect Mattress
         </h1>
@@ -130,8 +130,8 @@ export const MattressAIChat = () => {
       </div>
 
       {/* Messages Area */}
-      <ScrollArea className="flex-1 mb-8 px-4" ref={scrollRef}>
-        <div className="space-y-6 max-w-3xl mx-auto">
+      <ScrollArea className="flex-1 mb-6 px-2" ref={scrollRef}>
+        <div className="space-y-4 max-w-3xl mx-auto">
           {messages.map((message, idx) => (
             <div
               key={idx}
