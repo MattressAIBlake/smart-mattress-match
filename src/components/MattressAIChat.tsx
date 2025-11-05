@@ -204,48 +204,59 @@ export const MattressAIChat = () => {
 
       {/* Hero Title */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 tracking-tight">
           Find Your Perfect Mattress
         </h1>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-xl md:text-2xl text-muted-foreground font-light max-w-3xl mx-auto">
           No showrooms. No pushy sales. Just honest recommendations.
         </p>
       </div>
 
-      {/* Messages Area */}
-      <div className="max-w-3xl mx-auto w-full mb-6 px-4">
-        <div className="space-y-4">
-          {messages.map((message, idx) => (
-            <div
-              key={idx}
-              className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
-            >
+      {/* Initial Centered Greeting - Only show if it's the first message */}
+      {messages.length === 1 && messages[0].role === "assistant" && (
+        <div className="text-center mb-12 px-4 max-w-4xl mx-auto animate-fade-in">
+          <p className="text-lg md:text-xl text-foreground/80 leading-relaxed font-medium">
+            {messages[0].content}
+          </p>
+        </div>
+      )}
+
+      {/* Messages Area - Show conversation after first exchange */}
+      {messages.length > 1 && (
+        <div className="max-w-4xl mx-auto w-full mb-6 px-4">
+          <div className="space-y-4">
+            {messages.slice(1).map((message, idx) => (
               <div
-                className={`max-w-[80%] rounded-3xl px-6 py-4 transition-all duration-300 ${
-                  message.role === "user"
-                    ? "bg-primary text-primary-foreground shadow-lg"
-                    : "bg-white/70 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/20 shadow-md"
-                }`}
+                key={idx}
+                className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
               >
-                <div className="text-base leading-relaxed" style={{ WebkitFontSmoothing: 'antialiased' }}>
-                  {renderMessageContent(message.content)}
+                <div
+                  className={`max-w-[85%] rounded-3xl px-6 py-4 transition-all duration-300 ${
+                    message.role === "user"
+                      ? "bg-primary text-primary-foreground shadow-lg"
+                      : "bg-white/70 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/20 shadow-md"
+                  }`}
+                >
+                  <div className="text-base leading-relaxed" style={{ WebkitFontSmoothing: 'antialiased' }}>
+                    {renderMessageContent(message.content)}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-          {isLoading && messages[messages.length - 1]?.role === "user" && (
-            <div className="flex justify-start animate-fade-in">
-              <div className="bg-white/70 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/20 rounded-3xl px-6 py-4 shadow-md">
-                <Loader2 className="h-5 w-5 animate-spin text-primary" />
+            ))}
+            {isLoading && messages[messages.length - 1]?.role === "user" && (
+              <div className="flex justify-start animate-fade-in">
+                <div className="bg-white/70 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/20 rounded-3xl px-6 py-4 shadow-md">
+                  <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Input Area */}
-      <div className="max-w-4xl mx-auto w-full px-4">
-        <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl border border-white/40 dark:border-white/20 p-4">
+      <div className="max-w-5xl mx-auto w-full px-4">
+        <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl border border-white/40 dark:border-white/20 p-5">
           <div className="flex items-center gap-3">
             <Input
               ref={inputRef}
@@ -254,16 +265,35 @@ export const MattressAIChat = () => {
               onKeyPress={handleKeyPress}
               placeholder="Ask about firmness, cooling, back pain..."
               disabled={isLoading}
-              className="flex-1 border-0 bg-transparent text-base placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:ring-offset-0 h-12"
+              className="flex-1 border-0 bg-transparent text-lg placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:ring-offset-0 h-14"
             />
             <Button 
               onClick={sendMessage} 
               disabled={isLoading || !input.trim()} 
               size="icon"
-              className="h-12 w-12 rounded-full transition-transform hover:scale-110 shadow-lg"
+              className="h-14 w-14 rounded-full transition-transform hover:scale-110 shadow-lg"
             >
               {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
             </Button>
+          </div>
+          <p className="text-xs text-muted-foreground/70 mt-3 text-center">
+            Try: "I sleep on my side and get hot at night" or "Best for back pain?"
+          </p>
+        </div>
+
+        {/* Trust Indicators */}
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground/80">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span>Expert AI Guidance</span>
+          </div>
+          <div className="hidden sm:block w-1 h-1 rounded-full bg-muted-foreground/40" />
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-foreground">5 Premium Brands</span>
+          </div>
+          <div className="hidden sm:block w-1 h-1 rounded-full bg-muted-foreground/40" />
+          <div className="flex items-center gap-2">
+            <span>Unbiased Recommendations</span>
           </div>
         </div>
       </div>

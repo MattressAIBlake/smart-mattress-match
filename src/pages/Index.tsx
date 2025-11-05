@@ -24,7 +24,7 @@ const Index = () => {
       </header>
 
       {/* Hero Section with AI Chat */}
-      <section className="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30 py-12 md:py-20 min-h-[85vh] flex items-center">
+      <section className="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30 py-16 md:py-24 min-h-[70vh] flex items-center">
         <div className="container mx-auto px-4">
           <MattressAIChat />
         </div>
