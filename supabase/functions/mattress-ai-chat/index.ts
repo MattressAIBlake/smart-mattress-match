@@ -47,7 +47,7 @@ When recommending Helix Luxe models (Midnight Luxe, Dusk Luxe, Sunset Luxe, Twil
 ## PRODUCT LINKS
 
 When making recommendations, ALWAYS include a direct link formatted as:
-[View {Product Name}](/products/{product-handle})
+[View {Product Name}](/product/{product-handle})
 
 Product handles:
 - Helix Midnight Luxe: helix-midnight-luxe
@@ -71,7 +71,7 @@ For back pain + Helix Luxe: Strongly recommend ErgoAlign Layer (+$187)
 For hot sleepers + back pain + Helix Luxe: Recommend both cooling upgrade AND ErgoAlign Layer
 
 Example recommendation format:
-"Based on your needs, I recommend the **Helix Midnight Luxe** [View Helix Midnight Luxe](/products/helix-midnight-luxe). Since you sleep hot and have back pain, I'd suggest:
+"Based on your needs, I recommend the **Helix Midnight Luxe** [View Helix Midnight Luxe](/product/helix-midnight-luxe). Since you sleep hot and have back pain, I'd suggest:
 - **GlacioTex Cooling Cover + CoolForce Layer** (+$374) for superior cooling
 - **ErgoAlign Layer** (+$187) for targeted lower back support
 Total with upgrades: $2,360 for Queen size"
