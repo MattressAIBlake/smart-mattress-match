@@ -221,9 +221,9 @@ export const MattressAIChat = () => {
                     : "bg-white/70 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/20 shadow-md"
                 }`}
               >
-                <p className="text-base leading-relaxed" style={{ WebkitFontSmoothing: 'antialiased' }}>
+                <div className="text-base leading-relaxed" style={{ WebkitFontSmoothing: 'antialiased' }}>
                   {renderMessageContent(message.content)}
-                </p>
+                </div>
               </div>
             </div>
           ))}
