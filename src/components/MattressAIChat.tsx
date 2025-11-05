@@ -176,12 +176,12 @@ export const MattressAIChat = () => {
       }
 
       setIsLoading(false);
-      inputRef.current?.focus();
+      setTimeout(() => inputRef.current?.focus(), 100);
     } catch (error) {
       console.error("Chat error:", error);
       toast.error("Failed to send message. Please try again.");
       setIsLoading(false);
-      inputRef.current?.focus();
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
   };
 
