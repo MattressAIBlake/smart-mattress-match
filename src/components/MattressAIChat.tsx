@@ -110,7 +110,7 @@ export const MattressAIChat = () => {
   };
 
   return (
-    <div className="w-full min-h-[800px] flex flex-col bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30 rounded-3xl p-8 md:p-12">
+    <div className="w-full flex flex-col">
       {/* Header Badge */}
       <div className="flex justify-center mb-6">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/20">
@@ -120,7 +120,7 @@ export const MattressAIChat = () => {
       </div>
 
       {/* Hero Title */}
-      <div className="text-center mb-6">
+      <div className="text-center mb-8">
         <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
           Find Your Perfect Mattress
         </h1>
@@ -130,8 +130,8 @@ export const MattressAIChat = () => {
       </div>
 
       {/* Messages Area */}
-      <ScrollArea className="flex-1 mb-6 px-2" ref={scrollRef}>
-        <div className="space-y-4 max-w-3xl mx-auto">
+      <div className="max-w-3xl mx-auto w-full mb-6 px-4">
+        <div className="space-y-4">
           {messages.map((message, idx) => (
             <div
               key={idx}
@@ -158,10 +158,10 @@ export const MattressAIChat = () => {
             </div>
           )}
         </div>
-      </ScrollArea>
+      </div>
 
       {/* Input Area */}
-      <div className="max-w-4xl mx-auto w-full">
+      <div className="max-w-4xl mx-auto w-full px-4">
         <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl border border-white/40 dark:border-white/20 p-4">
           <div className="flex items-center gap-3">
             <Input
@@ -183,6 +183,7 @@ export const MattressAIChat = () => {
           </div>
         </div>
       </div>
+      <div ref={scrollRef} />
     </div>
   );
 };
