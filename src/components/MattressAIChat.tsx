@@ -112,12 +112,12 @@ export const MattressAIChat = () => {
 
   return (
     <Card className="w-full max-w-2xl mx-auto h-[600px] flex flex-col shadow-card">
-      <div className="p-4 border-b bg-gradient-primary text-primary-foreground">
+      <div className="p-4 border-b bg-muted">
         <div className="flex items-center gap-2">
-          <MessageCircle className="h-5 w-5" />
-          <h2 className="text-lg font-semibold">AI Mattress Expert</h2>
+          <MessageCircle className="h-5 w-5 text-primary" />
+          <h2 className="text-lg font-semibold text-foreground">AI Mattress Expert</h2>
         </div>
-        <p className="text-sm opacity-90 mt-1">Find your perfect mattress match</p>
+        <p className="text-sm text-muted-foreground mt-1">Find your perfect mattress match</p>
       </div>
 
       <ScrollArea className="flex-1 p-4" ref={scrollRef}>

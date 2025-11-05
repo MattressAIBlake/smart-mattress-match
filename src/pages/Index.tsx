@@ -23,42 +23,27 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-primary text-primary-foreground py-16 md:py-24">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Sparkles className="h-6 w-6" />
-            <span className="text-sm font-semibold uppercase tracking-wide">AI-Powered Recommendations</span>
-          </div>
-          <h2 className="text-4xl md:text-6xl font-bold mb-4">
-            Find Your Perfect Mattress
-          </h2>
-          <p className="text-xl md:text-2xl opacity-90 mb-8 max-w-2xl mx-auto">
-            Let our AI expert guide you to the ideal mattress from Helix, Leesa, Birch, Plank, and Brooklyn Bedding
-          </p>
-          <Button size="lg" variant="secondary" className="text-lg px-8">
-            Start Shopping
-          </Button>
-        </div>
-      </section>
-
-      {/* Featured Product */}
-      <FeaturedProduct />
-
-      {/* AI Chat Section */}
-      <section className="py-16 bg-gradient-soft">
+      {/* Hero Section with AI Chat */}
+      <section className="bg-gradient-soft py-12 md:py-16">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Talk to Our AI Mattress Expert
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Answer a few questions and get personalized recommendations tailored to your sleep style
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Sparkles className="h-6 w-6 text-primary" />
+              <span className="text-sm font-semibold uppercase tracking-wide text-primary">AI-Powered Selection</span>
+            </div>
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-foreground">
+              Skip the Research.<br />Trust AI Expertise.
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+              Our AI mattress expert has unbiased knowledge of every mattress from Helix, Leesa, Birch, Plank, and Brooklyn Bedding. Get your perfect match in minutes.
             </p>
           </div>
           <MattressAIChat />
         </div>
       </section>
+
+      {/* Featured Product */}
+      <FeaturedProduct />
 
       {/* Brand Products */}
       <BrandProducts />
