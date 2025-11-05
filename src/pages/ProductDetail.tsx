@@ -112,11 +112,10 @@ const ProductDetail = () => {
           <div className="space-y-6">
             <div>
               <h1 className="text-4xl font-bold mb-4">{product.node.title}</h1>
-              <div className="price-luxury text-5xl text-foreground mb-2">
-                <span className="price-currency">{variant?.price.currencyCode}</span>
-                {parseFloat(variant?.price.amount || "0").toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-              </div>
-              <p className="text-sm tracking-wide uppercase text-muted-foreground">
+              <p className="price-display text-4xl text-foreground mb-2">
+                ${parseFloat(variant?.price.amount || "0").toFixed(0)}
+              </p>
+              <p className="text-sm text-muted-foreground">
                 {variant?.title}
               </p>
             </div>

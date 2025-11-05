@@ -89,13 +89,12 @@ export const FeaturedProduct = () => {
                   ))}
                   <span className="text-sm text-muted-foreground">(2,847 reviews)</span>
                 </div>
-                <div className="space-y-1">
-                  <div className="price-luxury text-4xl text-foreground">
-                    <span className="price-currency">$</span>
-                    {parseFloat(price.amount).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-                  </div>
-                  <p className="text-sm tracking-wide uppercase text-muted-foreground">
-                    Queen Size
+                <div className="space-y-2">
+                  <p className="price-display text-3xl text-foreground">
+                    ${parseFloat(product.variants.edges.find(v => v.node.title === "Queen")?.node.price.amount || price.amount).toFixed(0)}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Queen size
                   </p>
                 </div>
               </div>
