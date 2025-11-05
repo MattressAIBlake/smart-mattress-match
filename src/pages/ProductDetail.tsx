@@ -4,19 +4,16 @@ import { fetchProducts } from "@/lib/shopify";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "@/components/CartDrawer";
 import { useCartStore } from "@/stores/cartStore";
-import { ShoppingCart, ArrowLeft, Moon, Loader2, Info } from "lucide-react";
+import { ShoppingCart, ArrowLeft, Moon, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
-import { Card } from "@/components/ui/card";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-
-type CoolingOption = "tencel" | "glaciotex" | "glaciotex-coolforce" | "glaciotex-elite" | "glaciotex-elite-coolforce";
-type SupportOption = "luxe" | "ergoalign";
 
 const ProductDetail = () => {
   const { handle } = useParams();
-  const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
+  const location = window.location;
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedCooling, setSelectedCooling] = useState("");
+  const [selectedSupport, setSelectedSupport] = useState("");
   
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
@@ -24,22 +21,35 @@ const ProductDetail = () => {
   });
 
   const addItem = useCartStore((state) => state.addItem);
-
   const product = products?.find((p) => p.node.handle === handle);
-  const isLuxeModel = product?.node.title.toLowerCase().includes("luxe");
-  const isEliteModel = product?.node.title.toLowerCase().includes("elite");
-  
-  const [coolingOption, setCoolingOption] = useState<CoolingOption>("tencel");
-  const [supportOption, setSupportOption] = useState<SupportOption>("luxe");
 
-  // Set initial cooling option based on model type
+  // Pre-select variant from URL params (from AI recommendations)
   useEffect(() => {
-    if (isEliteModel) {
-      setCoolingOption("glaciotex-elite");
-    } else {
-      setCoolingOption("tencel");
+    const params = new URLSearchParams(location.search);
+    const sizeParam = params.get("size");
+    const coolingParam = params.get("cooling");
+    const supportParam = params.get("support");
+
+    if (sizeParam) setSelectedSize(sizeParam);
+    if (coolingParam) setSelectedCooling(coolingParam);
+    if (supportParam) setSelectedSupport(supportParam);
+  }, [location.search]);
+
+  // Set defaults if not pre-selected
+  useEffect(() => {
+    if (product && !selectedSize) {
+      const firstSize = product.node.options.find(o => o.name === "Size")?.values[0];
+      if (firstSize) setSelectedSize(firstSize);
     }
-  }, [isEliteModel]);
+    if (product && !selectedCooling) {
+      const firstCooling = product.node.options.find(o => o.name === "Cooling")?.values[0];
+      if (firstCooling) setSelectedCooling(firstCooling);
+    }
+    if (product && !selectedSupport) {
+      const firstSupport = product.node.options.find(o => o.name === "Support")?.values[0];
+      if (firstSupport) setSelectedSupport(firstSupport);
+    }
+  }, [product, selectedSize, selectedCooling, selectedSupport]);
 
   if (isLoading) {
     return (
@@ -63,59 +73,30 @@ const ProductDetail = () => {
     );
   }
 
-  const variant = product.node.variants.edges[selectedVariantIndex]?.node;
-  const image = product.node.images.edges[0]?.node;
+  // Find matching variant based on selected options
+  const selectedVariant = product?.node.variants.edges.find((v) => {
+    const sizeMatch = v.node.selectedOptions.find((o) => o.name === "Size")?.value === selectedSize;
+    const coolingMatch = !selectedCooling || v.node.selectedOptions.find((o) => o.name === "Cooling")?.value === selectedCooling;
+    const supportMatch = !selectedSupport || v.node.selectedOptions.find((o) => o.name === "Support")?.value === selectedSupport;
+    return sizeMatch && coolingMatch && supportMatch;
+  })?.node;
 
-  const coolingPrices = {
-    tencel: 0,
-    glaciotex: 187,
-    "glaciotex-coolforce": 374,
-    "glaciotex-elite": 0,
-    "glaciotex-elite-coolforce": 279,
-  };
-
-  const supportPrices = {
-    luxe: 0,
-    ergoalign: 187,
-  };
-
-  const getCustomizationPrice = () => {
-    if (!isLuxeModel && !isEliteModel) return 0;
-    return coolingPrices[coolingOption] + supportPrices[supportOption];
-  };
-
-  const getTotalPrice = () => {
-    const basePrice = parseFloat(variant?.price.amount || "0");
-    return basePrice + getCustomizationPrice();
-  };
+  const image = product?.node.images.edges[0]?.node;
+  const hasMultipleOptions = product?.node.options && product.node.options.length > 1;
 
   const handleAddToCart = () => {
-    if (!variant) {
-      toast.error("Please select a variant");
+    if (!selectedVariant || !product) {
+      toast.error("Please select all options");
       return;
     }
 
-    const customizations = (isLuxeModel || isEliteModel)
-      ? [
-          coolingOption === "tencel" ? "TENCEL™ Cover" : 
-          coolingOption === "glaciotex" ? "GlacioTex™ Cooling Cover" :
-          coolingOption === "glaciotex-coolforce" ? "GlacioTex™ Cooling Cover + CoolForce Layer" :
-          coolingOption === "glaciotex-elite" ? "GlacioTex™ Elite Cooling Cover" :
-          "GlacioTex™ Elite Cooling Cover + CoolForce Layer",
-          supportOption === "luxe" ? "Luxe Responsive Foam" : "ErgoAlign Layer"
-        ]
-      : [];
-
     addItem({
       product,
-      variantId: variant.id,
-      variantTitle: `${variant.title}${customizations.length > 0 ? ` (${customizations.join(", ")})` : ""}`,
-      price: {
-        amount: getTotalPrice().toString(),
-        currencyCode: variant.price.currencyCode,
-      },
+      variantId: selectedVariant.id,
+      variantTitle: selectedVariant.title,
+      price: selectedVariant.price,
       quantity: 1,
-      selectedOptions: variant.selectedOptions || [],
+      selectedOptions: selectedVariant.selectedOptions,
     });
 
     toast.success("Added to cart", {
@@ -170,154 +151,48 @@ const ProductDetail = () => {
             <div>
               <h1 className="text-4xl font-bold mb-4">{product.node.title}</h1>
               <p className="price-display text-4xl text-foreground mb-2">
-                ${getTotalPrice().toFixed(0)}
+                ${selectedVariant ? parseFloat(selectedVariant.price.amount).toFixed(0) : "—"}
               </p>
-              <p className="text-sm text-muted-foreground">
-                {variant?.title}
-              </p>
+              {selectedVariant && (
+                <p className="text-sm text-muted-foreground">
+                  {selectedVariant.title}
+                </p>
+              )}
             </div>
 
             <p className="text-muted-foreground text-lg leading-relaxed">
               {product.node.description || "Premium mattress designed for exceptional comfort and support."}
             </p>
 
-            {/* Variant Selection */}
-            {product.node.variants.edges.length > 1 && (
-              <div>
-                <label className="block text-sm font-medium mb-3">Select Size</label>
+            {/* Option Selectors */}
+            {hasMultipleOptions && product.node.options.map((option) => (
+              <div key={option.name}>
+                <label className="block text-sm font-medium mb-3">{option.name}</label>
                 <div className="grid grid-cols-2 gap-2">
-                  {product.node.variants.edges.map((v, idx) => (
-                    <Button
-                      key={v.node.id}
-                      variant={selectedVariantIndex === idx ? "default" : "outline"}
-                      onClick={() => setSelectedVariantIndex(idx)}
-                      className="w-full"
-                    >
-                      {v.node.title}
-                    </Button>
-                  ))}
+                  {option.values.map((value) => {
+                    const isSelected = 
+                      (option.name === "Size" && value === selectedSize) ||
+                      (option.name === "Cooling" && value === selectedCooling) ||
+                      (option.name === "Support" && value === selectedSupport);
+                    
+                    return (
+                      <Button
+                        key={value}
+                        variant={isSelected ? "default" : "outline"}
+                        onClick={() => {
+                          if (option.name === "Size") setSelectedSize(value);
+                          if (option.name === "Cooling") setSelectedCooling(value);
+                          if (option.name === "Support") setSelectedSupport(value);
+                        }}
+                        className="w-full text-sm"
+                      >
+                        {value}
+                      </Button>
+                    );
+                  })}
                 </div>
               </div>
-            )}
-
-            {/* Luxe & Elite Customization Options */}
-            {(isLuxeModel || isEliteModel) && (
-              <>
-                {/* Cooling Options */}
-                <Card className="p-6 space-y-4">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-2">Sleep hot?</h3>
-                    <p className="text-sm text-muted-foreground mb-4">Select the right cooling option for you</p>
-                  </div>
-                  
-                  <RadioGroup value={coolingOption} onValueChange={(value) => setCoolingOption(value as CoolingOption)}>
-                    <div className="space-y-3">
-                      {isEliteModel ? (
-                        <>
-                          <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
-                            <RadioGroupItem value="glaciotex-elite" id="glaciotex-elite" className="mt-1" />
-                            <Label htmlFor="glaciotex-elite" className="flex-1 cursor-pointer">
-                              <div className="font-semibold mb-2">GlacioTex™ Elite Cooling Cover (+$0)</div>
-                              <div className="text-sm text-muted-foreground leading-relaxed">
-                                Your mattress is covered in a cutting-edge fabric that feels cool on contact.
-                              </div>
-                            </Label>
-                          </div>
-
-                          <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
-                            <RadioGroupItem value="glaciotex-elite-coolforce" id="glaciotex-elite-coolforce" className="mt-1" />
-                            <Label htmlFor="glaciotex-elite-coolforce" className="flex-1 cursor-pointer">
-                              <div className="font-semibold mb-2">GlacioTex™ Elite Cooling Cover + CoolForce Layer (+$279)</div>
-                              <div className="text-sm text-muted-foreground leading-relaxed">
-                                An innovative, deep-cooling layer that moves heat away from you.
-                              </div>
-                            </Label>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
-                            <RadioGroupItem value="tencel" id="tencel" className="mt-1" />
-                            <Label htmlFor="tencel" className="flex-1 cursor-pointer">
-                              <div className="font-semibold mb-2">TENCEL™ Cover (+$0)</div>
-                              <div className="text-sm text-muted-foreground leading-relaxed">
-                                Made from sustainably sourced eucalyptus fibers, is naturally hypoallergenic, and is luxuriously smooth and ultra-soft. It also naturally enhances airflow and regulates temperature for a comfortable night of rest.
-                              </div>
-                            </Label>
-                          </div>
-
-                          <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
-                            <RadioGroupItem value="glaciotex" id="glaciotex" className="mt-1" />
-                            <Label htmlFor="glaciotex" className="flex-1 cursor-pointer">
-                              <div className="font-semibold mb-2">GlacioTex™ Cooling Cover (+$187)</div>
-                              <div className="text-sm text-muted-foreground leading-relaxed">
-                                A great option for people who like that feeling of crisp, cool sheets when they get into bed each night. Made from our cutting-edge, heat conductive fabric, the GlacioTex Cooling Cover draws heat away from the surface of the mattress for a cool-to-the-touch feel — while also feeling soft and comfortable beneath you.
-                              </div>
-                            </Label>
-                          </div>
-
-                          <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
-                            <RadioGroupItem value="glaciotex-coolforce" id="glaciotex-coolforce" className="mt-1" />
-                            <Label htmlFor="glaciotex-coolforce" className="flex-1 cursor-pointer">
-                              <div className="font-semibold mb-2">GlacioTex™ Cooling Cover + CoolForce Layer (+$374)</div>
-                              <div className="text-sm text-muted-foreground leading-relaxed">
-                                For anyone who sleeps warm and wants the absolute latest in mattress-cooling technology. Made from five graphite ribbons embedded seamlessly beneath the surface of your mattress, the CoolForce Layer is proven to pull 22% more heat away from the body to keep you cool continuously for over 12 hours.
-                              </div>
-                            </Label>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </RadioGroup>
-                </Card>
-
-                {/* Support Layer Options */}
-                <Card className="p-6 space-y-4">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-2">Wake up with back pain?</h3>
-                    <div className="text-sm text-muted-foreground leading-relaxed space-y-3 mb-4">
-                      <p>
-                        If you're someone who wakes most mornings feeling tightness and discomfort in your lower back, there's a good chance you're not getting the necessary support from your mattress. In most cases, that lack of support is causing your hips to sag into the surface of the mattress and creating tension at your spine and lower back.
-                      </p>
-                      <p>
-                        Some sleepers deal with the pain. Others seek out ultra-firm mattress models that prevent you from sinking into the mattress at all, but might not be comfortable.
-                      </p>
-                      <p className="font-medium text-foreground">
-                        At Helix, we've created the ErgoAlign Layer.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <RadioGroup value={supportOption} onValueChange={(value) => setSupportOption(value as SupportOption)}>
-                    <div className="space-y-3">
-                      <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
-                        <RadioGroupItem value="luxe" id="luxe" className="mt-1" />
-                        <Label htmlFor="luxe" className="flex-1 cursor-pointer">
-                          <div className="font-semibold mb-2">Luxe Responsive Foam (+$0)</div>
-                          <div className="text-sm text-muted-foreground leading-relaxed">
-                            Every Helix Luxe mattress includes a premium pillow top, 3 layers of high-density foam, and up to 1,000 individually wrapped steel coils with our advanced zoned lumbar support for exceptional comfort and support.
-                          </div>
-                        </Label>
-                      </div>
-
-                      <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
-                        <RadioGroupItem value="ergoalign" id="ergoalign" className="mt-1" />
-                        <Label htmlFor="ergoalign" className="flex-1 cursor-pointer">
-                          <div className="font-semibold mb-2">ErgoAlign™ Layer (+$187)</div>
-                          <div className="text-sm text-muted-foreground leading-relaxed">
-                            This innovative design is a zoned top layer which features a segment of ultra-dense foam beneath your midsection to provide additional support and pressure relief where you need it, while the bottom and top sections follow the natural contours of your body. The result is an alignment structure ideal for reducing stress points and helping to provide a better night's sleep.
-                          </div>
-                        </Label>
-                      </div>
-                    </div>
-                  </RadioGroup>
-
-                  <div className="text-xs text-muted-foreground leading-relaxed pt-2">
-                    When you add the ErgoAlign Layer to your new mattress, you'll enjoy increased support where you need it most and additional pressure relief in all sleeping positions.
-                  </div>
-                </Card>
-              </>
-            )}
+            ))}
 
             <Button size="lg" className="w-full text-lg" onClick={handleAddToCart}>
               <ShoppingCart className="w-5 h-5 mr-2" />

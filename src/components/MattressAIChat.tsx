@@ -8,36 +8,80 @@ import { Link } from "react-router-dom";
 
 type Message = { role: "user" | "assistant"; content: string };
 
-// Convert markdown links and bold text to React elements
+import { ProductRecommendationCard } from "./ProductRecommendationCard";
+
+// Convert markdown links, bold text, and product recommendations to React elements
 const renderMessageContent = (content: string) => {
-  // First split by links to preserve them
-  const linkParts = content.split(/(\[.*?\]\(.*?\))/g);
-  
-  return linkParts.map((part, index) => {
-    const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
-    if (linkMatch) {
-      const [, text, url] = linkMatch;
-      return (
-        <Link 
-          key={index} 
-          to={url} 
-          className="text-primary underline hover:text-primary/80 font-medium"
-        >
-          {text}
-        </Link>
-      );
-    }
-    
-    // Handle bold text within non-link parts
-    const boldParts = part.split(/(\*\*.*?\*\*)/g);
-    return boldParts.map((boldPart, boldIndex) => {
-      const boldMatch = boldPart.match(/\*\*(.*?)\*\*/);
-      if (boldMatch) {
-        return <strong key={`${index}-${boldIndex}`}>{boldMatch[1]}</strong>;
+  const lines = content.split('\n');
+  const elements: React.ReactNode[] = [];
+  const productRecommendations: any[] = [];
+
+  lines.forEach((line, lineIdx) => {
+    // Check for product recommendation format
+    if (line.startsWith('PRODUCT_RECOMMENDATION:')) {
+      // Parse: handle?params|reason|features|price
+      const parts = line.replace('PRODUCT_RECOMMENDATION:', '').split('|');
+      if (parts.length >= 4) {
+        const [handleWithParams, reason, featuresStr, priceStr] = parts;
+        const [handle, queryParams] = handleWithParams.split('?');
+        
+        productRecommendations.push({
+          handle: handle.trim(),
+          queryParams: queryParams || '',
+          reason: reason.trim(),
+          features: featuresStr.split(',').map(f => f.trim()),
+          price: priceStr.trim().replace('$', ''),
+        });
       }
-      return <span key={`${index}-${boldIndex}`}>{boldPart}</span>;
+      return; // Skip this line in text rendering
+    }
+
+    // Regular text processing for non-product lines
+    const linkParts = line.split(/(\[.*?\]\(.*?\))/g);
+    
+    const processedLine = linkParts.map((part, index) => {
+      const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
+      if (linkMatch) {
+        const [, text, url] = linkMatch;
+        return (
+          <Link 
+            key={`${lineIdx}-link-${index}`} 
+            to={url} 
+            className="text-primary underline hover:text-primary/80 font-medium"
+          >
+            {text}
+          </Link>
+        );
+      }
+      
+      // Handle bold text within non-link parts
+      const boldParts = part.split(/(\*\*.*?\*\*)/g);
+      return boldParts.map((boldPart, boldIndex) => {
+        const boldMatch = boldPart.match(/\*\*(.*?)\*\*/);
+        if (boldMatch) {
+          return <strong key={`${lineIdx}-${index}-bold-${boldIndex}`}>{boldMatch[1]}</strong>;
+        }
+        return <span key={`${lineIdx}-${index}-text-${boldIndex}`}>{boldPart}</span>;
+      });
     });
+
+    if (line.trim()) {
+      elements.push(<p key={`line-${lineIdx}`} className="mb-2">{processedLine}</p>);
+    }
   });
+
+  // Add product recommendation cards after text
+  if (productRecommendations.length > 0) {
+    elements.push(
+      <div className="mt-4 space-y-3" key="product-recommendations">
+        {productRecommendations.map((rec, i) => (
+          <ProductRecommendationCard key={`rec-${i}`} {...rec} />
+        ))}
+      </div>
+    );
+  }
+
+  return elements.length > 0 ? elements : content;
 };
 
 export const MattressAIChat = () => {
