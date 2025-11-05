@@ -42,19 +42,22 @@ export const ProductRecommendationCard = ({
     return sizeMatch && coolingMatch && supportMatch;
   })?.node;
 
+  // Fallback to first available variant if no exact match
+  const selectedVariant = matchingVariant || product?.variants.edges[0]?.node;
+
   const handleQuickAdd = () => {
-    if (!matchingVariant || !product) {
-      toast.error("Product configuration unavailable");
+    if (!selectedVariant || !product) {
+      toast.error("Product unavailable");
       return;
     }
 
     addItem({
       product: { node: product },
-      variantId: matchingVariant.id,
-      variantTitle: matchingVariant.title,
-      price: matchingVariant.price,
+      variantId: selectedVariant.id,
+      variantTitle: selectedVariant.title,
+      price: selectedVariant.price,
       quantity: 1,
-      selectedOptions: matchingVariant.selectedOptions,
+      selectedOptions: selectedVariant.selectedOptions,
     });
 
     toast.success("Added to cart!", {
