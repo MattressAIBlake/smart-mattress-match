@@ -15,9 +15,6 @@ const BRANDS = [
   { name: "Leesa", value: "Leesa" },
   { name: "Brooklyn Bedding", value: "Brooklyn Bedding" },
   { name: "Birch", value: "Birch" },
-  { name: "Plank", value: "Plank" },
-  { name: "Titan", value: "Titan" },
-  { name: "Spartan", value: "Spartan" },
 ];
 
 export const BrandProducts = () => {
@@ -51,10 +48,29 @@ export const BrandProducts = () => {
     });
   };
 
-  const filteredProducts = products?.filter((product) => {
-    if (selectedBrand === "all") return product.node.title !== "Helix Midnight Luxe";
-    return product.node.vendor === selectedBrand;
-  });
+  const filteredProducts = products
+    ?.filter((product) => {
+      if (selectedBrand === "all") return product.node.title !== "Helix Midnight Luxe";
+      return product.node.vendor === selectedBrand;
+    })
+    ?.sort((a, b) => {
+      // Prioritize Elite mattresses first
+      const aIsElite = a.node.title.toLowerCase().includes("elite");
+      const bIsElite = b.node.title.toLowerCase().includes("elite");
+      
+      if (aIsElite && !bIsElite) return -1;
+      if (!aIsElite && bIsElite) return 1;
+      
+      // Then prioritize Luxe mattresses
+      const aIsLuxe = a.node.title.toLowerCase().includes("luxe");
+      const bIsLuxe = b.node.title.toLowerCase().includes("luxe");
+      
+      if (aIsLuxe && !bIsLuxe) return -1;
+      if (!aIsLuxe && bIsLuxe) return 1;
+      
+      // Keep original order for others
+      return 0;
+    });
 
   if (isLoading) {
     return (
