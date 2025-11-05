@@ -60,10 +60,6 @@ export const ProductRecommendationCard = ({
       quantity: 1,
       selectedOptions: selectedVariant.selectedOptions,
     });
-
-    toast.success("Added to cart!", {
-      description: product.title,
-    });
     
     openCart();
   };
