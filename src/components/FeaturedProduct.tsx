@@ -90,11 +90,12 @@ export const FeaturedProduct = () => {
                   <span className="text-sm text-muted-foreground">(2,847 reviews)</span>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-3xl font-bold text-primary">
-                    ${parseFloat(price.amount).toFixed(0)}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Queen size price
+                  <div className="price-luxury text-4xl text-foreground">
+                    <span className="price-currency">$</span>
+                    {parseFloat(price.amount).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                  </div>
+                  <p className="text-sm tracking-wide uppercase text-muted-foreground">
+                    Queen Size
                   </p>
                 </div>
               </div>

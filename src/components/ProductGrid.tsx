@@ -102,11 +102,12 @@ export const ProductGrid = () => {
                 {product.node.description || "Premium mattress for exceptional sleep"}
               </CardDescription>
               <div className="space-y-1">
-                <p className="text-2xl font-bold text-primary">
-                  ${parseFloat(price.amount).toFixed(0)}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Queen size price
+                <div className="price-luxury text-3xl text-foreground">
+                  <span className="price-currency">$</span>
+                  {parseFloat(price.amount).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                </div>
+                <p className="text-xs tracking-wide uppercase text-muted-foreground">
+                  Queen Size
                 </p>
               </div>
             </CardContent>
