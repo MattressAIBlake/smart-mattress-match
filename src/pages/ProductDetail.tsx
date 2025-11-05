@@ -1,7 +1,8 @@
 import { useParams, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { fetchProducts } from "@/lib/shopify";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchProducts, fetchProductByHandle } from "@/lib/shopify";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { CartDrawer } from "@/components/CartDrawer";
 import { useCartStore } from "@/stores/cartStore";
 import { ShoppingCart, ArrowLeft, Moon } from "lucide-react";
@@ -10,6 +11,8 @@ import { useState, useEffect } from "react";
 import { LazyImage } from "@/components/LazyImage";
 import { ProductDetailSkeleton } from "@/components/skeletons/ProductDetailSkeleton";
 import { ProductSchema } from "@/components/seo/ProductSchema";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
+import { SEOHead } from "@/components/seo/SEOHead";
 
 const ProductDetail = () => {
   const { handle } = useParams();
@@ -23,8 +26,14 @@ const ProductDetail = () => {
     queryFn: () => fetchProducts(100),
   });
 
+  const queryClient = useQueryClient();
   const addItem = useCartStore((state) => state.addItem);
   const product = products?.find((p) => p.node.handle === handle);
+
+  // Related products from same brand
+  const relatedProducts = products
+    ?.filter((p) => p.node.vendor === product?.node.vendor && p.node.handle !== handle)
+    ?.slice(0, 3);
 
   // Pre-select variant from URL params (from AI recommendations)
   useEffect(() => {
@@ -105,6 +114,16 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* SEO Meta Tags */}
+      <SEOHead
+        title={`${product.node.title} - ${product.node.vendor} Mattress | Mattress Wizard`}
+        description={`${product.node.title} - ${product.node.description?.slice(0, 140) || `Premium ${product.node.vendor} mattress`}. Starting at $${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(0)}. Free shipping & 100-night trial.`}
+        canonical={`https://mattresswizard.com/product/${product.node.handle}`}
+        ogImage={product.node.images.edges[0]?.node.url}
+        ogType="product"
+      />
+      
+      {/* Structured Data */}
       <ProductSchema
         name={product.node.title}
         description={product.node.description}
@@ -114,6 +133,14 @@ const ProductDetail = () => {
         image={product.node.images.edges[0]?.node.url}
         url={`${window.location.origin}/product/${product.node.handle}`}
       />
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: window.location.origin },
+          { name: product.node.vendor, url: `${window.location.origin}/brand/${product.node.vendor.toLowerCase().replace(" ", "-")}` },
+          { name: product.node.title, url: window.location.href },
+        ]}
+      />
+      
       {/* Header */}
       <header className="border-b sticky top-0 z-50 bg-background/95 backdrop-blur">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -218,6 +245,71 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Related Products */}
+        {relatedProducts && relatedProducts.length > 0 && (
+          <section className="mt-16 border-t pt-12">
+            <h3 className="text-2xl font-bold mb-6">More from {product.node.vendor}</h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              {relatedProducts.map((relatedProduct) => {
+                const relImage = relatedProduct.node.images.edges[0]?.node;
+                const relPrice = relatedProduct.node.priceRange.minVariantPrice;
+                
+                return (
+                  <Card
+                    key={relatedProduct.node.id}
+                    className="overflow-hidden hover:shadow-soft transition-shadow"
+                    onMouseEnter={() => {
+                      // Prefetch product data on hover
+                      queryClient.prefetchQuery({
+                        queryKey: ["product", relatedProduct.node.handle],
+                        queryFn: () => fetchProductByHandle(relatedProduct.node.handle),
+                      });
+                    }}
+                  >
+                    <Link to={`/product/${relatedProduct.node.handle}`}>
+                      <CardHeader className="p-0">
+                        {relImage ? (
+                          <div className="aspect-square bg-muted overflow-hidden">
+                            <LazyImage
+                              src={relImage.url}
+                              alt={relImage.altText || relatedProduct.node.title}
+                              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                        ) : (
+                          <div className="aspect-square bg-gradient-soft flex items-center justify-center">
+                            <span className="text-muted-foreground text-sm">No image</span>
+                          </div>
+                        )}
+                      </CardHeader>
+                    </Link>
+                    <CardContent className="p-4">
+                      <Link to={`/product/${relatedProduct.node.handle}`}>
+                        <CardTitle className="text-base mb-2 hover:text-primary transition-colors line-clamp-2">
+                          {relatedProduct.node.title}
+                        </CardTitle>
+                      </Link>
+                      <CardDescription className="line-clamp-2 text-sm mb-3">
+                        {relatedProduct.node.description || "Premium mattress"}
+                      </CardDescription>
+                      <p className="text-xl font-bold text-primary">
+                        ${parseFloat(relPrice.amount).toFixed(0)}
+                      </p>
+                    </CardContent>
+                    <CardFooter className="p-4 pt-0">
+                      <Link to={`/product/${relatedProduct.node.handle}`} className="w-full">
+                        <Button variant="outline" size="sm" className="w-full">
+                          View Details
+                        </Button>
+                      </Link>
+                    </CardFooter>
+                  </Card>
+                );
+              })}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

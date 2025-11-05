@@ -94,6 +94,7 @@ export const MattressAIChat = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [streamBuffer, setStreamBuffer] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -104,6 +105,25 @@ export const MattressAIChat = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Debounced streaming buffer - flush every 50ms for smooth updates
+  useEffect(() => {
+    if (!streamBuffer) return;
+    
+    const timer = setTimeout(() => {
+      setMessages((prev) => {
+        const last = prev[prev.length - 1];
+        if (last?.role === "assistant") {
+          return prev.map((m, i) => (i === prev.length - 1 ? { ...m, content: m.content + streamBuffer } : m));
+        }
+        return [...prev, { role: "assistant", content: streamBuffer }];
+      });
+      setStreamBuffer("");
+      scrollToBottom();
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, [streamBuffer]);
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
@@ -117,14 +137,8 @@ export const MattressAIChat = () => {
     let assistantContent = "";
     const updateAssistant = (chunk: string) => {
       assistantContent += chunk;
-      setMessages((prev) => {
-        const last = prev[prev.length - 1];
-        if (last?.role === "assistant") {
-          return prev.map((m, i) => (i === prev.length - 1 ? { ...m, content: assistantContent } : m));
-        }
-        return [...prev, { role: "assistant", content: assistantContent }];
-      });
-      scrollToBottom();
+      // Buffer chunks for debounced updates
+      setStreamBuffer((prev) => prev + chunk);
     };
 
     try {

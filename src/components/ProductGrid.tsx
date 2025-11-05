@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchProducts } from "@/lib/shopify";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchProducts, fetchProductByHandle } from "@/lib/shopify";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Loader2 } from "lucide-react";
@@ -16,6 +16,7 @@ export const ProductGrid = () => {
   });
 
   const addItem = useCartStore((state) => state.addItem);
+  const queryClient = useQueryClient();
 
   const handleAddToCart = (product: any) => {
     const variant = product.node.variants.edges[0]?.node;
@@ -71,7 +72,26 @@ export const ProductGrid = () => {
         const price = product.node.priceRange.minVariantPrice;
 
         return (
-          <Card key={product.node.id} className="overflow-hidden hover:shadow-soft transition-shadow">
+          <Card
+            key={product.node.id}
+            className="overflow-hidden hover:shadow-soft transition-shadow"
+            onMouseEnter={() => {
+              // Prefetch product data on hover
+              queryClient.prefetchQuery({
+                queryKey: ["product", product.node.handle],
+                queryFn: () => fetchProductByHandle(product.node.handle),
+                staleTime: 30000,
+              });
+            }}
+            onTouchStart={() => {
+              // Prefetch on touch for mobile
+              queryClient.prefetchQuery({
+                queryKey: ["product", product.node.handle],
+                queryFn: () => fetchProductByHandle(product.node.handle),
+                staleTime: 30000,
+              });
+            }}
+          >
             <Link to={`/product/${product.node.handle}`}>
               <CardHeader className="p-0">
                 {image ? (

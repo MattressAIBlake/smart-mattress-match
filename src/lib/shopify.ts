@@ -5,6 +5,14 @@ export const SHOPIFY_STORE_PERMANENT_DOMAIN = 'smart-mattress-match-4z87c.myshop
 export const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
 export const SHOPIFY_STOREFRONT_TOKEN = '639a9992ee5e16b22c3b97f7f9b737d6';
 
+// Image optimization helper for Shopify CDN
+export const optimizeShopifyImage = (url: string, width: number, quality = 85): string => {
+  if (!url) return url;
+  // Shopify CDN supports: ?width=800&quality=85&format=webp
+  const separator = url.includes('?') ? '&' : '?';
+  return `${url}${separator}width=${width}&quality=${quality}&format=webp`;
+};
+
 export interface ShopifyProduct {
   node: {
     id: string;

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { fetchProducts } from "@/lib/shopify";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchProducts, fetchProductByHandle } from "@/lib/shopify";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,6 +21,7 @@ const BRANDS = [
 
 export const BrandProducts = () => {
   const [selectedBrand, setSelectedBrand] = useState("all");
+  const queryClient = useQueryClient();
   
   const { data: products, isLoading, error } = useQuery({
     queryKey: ["products"],
@@ -147,7 +148,26 @@ export const BrandProducts = () => {
                   const price = product.node.priceRange.minVariantPrice;
 
                   return (
-                    <Card key={product.node.id} className="overflow-hidden hover:shadow-soft transition-shadow flex flex-col">
+                    <Card
+                      key={product.node.id}
+                      className="overflow-hidden hover:shadow-soft transition-shadow flex flex-col"
+                      onMouseEnter={() => {
+                        // Prefetch product data on hover
+                        queryClient.prefetchQuery({
+                          queryKey: ["product", product.node.handle],
+                          queryFn: () => fetchProductByHandle(product.node.handle),
+                          staleTime: 30000,
+                        });
+                      }}
+                      onTouchStart={() => {
+                        // Prefetch on touch for mobile
+                        queryClient.prefetchQuery({
+                          queryKey: ["product", product.node.handle],
+                          queryFn: () => fetchProductByHandle(product.node.handle),
+                          staleTime: 30000,
+                        });
+                      }}
+                    >
                       <Link to={`/product/${product.node.handle}`}>
                         <CardHeader className="p-0">
                           {image ? (
