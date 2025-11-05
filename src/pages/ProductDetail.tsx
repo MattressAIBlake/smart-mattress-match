@@ -6,19 +6,17 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { useCartStore } from "@/stores/cartStore";
 import { ShoppingCart, ArrowLeft, Moon, Loader2, Info } from "lucide-react";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 
-type CoolingOption = "tencel" | "glaciotex" | "glaciotex-coolforce";
+type CoolingOption = "tencel" | "glaciotex" | "glaciotex-coolforce" | "glaciotex-elite" | "glaciotex-elite-coolforce";
 type SupportOption = "luxe" | "ergoalign";
 
 const ProductDetail = () => {
   const { handle } = useParams();
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
-  const [coolingOption, setCoolingOption] = useState<CoolingOption>("tencel");
-  const [supportOption, setSupportOption] = useState<SupportOption>("luxe");
   
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
@@ -29,6 +27,19 @@ const ProductDetail = () => {
 
   const product = products?.find((p) => p.node.handle === handle);
   const isLuxeModel = product?.node.title.toLowerCase().includes("luxe");
+  const isEliteModel = product?.node.title.toLowerCase().includes("elite");
+  
+  const [coolingOption, setCoolingOption] = useState<CoolingOption>("tencel");
+  const [supportOption, setSupportOption] = useState<SupportOption>("luxe");
+
+  // Set initial cooling option based on model type
+  useEffect(() => {
+    if (isEliteModel) {
+      setCoolingOption("glaciotex-elite");
+    } else {
+      setCoolingOption("tencel");
+    }
+  }, [isEliteModel]);
 
   if (isLoading) {
     return (
@@ -59,6 +70,8 @@ const ProductDetail = () => {
     tencel: 0,
     glaciotex: 187,
     "glaciotex-coolforce": 374,
+    "glaciotex-elite": 0,
+    "glaciotex-elite-coolforce": 279,
   };
 
   const supportPrices = {
@@ -67,7 +80,7 @@ const ProductDetail = () => {
   };
 
   const getCustomizationPrice = () => {
-    if (!isLuxeModel) return 0;
+    if (!isLuxeModel && !isEliteModel) return 0;
     return coolingPrices[coolingOption] + supportPrices[supportOption];
   };
 
@@ -82,11 +95,13 @@ const ProductDetail = () => {
       return;
     }
 
-    const customizations = isLuxeModel
+    const customizations = (isLuxeModel || isEliteModel)
       ? [
           coolingOption === "tencel" ? "TENCEL™ Cover" : 
           coolingOption === "glaciotex" ? "GlacioTex™ Cooling Cover" :
-          "GlacioTex™ Cooling Cover + CoolForce Layer",
+          coolingOption === "glaciotex-coolforce" ? "GlacioTex™ Cooling Cover + CoolForce Layer" :
+          coolingOption === "glaciotex-elite" ? "GlacioTex™ Elite Cooling Cover" :
+          "GlacioTex™ Elite Cooling Cover + CoolForce Layer",
           supportOption === "luxe" ? "Luxe Responsive Foam" : "ErgoAlign Layer"
         ]
       : [];
@@ -185,46 +200,73 @@ const ProductDetail = () => {
               </div>
             )}
 
-            {/* Luxe Customization Options */}
-            {isLuxeModel && (
+            {/* Luxe & Elite Customization Options */}
+            {(isLuxeModel || isEliteModel) && (
               <>
                 {/* Cooling Options */}
                 <Card className="p-6 space-y-4">
                   <div>
-                    <h3 className="text-lg font-semibold mb-4">Which cooling option is right for you?</h3>
+                    <h3 className="text-lg font-semibold mb-2">Sleep hot?</h3>
+                    <p className="text-sm text-muted-foreground mb-4">Select the right cooling option for you</p>
                   </div>
                   
                   <RadioGroup value={coolingOption} onValueChange={(value) => setCoolingOption(value as CoolingOption)}>
                     <div className="space-y-3">
-                      <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
-                        <RadioGroupItem value="tencel" id="tencel" className="mt-1" />
-                        <Label htmlFor="tencel" className="flex-1 cursor-pointer">
-                          <div className="font-semibold mb-2">TENCEL™ Cover (+$0)</div>
-                          <div className="text-sm text-muted-foreground leading-relaxed">
-                            Made from sustainably sourced eucalyptus fibers, is naturally hypoallergenic, and is luxuriously smooth and ultra-soft. It also naturally enhances airflow and regulates temperature for a comfortable night of rest.
+                      {isEliteModel ? (
+                        <>
+                          <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
+                            <RadioGroupItem value="glaciotex-elite" id="glaciotex-elite" className="mt-1" />
+                            <Label htmlFor="glaciotex-elite" className="flex-1 cursor-pointer">
+                              <div className="font-semibold mb-2">GlacioTex™ Elite Cooling Cover (+$0)</div>
+                              <div className="text-sm text-muted-foreground leading-relaxed">
+                                Your mattress is covered in a cutting-edge fabric that feels cool on contact.
+                              </div>
+                            </Label>
                           </div>
-                        </Label>
-                      </div>
 
-                      <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
-                        <RadioGroupItem value="glaciotex" id="glaciotex" className="mt-1" />
-                        <Label htmlFor="glaciotex" className="flex-1 cursor-pointer">
-                          <div className="font-semibold mb-2">GlacioTex™ Cooling Cover (+$187)</div>
-                          <div className="text-sm text-muted-foreground leading-relaxed">
-                            A great option for people who like that feeling of crisp, cool sheets when they get into bed each night. Made from our cutting-edge, heat conductive fabric, the GlacioTex Cooling Cover draws heat away from the surface of the mattress for a cool-to-the-touch feel — while also feeling soft and comfortable beneath you.
+                          <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
+                            <RadioGroupItem value="glaciotex-elite-coolforce" id="glaciotex-elite-coolforce" className="mt-1" />
+                            <Label htmlFor="glaciotex-elite-coolforce" className="flex-1 cursor-pointer">
+                              <div className="font-semibold mb-2">GlacioTex™ Elite Cooling Cover + CoolForce Layer (+$279)</div>
+                              <div className="text-sm text-muted-foreground leading-relaxed">
+                                An innovative, deep-cooling layer that moves heat away from you.
+                              </div>
+                            </Label>
                           </div>
-                        </Label>
-                      </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
+                            <RadioGroupItem value="tencel" id="tencel" className="mt-1" />
+                            <Label htmlFor="tencel" className="flex-1 cursor-pointer">
+                              <div className="font-semibold mb-2">TENCEL™ Cover (+$0)</div>
+                              <div className="text-sm text-muted-foreground leading-relaxed">
+                                Made from sustainably sourced eucalyptus fibers, is naturally hypoallergenic, and is luxuriously smooth and ultra-soft. It also naturally enhances airflow and regulates temperature for a comfortable night of rest.
+                              </div>
+                            </Label>
+                          </div>
 
-                      <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
-                        <RadioGroupItem value="glaciotex-coolforce" id="glaciotex-coolforce" className="mt-1" />
-                        <Label htmlFor="glaciotex-coolforce" className="flex-1 cursor-pointer">
-                          <div className="font-semibold mb-2">GlacioTex™ Cooling Cover + CoolForce Layer (+$374)</div>
-                          <div className="text-sm text-muted-foreground leading-relaxed">
-                            For anyone who sleeps warm and wants the absolute latest in mattress-cooling technology. Made from five graphite ribbons embedded seamlessly beneath the surface of your mattress, the CoolForce Layer is proven to pull 22% more heat away from the body to keep you cool continuously for over 12 hours.
+                          <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
+                            <RadioGroupItem value="glaciotex" id="glaciotex" className="mt-1" />
+                            <Label htmlFor="glaciotex" className="flex-1 cursor-pointer">
+                              <div className="font-semibold mb-2">GlacioTex™ Cooling Cover (+$187)</div>
+                              <div className="text-sm text-muted-foreground leading-relaxed">
+                                A great option for people who like that feeling of crisp, cool sheets when they get into bed each night. Made from our cutting-edge, heat conductive fabric, the GlacioTex Cooling Cover draws heat away from the surface of the mattress for a cool-to-the-touch feel — while also feeling soft and comfortable beneath you.
+                              </div>
+                            </Label>
                           </div>
-                        </Label>
-                      </div>
+
+                          <div className="flex items-start space-x-3 p-4 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors">
+                            <RadioGroupItem value="glaciotex-coolforce" id="glaciotex-coolforce" className="mt-1" />
+                            <Label htmlFor="glaciotex-coolforce" className="flex-1 cursor-pointer">
+                              <div className="font-semibold mb-2">GlacioTex™ Cooling Cover + CoolForce Layer (+$374)</div>
+                              <div className="text-sm text-muted-foreground leading-relaxed">
+                                For anyone who sleeps warm and wants the absolute latest in mattress-cooling technology. Made from five graphite ribbons embedded seamlessly beneath the surface of your mattress, the CoolForce Layer is proven to pull 22% more heat away from the body to keep you cool continuously for over 12 hours.
+                              </div>
+                            </Label>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </RadioGroup>
                 </Card>
