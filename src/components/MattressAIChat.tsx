@@ -4,8 +4,41 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
 type Message = { role: "user" | "assistant"; content: string };
+
+// Convert markdown links and bold text to React elements
+const renderMessageContent = (content: string) => {
+  // First split by links to preserve them
+  const linkParts = content.split(/(\[.*?\]\(.*?\))/g);
+  
+  return linkParts.map((part, index) => {
+    const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
+    if (linkMatch) {
+      const [, text, url] = linkMatch;
+      return (
+        <Link 
+          key={index} 
+          to={url} 
+          className="text-primary underline hover:text-primary/80 font-medium"
+        >
+          {text}
+        </Link>
+      );
+    }
+    
+    // Handle bold text within non-link parts
+    const boldParts = part.split(/(\*\*.*?\*\*)/g);
+    return boldParts.map((boldPart, boldIndex) => {
+      const boldMatch = boldPart.match(/\*\*(.*?)\*\*/);
+      if (boldMatch) {
+        return <strong key={`${index}-${boldIndex}`}>{boldMatch[1]}</strong>;
+      }
+      return <span key={`${index}-${boldIndex}`}>{boldPart}</span>;
+    });
+  });
+};
 
 export const MattressAIChat = () => {
   const [messages, setMessages] = useState<Message[]>([
@@ -145,7 +178,7 @@ export const MattressAIChat = () => {
                 }`}
               >
                 <p className="text-base leading-relaxed" style={{ WebkitFontSmoothing: 'antialiased' }}>
-                  {message.content}
+                  {renderMessageContent(message.content)}
                 </p>
               </div>
             </div>
