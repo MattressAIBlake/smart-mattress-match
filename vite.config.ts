@@ -15,4 +15,16 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'query': ['@tanstack/react-query'],
+          'ui': ['@radix-ui/react-slot', '@radix-ui/react-tabs', '@radix-ui/react-dialog'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+  },
 }));

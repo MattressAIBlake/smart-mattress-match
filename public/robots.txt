@@ -12,3 +12,7 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /cart
+Disallow: /checkout
+
+Sitemap: https://mattresswizard.com/sitemap.xml

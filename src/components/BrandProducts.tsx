@@ -8,6 +8,8 @@ import { ShoppingCart, Loader2 } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { LazyImage } from "@/components/LazyImage";
+import { ProductGridSkeleton } from "@/components/skeletons/ProductGridSkeleton";
 
 const BRANDS = [
   { name: "All Brands", value: "all" },
@@ -74,9 +76,17 @@ export const BrandProducts = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Browse by Brand</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Explore our complete collection of premium mattresses from the industry's most trusted brands
+            </p>
+          </div>
+          <ProductGridSkeleton count={12} />
+        </div>
+      </section>
     );
   }
 
@@ -101,13 +111,24 @@ export const BrandProducts = () => {
         <Tabs value={selectedBrand} onValueChange={setSelectedBrand} className="w-full">
           <TabsList className="w-full justify-start overflow-x-auto flex-wrap h-auto gap-2 bg-transparent mb-8">
             {BRANDS.map((brand) => (
-              <TabsTrigger
-                key={brand.value}
-                value={brand.value}
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-              >
-                {brand.name}
-              </TabsTrigger>
+              brand.value === "all" ? (
+                <TabsTrigger
+                  key={brand.value}
+                  value={brand.value}
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                >
+                  {brand.name}
+                </TabsTrigger>
+              ) : (
+                <Link key={brand.value} to={`/brand/${brand.value.toLowerCase().replace(" ", "-")}`}>
+                  <TabsTrigger
+                    value={brand.value}
+                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                  >
+                    {brand.name}
+                  </TabsTrigger>
+                </Link>
+              )
             ))}
           </TabsList>
 
@@ -131,7 +152,7 @@ export const BrandProducts = () => {
                         <CardHeader className="p-0">
                           {image ? (
                             <div className="aspect-square bg-muted overflow-hidden">
-                              <img
+                              <LazyImage
                                 src={image.url}
                                 alt={image.altText || product.node.title}
                                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"

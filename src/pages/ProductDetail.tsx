@@ -4,9 +4,12 @@ import { fetchProducts } from "@/lib/shopify";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "@/components/CartDrawer";
 import { useCartStore } from "@/stores/cartStore";
-import { ShoppingCart, ArrowLeft, Moon, Loader2 } from "lucide-react";
+import { ShoppingCart, ArrowLeft, Moon } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
+import { LazyImage } from "@/components/LazyImage";
+import { ProductDetailSkeleton } from "@/components/skeletons/ProductDetailSkeleton";
+import { ProductSchema } from "@/components/seo/ProductSchema";
 
 const ProductDetail = () => {
   const { handle } = useParams();
@@ -52,11 +55,7 @@ const ProductDetail = () => {
   }, [product, selectedSize, selectedCooling, selectedSupport]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+    return <ProductDetailSkeleton />;
   }
 
   if (!product) {
@@ -106,6 +105,15 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <ProductSchema
+        name={product.node.title}
+        description={product.node.description}
+        brand={product.node.vendor}
+        price={selectedVariant?.price.amount || product.node.priceRange.minVariantPrice.amount}
+        currency={selectedVariant?.price.currencyCode || product.node.priceRange.minVariantPrice.currencyCode}
+        image={product.node.images.edges[0]?.node.url}
+        url={`${window.location.origin}/product/${product.node.handle}`}
+      />
       {/* Header */}
       <header className="border-b sticky top-0 z-50 bg-background/95 backdrop-blur">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -133,7 +141,7 @@ const ProductDetail = () => {
           <div className="space-y-4">
             {image ? (
               <div className="aspect-square bg-muted rounded-lg overflow-hidden">
-                <img
+                <LazyImage
                   src={image.url}
                   alt={image.altText || product.node.title}
                   className="w-full h-full object-cover"

@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { TypingIndicator } from "./TypingIndicator";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -93,6 +93,7 @@ export const MattressAIChat = () => {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -111,6 +112,7 @@ export const MattressAIChat = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
+    setIsTyping(true);
 
     let assistantContent = "";
     const updateAssistant = (chunk: string) => {
@@ -143,6 +145,7 @@ export const MattressAIChat = () => {
       const decoder = new TextDecoder();
       let textBuffer = "";
       let streamDone = false;
+      setIsTyping(false); // Stop typing indicator once stream starts
 
       while (!streamDone) {
         const { done, value } = await reader.read();
@@ -181,6 +184,7 @@ export const MattressAIChat = () => {
       console.error("Chat error:", error);
       toast.error("Failed to send message. Please try again.");
       setIsLoading(false);
+      setIsTyping(false);
       setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 100);
     }
   };
@@ -243,10 +247,10 @@ export const MattressAIChat = () => {
                 </div>
               </div>
             ))}
-            {isLoading && messages[messages.length - 1]?.role === "user" && (
+            {isTyping && messages[messages.length - 1]?.role === "user" && (
               <div className="flex justify-start animate-fade-in">
                 <div className="bg-white/70 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/20 rounded-3xl px-6 py-4 shadow-md">
-                  <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                  <TypingIndicator />
                 </div>
               </div>
             )}

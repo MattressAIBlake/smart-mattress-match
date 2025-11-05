@@ -6,6 +6,8 @@ import { ShoppingCart, Loader2 } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { LazyImage } from "@/components/LazyImage";
+import { ProductGridSkeleton } from "@/components/skeletons/ProductGridSkeleton";
 
 export const ProductGrid = () => {
   const { data: products, isLoading, error } = useQuery({
@@ -37,11 +39,7 @@ export const ProductGrid = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+    return <ProductGridSkeleton count={9} />;
   }
 
   if (error) {
@@ -78,7 +76,7 @@ export const ProductGrid = () => {
               <CardHeader className="p-0">
                 {image ? (
                   <div className="aspect-square bg-muted overflow-hidden">
-                    <img
+                    <LazyImage
                       src={image.url}
                       alt={image.altText || product.node.title}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
