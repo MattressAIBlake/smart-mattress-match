@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -14,13 +13,15 @@ import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 
 export const CartDrawer = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const { 
     items, 
-    isLoading, 
+    isLoading,
+    isCartOpen,
     updateQuantity, 
     removeItem, 
-    createCheckout 
+    createCheckout,
+    openCart,
+    closeCart
   } = useCartStore();
   
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -32,7 +33,7 @@ export const CartDrawer = () => {
       const checkoutUrl = useCartStore.getState().checkoutUrl;
       if (checkoutUrl) {
         window.open(checkoutUrl, '_blank');
-        setIsOpen(false);
+        closeCart();
       }
     } catch (error) {
       console.error('Checkout failed:', error);
@@ -41,7 +42,7 @@ export const CartDrawer = () => {
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+    <Sheet open={isCartOpen} onOpenChange={(open) => open ? openCart() : closeCart()}>
       <SheetTrigger asChild>
         <Button variant="outline" size="icon" className="relative">
           <ShoppingCart className="h-5 w-5" />

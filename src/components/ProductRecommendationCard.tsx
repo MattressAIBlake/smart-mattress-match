@@ -28,6 +28,7 @@ export const ProductRecommendationCard = ({
   });
 
   const addItem = useCartStore((state) => state.addItem);
+  const openCart = useCartStore((state) => state.openCart);
 
   // Parse query params to find exact variant
   const params = new URLSearchParams(queryParams || "");
@@ -63,6 +64,8 @@ export const ProductRecommendationCard = ({
     toast.success("Added to cart!", {
       description: product.title,
     });
+    
+    openCart();
   };
 
   if (!product) return null;
