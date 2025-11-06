@@ -14,10 +14,142 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      referral_transactions: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          order_id: string | null
+          referee_email: string
+          referrer_code: string
+          reward_amount: number
+          status: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          order_id?: string | null
+          referee_email: string
+          referrer_code: string
+          reward_amount: number
+          status: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          order_id?: string | null
+          referee_email?: string
+          referrer_code?: string
+          reward_amount?: number
+          status?: string
+        }
+        Relationships: []
+      }
+      reward_redemptions: {
+        Row: {
+          amount: number
+          created_at: string | null
+          expires_at: string
+          id: string
+          redemption_code: string
+          status: string
+          used_at: string | null
+          user_email: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          redemption_code: string
+          status: string
+          used_at?: string | null
+          user_email: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          redemption_code?: string
+          status?: string
+          used_at?: string | null
+          user_email?: string
+        }
+        Relationships: []
+      }
+      sleep_profiles: {
+        Row: {
+          conversation_summary: string | null
+          created_at: string | null
+          id: string
+          profile_data: Json
+          recommended_products: Json | null
+          share_count: number | null
+        }
+        Insert: {
+          conversation_summary?: string | null
+          created_at?: string | null
+          id?: string
+          profile_data: Json
+          recommended_products?: Json | null
+          share_count?: number | null
+        }
+        Update: {
+          conversation_summary?: string | null
+          created_at?: string | null
+          id?: string
+          profile_data?: Json
+          recommended_products?: Json | null
+          share_count?: number | null
+        }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          referral_code: string
+          referred_by_code: string | null
+          reward_balance: number | null
+          total_referrals: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          referral_code: string
+          referred_by_code?: string | null
+          reward_balance?: number | null
+          total_referrals?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          referral_code?: string
+          referred_by_code?: string | null
+          reward_balance?: number | null
+          total_referrals?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      viral_metrics: {
+        Row: {
+          avg_referrals_per_user: number | null
+          profiles_shared: number | null
+          total_profiles_created: number | null
+          total_referrals_completed: number | null
+          total_referrers: number | null
+          total_shares: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
