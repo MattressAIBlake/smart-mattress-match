@@ -23,6 +23,7 @@ interface CartStore {
   checkoutUrl: string | null;
   isLoading: boolean;
   isCartOpen: boolean;
+  referralCode: string | null;
   
   addItem: (item: CartItem) => void;
   updateQuantity: (variantId: string, quantity: number) => void;
@@ -31,6 +32,7 @@ interface CartStore {
   setCartId: (cartId: string) => void;
   setCheckoutUrl: (url: string) => void;
   setLoading: (loading: boolean) => void;
+  setReferralCode: (code: string | null) => void;
   openCart: () => void;
   closeCart: () => void;
   createCheckout: () => Promise<void>;
@@ -58,13 +60,27 @@ const CART_CREATE_MUTATION = `
   }
 `;
 
-async function createStorefrontCheckout(items: CartItem[]): Promise<string> {
+async function createStorefrontCheckout(items: CartItem[], referralCode?: string | null): Promise<string> {
   const lines = items.map(item => ({
     quantity: item.quantity,
     merchandiseId: item.variantId,
   }));
 
   const input: any = { lines };
+  
+  // Add referral code as note/attribute if present
+  if (referralCode) {
+    input.attributes = [
+      {
+        key: 'referral_code',
+        value: referralCode
+      },
+      {
+        key: 'discount_note',
+        value: '10% referral discount - 100 night trial waived'
+      }
+    ];
+  }
 
   const cartData = await storefrontApiRequest(CART_CREATE_MUTATION, {
     input,
@@ -93,6 +109,7 @@ export const useCartStore = create<CartStore>()(
       checkoutUrl: null,
       isLoading: false,
       isCartOpen: false,
+      referralCode: null,
 
       addItem: (item) => {
         const { items } = get();
@@ -137,16 +154,17 @@ export const useCartStore = create<CartStore>()(
       setCartId: (cartId) => set({ cartId }),
       setCheckoutUrl: (checkoutUrl) => set({ checkoutUrl }),
       setLoading: (isLoading) => set({ isLoading }),
+      setReferralCode: (referralCode) => set({ referralCode }),
       openCart: () => set({ isCartOpen: true }),
       closeCart: () => set({ isCartOpen: false }),
 
       createCheckout: async () => {
-        const { items, setLoading, setCheckoutUrl } = get();
+        const { items, referralCode, setLoading, setCheckoutUrl } = get();
         if (items.length === 0) return;
 
         setLoading(true);
         try {
-          const checkoutUrl = await createStorefrontCheckout(items);
+          const checkoutUrl = await createStorefrontCheckout(items, referralCode);
           setCheckoutUrl(checkoutUrl);
         } catch (error) {
           console.error('Failed to create checkout:', error);

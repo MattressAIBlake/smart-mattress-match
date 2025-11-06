@@ -1,18 +1,33 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { FeaturedProduct } from "@/components/FeaturedProduct";
 import { MattressAIChat } from "@/components/MattressAIChat";
 import { CartDrawer } from "@/components/CartDrawer";
 import { PromoBar } from "@/components/PromoBar";
+import { ReferralShareCard } from "@/components/ReferralShareCard";
 import { Link, useNavigate } from "react-router-dom";
 import { FAQSchema } from "@/components/seo/FAQSchema";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 import { ProductGridSkeleton } from "@/components/skeletons/ProductGridSkeleton";
+import { useCartStore } from "@/stores/cartStore";
 
 // Lazy load below-fold components
 const BrandProducts = lazy(() => import("@/components/BrandProducts").then(m => ({ default: m.BrandProducts })));
 
 const Index = () => {
   const navigate = useNavigate();
+  const setReferralCode = useCartStore(state => state.setReferralCode);
+
+  useEffect(() => {
+    // Check for referral code in URL
+    const params = new URLSearchParams(window.location.search);
+    const refCode = params.get('ref');
+    
+    if (refCode) {
+      setReferralCode(refCode);
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [setReferralCode]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -72,6 +87,13 @@ const Index = () => {
 
       {/* Featured Product */}
       <FeaturedProduct />
+
+      {/* Referral Share Section */}
+      <section className="py-16 bg-gradient-to-br from-primary/5 via-background to-purple-500/5">
+        <div className="container mx-auto px-4">
+          <ReferralShareCard />
+        </div>
+      </section>
 
       {/* Brand Products - Lazy loaded */}
       <Suspense fallback={<div className="py-16"><div className="container mx-auto px-4"><ProductGridSkeleton count={12} /></div></div>}>
