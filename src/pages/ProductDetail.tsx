@@ -93,8 +93,8 @@ const ProductDetail = () => {
   // Find matching variant based on selected options
   const selectedVariant = product?.node.variants.edges.find((v) => {
     const sizeMatch = v.node.selectedOptions.find((o) => o.name === "Size")?.value === selectedSize;
-    const coolingMatch = !selectedCooling || v.node.selectedOptions.find((o) => o.name === "Cooling")?.value === selectedCooling;
-    const supportMatch = !selectedSupport || v.node.selectedOptions.find((o) => o.name === "Support")?.value === selectedSupport;
+    const coolingMatch = v.node.selectedOptions.find((o) => o.name === "Cooling")?.value === selectedCooling;
+    const supportMatch = v.node.selectedOptions.find((o) => o.name === "Support")?.value === selectedSupport;
     return sizeMatch && coolingMatch && supportMatch;
   })?.node;
 
