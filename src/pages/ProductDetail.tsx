@@ -92,9 +92,22 @@ const ProductDetail = () => {
 
   // Find matching variant based on selected options
   const selectedVariant = product?.node.variants.edges.find((v) => {
-    const sizeMatch = v.node.selectedOptions.find((o) => o.name === "Size")?.value === selectedSize;
-    const coolingMatch = v.node.selectedOptions.find((o) => o.name === "Cooling")?.value === selectedCooling;
-    const supportMatch = v.node.selectedOptions.find((o) => o.name === "Support")?.value === selectedSupport;
+    const variantOptions = v.node.selectedOptions;
+    
+    // Check each option that exists on this product
+    const sizeOption = variantOptions.find((o) => o.name === "Size");
+    const coolingOption = variantOptions.find((o) => o.name === "Cooling");
+    const supportOption = variantOptions.find((o) => o.name === "Support");
+    
+    // Match size if product has size option
+    const sizeMatch = !sizeOption || sizeOption.value === selectedSize;
+    
+    // Match cooling if product has cooling option
+    const coolingMatch = !coolingOption || coolingOption.value === selectedCooling;
+    
+    // Match support if product has support option
+    const supportMatch = !supportOption || supportOption.value === selectedSupport;
+    
     return sizeMatch && coolingMatch && supportMatch;
   })?.node;
 
