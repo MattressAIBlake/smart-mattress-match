@@ -17,7 +17,7 @@ export function getShareableReferralLink(referralCode: string): string {
   return `${window.location.origin}?ref=${referralCode}`;
 }
 
-export const REFERRAL_REWARD_AMOUNT = 100;
+export const REFERRAL_REWARD_AMOUNT = 50;
 
 export function formatCurrency(amount: number): string {
   return `$${amount.toFixed(2)}`;

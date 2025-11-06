@@ -42,7 +42,7 @@ export const ReferralWelcome = ({ open, onOpenChange, referralCode }: ReferralWe
         
         <div className="space-y-4">
           <div className="p-6 rounded-lg bg-gradient-to-br from-primary/10 via-purple-500/10 to-pink-500/10 border border-primary/20 text-center">
-            <p className="text-4xl font-bold text-primary mb-2">$100 OFF</p>
+            <p className="text-4xl font-bold text-primary mb-2">$50 OFF</p>
             <p className="text-sm text-muted-foreground">your first mattress purchase</p>
           </div>
           
@@ -56,7 +56,7 @@ export const ReferralWelcome = ({ open, onOpenChange, referralCode }: ReferralWe
           </div>
           
           <Button className="w-full" size="lg" onClick={() => onOpenChange(false)}>
-            Start Shopping & Save $100
+            Start Shopping & Save $50
           </Button>
         </div>
       </DialogContent>

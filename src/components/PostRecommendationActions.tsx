@@ -35,9 +35,9 @@ export const PostRecommendationActions = ({ onShare, onReferFriends }: PostRecom
             <Gift className="h-6 w-6 text-green-600" />
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold text-lg mb-1">Refer Friends ($100)</h3>
+            <h3 className="font-semibold text-lg mb-1">Refer Friends ($50)</h3>
             <p className="text-sm text-muted-foreground">
-              Share your code and you both get $100 rewards
+              They save $50, you get a $50 Amazon gift card
             </p>
           </div>
         </div>

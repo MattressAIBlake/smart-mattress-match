@@ -32,12 +32,12 @@ export const ReferralCard = ({ referralCode, rewardBalance, totalReferrals }: Re
         
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
-            <h3 className="text-lg font-semibold">Give $100, Get $100</h3>
+            <h3 className="text-lg font-semibold">Friend Saves $50, You Get $50</h3>
             <Badge variant="secondary">{totalReferrals} referrals</Badge>
           </div>
           
           <p className="text-sm text-muted-foreground mb-4">
-            Share your code with friends. When they make their first purchase, you both get $100!
+            Share your code with friends. They save $50 on their purchase, and you get a $50 Amazon gift card!
           </p>
           
           <div className="flex items-center gap-2">

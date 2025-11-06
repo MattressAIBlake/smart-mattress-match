@@ -68,7 +68,7 @@ serve(async (req) => {
       .insert({
         referrer_code: referralCode,
         referee_email: customerEmail,
-        reward_amount: 100,
+        reward_amount: 50,
         status: "completed",
         order_id: orderId,
         completed_at: new Date().toISOString(),
@@ -83,7 +83,7 @@ serve(async (req) => {
     const { error: updateError } = await supabase
       .from("user_profiles")
       .update({
-        reward_balance: referrer.reward_balance + 100,
+        reward_balance: referrer.reward_balance + 50,
         total_referrals: referrer.total_referrals + 1,
       })
       .eq("id", referrer.id);
@@ -102,7 +102,7 @@ serve(async (req) => {
       .from("reward_redemptions")
       .insert({
         user_email: customerEmail,
-        amount: 100,
+        amount: 50,
         redemption_code: redemptionCode,
         status: "active",
         expires_at: expiresAt.toISOString(),
@@ -117,7 +117,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: true,
-        referrerReward: 100,
+        referrerReward: 50,
         refereeCode: redemptionCode,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }

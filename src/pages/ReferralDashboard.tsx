@@ -206,9 +206,9 @@ export default function ReferralDashboard() {
             <h3 className="text-lg font-semibold mb-2">How It Works</h3>
             <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
               <li>Share your unique referral code with friends</li>
-              <li>They save $100 on their first mattress purchase</li>
-              <li>You receive $100 credit when they complete their order</li>
-              <li>Use your credits on any future purchase</li>
+              <li>They save $50 on their first mattress purchase</li>
+              <li>You receive a $50 Amazon gift card when they complete their order</li>
+              <li>Gift cards are sent to your email within 48 hours</li>
             </ol>
           </Card>
         </div>
