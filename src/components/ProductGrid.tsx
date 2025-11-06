@@ -69,7 +69,15 @@ export const ProductGrid = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {products.map((product) => {
         const image = product.node.images.edges[0]?.node;
-        const price = product.node.priceRange.minVariantPrice;
+        
+        // Find Queen size variant for accurate pricing
+        const queenVariant = product.node.variants.edges.find(v => 
+          v.node.selectedOptions?.some(opt => 
+            opt.name === "Size" && opt.value === "Queen"
+          )
+        )?.node;
+        
+        const price = queenVariant?.price || product.node.priceRange.minVariantPrice;
 
         return (
           <Card
@@ -124,7 +132,7 @@ export const ProductGrid = () => {
                   ${parseFloat(price.amount).toFixed(0)}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Starting at Queen size
+                  Queen size price
                 </p>
               </div>
             </CardContent>
