@@ -296,7 +296,6 @@ export const MattressAIChat = () => {
           {showActions && (
           <PostRecommendationActions 
             onShare={handleShare}
-            onReferFriends={() => navigate('/referral')}
           />
           )}
         </div>

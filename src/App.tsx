@@ -12,7 +12,6 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 // Lazy load route components for code splitting
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const BrandPage = lazy(() => import("./pages/BrandPage"));
-const ReferralDashboard = lazy(() => import("./pages/ReferralDashboard"));
 const Auth = lazy(() => import("./pages/Auth"));
 
 const App = () => {
@@ -52,14 +51,6 @@ const App = () => {
               element={
                 <Suspense fallback={<div className="container mx-auto px-4 py-8"><ProductGridSkeleton count={6} /></div>}>
                   <BrandPage />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/referral"
-              element={
-                <Suspense fallback={<div className="container mx-auto px-4 py-8"><ProductGridSkeleton count={1} /></div>}>
-                  <ReferralDashboard />
                 </Suspense>
               }
             />

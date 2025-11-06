@@ -22,7 +22,7 @@ export default function Auth() {
     // Check if user is already logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        navigate("/referral");
+        navigate("/");
       }
     });
   }, [navigate]);
@@ -39,7 +39,7 @@ export default function Auth() {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/referral`,
+          emailRedirectTo: `${window.location.origin}/`,
         },
       });
 
@@ -74,7 +74,7 @@ export default function Auth() {
       if (error) throw error;
 
       toast.success("Signed in successfully!");
-      navigate("/referral");
+      navigate("/");
     } catch (error: any) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
@@ -90,8 +90,8 @@ export default function Auth() {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Welcome to SleepMatch</CardTitle>
-          <CardDescription>Sign in or create an account to access your referral dashboard</CardDescription>
+          <CardTitle>Welcome to Mattress Wizard</CardTitle>
+          <CardDescription>Sign in or create an account</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin">
