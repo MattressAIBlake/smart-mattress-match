@@ -9,8 +9,8 @@ import { Link } from "react-router-dom";
 
 export const FeaturedProduct = () => {
   const { data: product, isLoading } = useQuery({
-    queryKey: ["featured-product", "helix-midnight-luxe-1"],
-    queryFn: () => fetchProductByHandle("helix-midnight-luxe-1"),
+    queryKey: ["featured-product", "helix-dusk-luxe"],
+    queryFn: () => fetchProductByHandle("helix-dusk-luxe"),
   });
 
   const addItem = useCartStore((state) => state.addItem);
@@ -57,9 +57,9 @@ export const FeaturedProduct = () => {
             <Star className="h-4 w-4 fill-current" />
             <span className="text-sm font-semibold">Featured Premium Mattress</span>
           </div>
-          <h2 className="text-4xl font-bold mb-2">Helix Midnight Luxe</h2>
+          <h2 className="text-4xl font-bold mb-2">Helix Dusk Luxe</h2>
           <p className="text-muted-foreground">
-            Our most popular luxury mattress for exceptional side sleeping comfort
+            Premium hybrid mattress with medium-firm support - perfect for back and stomach sleepers
           </p>
         </div>
 
@@ -102,7 +102,7 @@ export const FeaturedProduct = () => {
               <div className="space-y-3 mb-6 text-sm">
                 <div className="flex items-start gap-2">
                   <span className="text-primary">✓</span>
-                  <span>Medium feel (5-6/10) - Perfect for side sleepers</span>
+                  <span>Medium-firm feel (6-7/10) - Perfect for back and stomach sleepers</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <span className="text-primary">✓</span>
