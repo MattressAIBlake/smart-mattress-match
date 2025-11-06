@@ -1,1 +1,7 @@
 project_id = "hfdyxsxlwfogtwgjahkg"
+
+[functions.mattress-ai-chat]
+verify_jwt = false
+
+[functions.process-referral]
+verify_jwt = false

@@ -3,8 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { TypingIndicator } from "./TypingIndicator";
+import { PostRecommendationActions } from "./PostRecommendationActions";
+import { ShareProfileDialog } from "./ShareProfileDialog";
+import { ShareChatDialog } from "./ShareChatDialog";
+import { analyzeChatForProfile, saveSleepProfile } from "@/lib/profileGenerator";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -85,6 +89,7 @@ const renderMessageContent = (content: string) => {
 };
 
 export const MattressAIChat = () => {
+  const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -95,8 +100,12 @@ export const MattressAIChat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [streamBuffer, setStreamBuffer] = useState("");
+  const [showActions, setShowActions] = useState(false);
+  const [shareProfileOpen, setShareProfileOpen] = useState(false);
+  const [shareChatOpen, setShareChatOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -192,6 +201,11 @@ export const MattressAIChat = () => {
         }
       }
 
+      // Check if recommendation was made
+      if (assistantContent.includes('PRODUCT_RECOMMENDATION:')) {
+        setShowActions(true);
+      }
+
       setIsLoading(false);
       setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 100);
     } catch (error) {
@@ -201,6 +215,17 @@ export const MattressAIChat = () => {
       setIsTyping(false);
       setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 100);
     }
+  };
+
+  const handleShareProfile = async () => {
+    const profile = analyzeChatForProfile(messages);
+    const conversationSummary = messages.slice(1).map(m => m.content).join(' ').slice(0, 500);
+    await saveSleepProfile(profile, conversationSummary);
+    setShareProfileOpen(true);
+  };
+
+  const handleShareChat = () => {
+    setShareChatOpen(true);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -246,6 +271,7 @@ export const MattressAIChat = () => {
             {messages.slice(1).map((message, idx) => (
               <div
                 key={idx}
+                ref={idx === messages.length - 2 ? lastMessageRef : null}
                 className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} animate-fade-in`}
               >
                 <div
@@ -269,6 +295,15 @@ export const MattressAIChat = () => {
               </div>
             )}
           </div>
+          
+          {/* Post-Recommendation Actions */}
+          {showActions && (
+            <PostRecommendationActions
+              onShareProfile={handleShareProfile}
+              onReferFriends={() => navigate('/referral')}
+              onShareChat={handleShareChat}
+            />
+          )}
         </div>
       )}
 
@@ -316,6 +351,18 @@ export const MattressAIChat = () => {
         </div>
       </div>
       <div ref={scrollRef} />
+      
+      {/* Share Dialogs */}
+      <ShareProfileDialog
+        open={shareProfileOpen}
+        onOpenChange={setShareProfileOpen}
+        profile={analyzeChatForProfile(messages)}
+      />
+      <ShareChatDialog
+        open={shareChatOpen}
+        onOpenChange={setShareChatOpen}
+        messageElement={lastMessageRef.current}
+      />
     </div>
   );
 };

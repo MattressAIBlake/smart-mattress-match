@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Sheet,
   SheetContent,
@@ -13,26 +14,31 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Gift, ChevronDown, Sparkles } from "lucide-react";
+import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Gift, ChevronDown, Sparkles, Check } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { useRecommendedBases } from "@/hooks/useRecommendedBases";
 import { optimizeShopifyImage } from "@/lib/shopify";
+import { validateReferralCode } from "@/lib/referralUtils";
 
 export const CartDrawer = () => {
   const [showPromo, setShowPromo] = useState(false);
   const [isBaseUpsellOpen, setIsBaseUpsellOpen] = useState(false);
+  const [referralInput, setReferralInput] = useState("");
+  const [referralExpanded, setReferralExpanded] = useState(false);
   const { 
     items, 
     isLoading,
     isCartOpen,
+    referralCode,
     updateQuantity, 
     removeItem, 
     createCheckout,
     openCart,
     closeCart,
-    addItem
+    addItem,
+    setReferralCode
   } = useCartStore();
 
   const { recommendedBases, shouldShow, mattressSize } = useRecommendedBases(items);
@@ -47,6 +53,18 @@ export const CartDrawer = () => {
   
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
+
+  const handleApplyReferral = () => {
+    if (!referralInput.trim()) return;
+    
+    if (validateReferralCode(referralInput.trim())) {
+      setReferralCode(referralInput.trim());
+      toast.success("Referral code applied! You'll save $100 at checkout 🎉");
+      setReferralExpanded(false);
+    } else {
+      toast.error("Invalid referral code format");
+    }
+  };
 
   const handleCheckout = async () => {
     try {
@@ -223,6 +241,37 @@ export const CartDrawer = () => {
               </div>
               
               <div className="flex-shrink-0 space-y-4 pt-4 border-t bg-background">
+                {/* Referral Code Input */}
+                <Collapsible open={referralExpanded} onOpenChange={setReferralExpanded}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full text-sm text-muted-foreground hover:text-foreground transition-colors">
+                    <span>{referralCode ? "Referral code applied ✓" : "Have a referral code?"}</span>
+                    <ChevronDown className={`h-4 w-4 transition-transform ${referralExpanded ? 'rotate-180' : ''}`} />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-2">
+                    {referralCode ? (
+                      <div className="p-3 bg-primary/10 border border-primary/20 rounded-lg">
+                        <div className="flex items-center gap-2">
+                          <Check className="h-4 w-4 text-primary" />
+                          <span className="text-sm font-semibold">Code: {referralCode}</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">You'll save $100 at checkout!</p>
+                      </div>
+                    ) : (
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="SLEEP-XXX-XXX"
+                          value={referralInput}
+                          onChange={(e) => setReferralInput(e.target.value.toUpperCase())}
+                          className="text-sm"
+                        />
+                        <Button size="sm" onClick={handleApplyReferral}>
+                          Apply
+                        </Button>
+                      </div>
+                    )}
+                  </CollapsibleContent>
+                </Collapsible>
+                
                 {showPromo && (
                   <div className="bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 border border-primary/20 rounded-lg p-3">
                     <div className="flex items-start gap-2">

@@ -1,19 +1,43 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { FeaturedProduct } from "@/components/FeaturedProduct";
 import { MattressAIChat } from "@/components/MattressAIChat";
 import { CartDrawer } from "@/components/CartDrawer";
 import { PromoBar } from "@/components/PromoBar";
 import { Button } from "@/components/ui/button";
-import { Moon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { Moon, Gift } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { FAQSchema } from "@/components/seo/FAQSchema";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
 import { ProductGridSkeleton } from "@/components/skeletons/ProductGridSkeleton";
+import { FloatingReferralCTA } from "@/components/FloatingReferralCTA";
+import { ReferralWelcome } from "@/components/ReferralWelcome";
+import { useCartStore } from "@/stores/cartStore";
 
 // Lazy load below-fold components
 const BrandProducts = lazy(() => import("@/components/BrandProducts").then(m => ({ default: m.BrandProducts })));
 
 const Index = () => {
+  const navigate = useNavigate();
+  const [showReferralWelcome, setShowReferralWelcome] = useState(false);
+  const [welcomeReferralCode, setWelcomeReferralCode] = useState("");
+  const setReferralCode = useCartStore(state => state.setReferralCode);
+
+  useEffect(() => {
+    // Check for referral code in URL
+    const params = new URLSearchParams(window.location.search);
+    const refCode = params.get('ref');
+    
+    if (refCode) {
+      setReferralCode(refCode);
+      setWelcomeReferralCode(refCode);
+      setShowReferralWelcome(true);
+      
+      // Clean URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [setReferralCode]);
+
   return (
     <div className="min-h-screen bg-background">
       {/* SEO Schemas */}
@@ -60,7 +84,19 @@ const Index = () => {
               <p className="text-xs text-muted-foreground">Premium Sleep Solutions</p>
             </div>
           </Link>
-          <CartDrawer />
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="hidden md:flex items-center gap-2"
+              onClick={() => navigate('/referral')}
+            >
+              <Gift className="h-4 w-4" />
+              <span>Refer & Earn</span>
+              <Badge variant="secondary" className="text-xs">$100</Badge>
+            </Button>
+            <CartDrawer />
+          </div>
         </div>
       </header>
 
@@ -104,6 +140,16 @@ const Index = () => {
           </div>
         </div>
       </footer>
+      
+      {/* Floating Referral CTA */}
+      <FloatingReferralCTA onOpen={() => navigate('/referral')} />
+      
+      {/* Referral Welcome Modal */}
+      <ReferralWelcome
+        open={showReferralWelcome}
+        onOpenChange={setShowReferralWelcome}
+        referralCode={welcomeReferralCode}
+      />
     </div>
   );
 };

@@ -78,15 +78,15 @@ export async function saveSleepProfile(profile: SleepProfile, conversationSummar
     const { data, error } = await supabase
       .from('sleep_profiles')
       .insert({
-        profile_data: profile,
+        profile_data: profile as any,
         conversation_summary: conversationSummary,
-        recommended_products: profile.recommendedProducts
-      })
+        recommended_products: profile.recommendedProducts as any
+      } as any)
       .select('id')
       .single();
     
     if (error) throw error;
-    return data?.id || null;
+    return (data as any)?.id || null;
   } catch (error) {
     console.error('Failed to save sleep profile:', error);
     return null;
@@ -95,7 +95,7 @@ export async function saveSleepProfile(profile: SleepProfile, conversationSummar
 
 export async function incrementShareCount(profileId: string) {
   try {
-    await supabase.rpc('increment_share_count', { profile_id: profileId });
+    await (supabase.rpc as any)('increment_share_count', { profile_id: profileId });
   } catch (error) {
     console.error('Failed to increment share count:', error);
   }
