@@ -8,11 +8,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2 } from "lucide-react";
+import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Gift } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
+import { useState, useEffect } from "react";
 
 export const CartDrawer = () => {
+  const [showPromo, setShowPromo] = useState(false);
   const { 
     items, 
     isLoading,
@@ -23,6 +25,14 @@ export const CartDrawer = () => {
     openCart,
     closeCart
   } = useCartStore();
+
+  useEffect(() => {
+    // Show promo if first-time visitor
+    const hasVisited = localStorage.getItem('mattress-wizard-visited');
+    if (hasVisited === 'true') {
+      setShowPromo(true);
+    }
+  }, []);
   
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
@@ -132,6 +142,18 @@ export const CartDrawer = () => {
               </div>
               
               <div className="flex-shrink-0 space-y-4 pt-4 border-t bg-background">
+                {showPromo && (
+                  <div className="bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 border border-primary/20 rounded-lg p-3">
+                    <div className="flex items-start gap-2">
+                      <Gift className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                      <div className="text-sm">
+                        <p className="font-semibold text-primary">Don't forget your FREE Bedding Bundle!</p>
+                        <p className="text-muted-foreground">Complete your order today to claim your $180 gift</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-semibold">Total</span>
                   <span className="text-xl font-bold">
@@ -153,7 +175,7 @@ export const CartDrawer = () => {
                   ) : (
                     <>
                       <ExternalLink className="w-4 h-4 mr-2" />
-                      Checkout
+                      Checkout & Claim Bonus
                     </>
                   )}
                 </Button>

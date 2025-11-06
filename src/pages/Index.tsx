@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { FeaturedProduct } from "@/components/FeaturedProduct";
 import { MattressAIChat } from "@/components/MattressAIChat";
 import { CartDrawer } from "@/components/CartDrawer";
+import { PromoBar } from "@/components/PromoBar";
 import { Button } from "@/components/ui/button";
 import { Moon } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -45,6 +46,9 @@ const Index = () => {
         description="AI-powered mattress recommendations from premium brands including Helix, Leesa, Birch, Plank, and Brooklyn Bedding"
         url="https://mattresswizard.com"
       />
+
+      {/* Promo Bar */}
+      <PromoBar />
 
       {/* Header */}
       <header className="border-b sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

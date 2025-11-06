@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { CartDrawer } from "@/components/CartDrawer";
 import { useCartStore } from "@/stores/cartStore";
-import { ShoppingCart, ArrowLeft, Moon } from "lucide-react";
+import { ShoppingCart, ArrowLeft, Moon, Gift } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { LazyImage } from "@/components/LazyImage";
@@ -20,6 +20,15 @@ const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedCooling, setSelectedCooling] = useState("");
   const [selectedSupport, setSelectedSupport] = useState("");
+  const [showPromo, setShowPromo] = useState(false);
+
+  useEffect(() => {
+    // Show promo if first-time visitor
+    const hasVisited = localStorage.getItem('mattress-wizard-visited');
+    if (hasVisited === 'true') {
+      setShowPromo(true);
+    }
+  }, []);
   
   const { data: products, isLoading } = useQuery({
     queryKey: ["products"],
@@ -194,6 +203,18 @@ const ProductDetail = () => {
                 </p>
               )}
             </div>
+
+            {showPromo && (
+              <div className="bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10 border-2 border-primary/30 rounded-lg p-4 animate-pulse">
+                <div className="flex items-start gap-3">
+                  <Gift className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="font-bold text-lg text-primary mb-1">🎁 Limited Time: FREE Bedding Bundle!</p>
+                    <p className="text-sm text-foreground">Buy today and get a complete bedding set, mattress protector & pillow cases - a <span className="font-semibold">$180 value</span> absolutely FREE!</p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <p className="text-muted-foreground text-lg leading-relaxed">
               {product.node.description || "Premium mattress designed for exceptional comfort and support."}
