@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { CartDrawer } from "@/components/CartDrawer";
 import { useCartStore } from "@/stores/cartStore";
-import { ShoppingCart, ArrowLeft, Moon, Gift } from "lucide-react";
+import { ShoppingCart, ArrowLeft, Gift } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { LazyImage } from "@/components/LazyImage";
@@ -154,7 +154,6 @@ const ProductDetail = () => {
       <header className="border-b sticky top-0 z-50 bg-background/95 backdrop-blur">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <Moon className="h-8 w-8 text-primary" />
             <div>
               <h1 className="text-2xl font-bold">Mattress Wizard</h1>
               <p className="text-xs text-muted-foreground">Premium Sleep Solutions</p>

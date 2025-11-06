@@ -5,7 +5,7 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { PromoBar } from "@/components/PromoBar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Moon, Gift } from "lucide-react";
+import { Gift } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { FAQSchema } from "@/components/seo/FAQSchema";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
@@ -78,7 +78,6 @@ const Index = () => {
       <header className="border-b sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <Moon className="h-8 w-8 text-primary" />
             <div>
               <h1 className="text-2xl font-bold">Mattress Wizard</h1>
               <p className="text-xs text-muted-foreground">Premium Sleep Solutions</p>
@@ -93,7 +92,7 @@ const Index = () => {
             >
               <Gift className="h-4 w-4" />
               <span>Refer & Earn</span>
-              <Badge variant="secondary" className="text-xs">$100</Badge>
+              <Badge variant="secondary" className="text-xs">$50</Badge>
             </Button>
             <CartDrawer />
           </div>
