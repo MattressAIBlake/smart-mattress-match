@@ -17,19 +17,25 @@ export default function ReferralDashboard() {
   const [email, setEmail] = useState("");
   
   useEffect(() => {
-    loadReferralData();
+    checkAuthAndLoadData();
   }, []);
   
-  const loadReferralData = async () => {
+  const checkAuthAndLoadData = async () => {
+    // Check authentication FIRST before any data loading
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError || !user) {
+      toast.error("Please sign in to access your referral dashboard");
+      navigate("/auth");
+      return;
+    }
+    
+    // User is authenticated, now load data
+    loadReferralData(user);
+  };
+  
+  const loadReferralData = async (user: any) => {
     try {
-      // Check if user is authenticated
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      
-      if (authError || !user) {
-        toast.error("Please sign in to access your referral dashboard");
-        window.location.href = "/auth";
-        return;
-      }
       
       setEmail(user.email || "");
       
