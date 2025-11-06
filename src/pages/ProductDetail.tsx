@@ -99,7 +99,7 @@ const ProductDetail = () => {
   })?.node;
 
   const image = product?.node.images.edges[0]?.node;
-  const hasMultipleOptions = product?.node.options && product.node.options.length > 1;
+  const hasOptions = product?.node.options && product.node.options.length > 0;
 
   const handleAddToCart = () => {
     if (!selectedVariant || !product) {
@@ -220,7 +220,7 @@ const ProductDetail = () => {
             </p>
 
             {/* Option Selectors */}
-            {hasMultipleOptions && product.node.options.map((option) => (
+            {hasOptions && product.node.options.map((option) => (
               <div key={option.name}>
                 <label className="block text-sm font-medium mb-3">{option.name}</label>
                 <div className="grid grid-cols-2 gap-2">
