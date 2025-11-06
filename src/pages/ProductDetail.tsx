@@ -194,7 +194,13 @@ const ProductDetail = () => {
             <div>
               <h1 className="text-4xl font-bold mb-4">{product.node.title}</h1>
               <p className="price-display text-4xl text-foreground mb-2">
-                ${selectedVariant ? parseFloat(selectedVariant.price.amount).toFixed(0) : "—"}
+                {selectedVariant ? (
+                  `$${parseFloat(selectedVariant.price.amount).toFixed(0)}`
+                ) : (
+                  <span>
+                    Starting at ${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(0)}
+                  </span>
+                )}
               </p>
               {selectedVariant && (
                 <p className="text-sm text-muted-foreground">
