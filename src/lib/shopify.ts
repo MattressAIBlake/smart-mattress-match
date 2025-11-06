@@ -201,3 +201,11 @@ export async function fetchProductByHandle(handle: string) {
 
   return data.data.productByHandle;
 }
+
+export async function fetchAdjustableBases(limit = 10) {
+  const data = await storefrontApiRequest(STOREFRONT_QUERY, { 
+    first: limit, 
+    query: 'vendor:BedTech' 
+  });
+  return data.data.products.edges as ShopifyProduct[];
+}

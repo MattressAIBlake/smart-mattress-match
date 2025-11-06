@@ -8,13 +8,21 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Gift } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, Gift, ChevronDown, Sparkles } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
+import { useRecommendedBases } from "@/hooks/useRecommendedBases";
+import { optimizeShopifyImage } from "@/lib/shopify";
 
 export const CartDrawer = () => {
   const [showPromo, setShowPromo] = useState(false);
+  const [isBaseUpsellOpen, setIsBaseUpsellOpen] = useState(false);
   const { 
     items, 
     isLoading,
@@ -23,8 +31,11 @@ export const CartDrawer = () => {
     removeItem, 
     createCheckout,
     openCart,
-    closeCart
+    closeCart,
+    addItem
   } = useCartStore();
+
+  const { recommendedBases, shouldShow, mattressSize } = useRecommendedBases(items);
 
   useEffect(() => {
     // Show promo if first-time visitor
@@ -139,6 +150,76 @@ export const CartDrawer = () => {
                     </div>
                   ))}
                 </div>
+
+                {/* Adjustable Base Upsell */}
+                {shouldShow && recommendedBases.length > 0 && (
+                  <div className="border-t pt-4 mt-4">
+                    <Collapsible open={isBaseUpsellOpen} onOpenChange={setIsBaseUpsellOpen}>
+                      <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-gradient-to-r from-primary/5 to-purple-500/5 border border-primary/10 hover:border-primary/20 transition-colors">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="h-4 w-4 text-primary" />
+                          <span className="text-sm font-semibold">Complete Your Setup</span>
+                          <Badge variant="secondary" className="text-xs">Save up to $500</Badge>
+                        </div>
+                        <ChevronDown className={`h-4 w-4 transition-transform ${isBaseUpsellOpen ? 'rotate-180' : ''}`} />
+                      </CollapsibleTrigger>
+                      
+                      <CollapsibleContent className="pt-3 space-y-2">
+                        <p className="text-xs text-muted-foreground mb-3">
+                          Maximize comfort with an adjustable base {mattressSize ? `for your ${mattressSize} mattress` : ''}
+                        </p>
+                        <div className="space-y-2">
+                          {recommendedBases.map((base) => {
+                            const variant = base.node.variants.edges.find(v => 
+                              mattressSize ? v.node.selectedOptions.some(opt => opt.value === mattressSize) : true
+                            )?.node || base.node.variants.edges[0].node;
+
+                            return (
+                              <div key={base.node.id} className="flex gap-3 p-2 border rounded-lg bg-background hover:border-primary/30 transition-colors">
+                                <div className="w-16 h-16 bg-secondary/20 rounded-md overflow-hidden flex-shrink-0">
+                                  {base.node.images?.edges?.[0]?.node && (
+                                    <img
+                                      src={optimizeShopifyImage(base.node.images.edges[0].node.url, 100)}
+                                      alt={base.node.title}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  )}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h5 className="text-sm font-medium truncate">{base.node.title}</h5>
+                                  <p className="text-xs text-muted-foreground">{mattressSize || 'Queen'}</p>
+                                  <p className="text-sm font-semibold text-primary">
+                                    ${parseFloat(variant.price.amount).toFixed(0)}
+                                  </p>
+                                </div>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="flex-shrink-0 h-8"
+                                  onClick={() => {
+                                    addItem({
+                                      product: base,
+                                      variantId: variant.id,
+                                      variantTitle: variant.title,
+                                      price: variant.price,
+                                      quantity: 1,
+                                      selectedOptions: variant.selectedOptions,
+                                    });
+                                    toast.success("Added to cart!", {
+                                      description: base.node.title,
+                                    });
+                                  }}
+                                >
+                                  Add
+                                </Button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </div>
+                )}
               </div>
               
               <div className="flex-shrink-0 space-y-4 pt-4 border-t bg-background">
