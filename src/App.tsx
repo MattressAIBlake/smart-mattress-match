@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const BrandPage = lazy(() => import("./pages/BrandPage"));
 const ReferralDashboard = lazy(() => import("./pages/ReferralDashboard"));
+const Auth = lazy(() => import("./pages/Auth"));
 
 const App = () => {
   const [queryClient] = useState(
@@ -57,6 +58,14 @@ const App = () => {
               element={
                 <Suspense fallback={<div className="container mx-auto px-4 py-8"><ProductGridSkeleton count={1} /></div>}>
                   <ReferralDashboard />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/auth"
+              element={
+                <Suspense fallback={<div className="container mx-auto px-4 py-8"><ProductGridSkeleton count={1} /></div>}>
+                  <Auth />
                 </Suspense>
               }
             />

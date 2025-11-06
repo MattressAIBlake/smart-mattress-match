@@ -1,10 +1,18 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Input validation schema
+const requestSchema = z.object({
+  orderId: z.string().min(1).max(100),
+  referralCode: z.string().regex(/^SLEEP-[A-Z0-9]{1,6}-[A-Z0-9]{4}$/),
+  customerEmail: z.string().email().max(255)
+});
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -17,9 +25,13 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { orderId, referralCode, customerEmail } = await req.json();
+    const body = await req.json();
+    
+    // Validate input
+    const validated = requestSchema.parse(body);
+    const { orderId, referralCode, customerEmail } = validated;
 
-    console.log("Processing referral for order:", orderId, "with code:", referralCode);
+    console.log("Processing referral");
 
     // Verify referral code exists
     const { data: referrer, error: referrerError } = await supabase
@@ -29,7 +41,6 @@ serve(async (req) => {
       .single();
 
     if (referrerError || !referrer) {
-      console.error("Referrer not found:", referrerError);
       return new Response(
         JSON.stringify({ error: "Invalid referral code" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -98,7 +109,7 @@ serve(async (req) => {
       });
 
     if (redemptionError) {
-      console.error("Failed to create redemption:", redemptionError);
+      console.error("Failed to create redemption");
     }
 
     console.log("Referral processed successfully");
@@ -112,9 +123,16 @@ serve(async (req) => {
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
-    console.error("Error processing referral:", error);
+    if (error instanceof z.ZodError) {
+      return new Response(
+        JSON.stringify({ error: "Invalid input data", details: error.errors }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    
+    console.error("Error processing referral");
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({ error: "Failed to process referral" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

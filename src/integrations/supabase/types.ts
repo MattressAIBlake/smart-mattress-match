@@ -152,7 +152,10 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      increment_share_count: {
+        Args: { profile_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

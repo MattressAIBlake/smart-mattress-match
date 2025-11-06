@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Gift, Users, DollarSign } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowLeft, Gift, Users, DollarSign, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { ReferralCard } from "@/components/ReferralCard";
 import { toast } from "sonner";
 import { generateReferralCode } from "@/lib/referralUtils";
 
 export default function ReferralDashboard() {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<any>(null);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,18 +22,22 @@ export default function ReferralDashboard() {
   
   const loadReferralData = async () => {
     try {
-      // For demo purposes, using email from localStorage or creating new profile
-      const userEmail = localStorage.getItem('user_email') || prompt("Enter your email to access referral dashboard:");
-      if (!userEmail) return;
+      // Check if user is authenticated
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
       
-      setEmail(userEmail);
-      localStorage.setItem('user_email', userEmail);
+      if (authError || !user) {
+        toast.error("Please sign in to access your referral dashboard");
+        window.location.href = "/auth";
+        return;
+      }
+      
+      setEmail(user.email || "");
       
       // Check if profile exists
       const { data: existingProfile, error: profileError } = await supabase
         .from('user_profiles')
         .select('*')
-        .eq('email', userEmail)
+        .eq('email', user.email)
         .single();
       
       if (profileError && profileError.code !== 'PGRST116') {
@@ -41,11 +46,12 @@ export default function ReferralDashboard() {
       
       if (!existingProfile) {
         // Create new profile
-        const referralCode = generateReferralCode(userEmail);
+        const referralCode = generateReferralCode(user.email || "");
         const { data: newProfile, error: insertError } = await supabase
           .from('user_profiles')
           .insert({
-            email: userEmail,
+            id: user.id,
+            email: user.email,
             referral_code: referralCode,
             reward_balance: 0,
             total_referrals: 0
@@ -94,13 +100,24 @@ export default function ReferralDashboard() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b sticky top-0 z-50 bg-background">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Home
             </Button>
           </Link>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={async () => {
+              await supabase.auth.signOut();
+              navigate("/auth");
+            }}
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Sign Out
+          </Button>
         </div>
       </header>
       
