@@ -9,8 +9,8 @@ import { Link } from "react-router-dom";
 
 export const FeaturedProduct = () => {
   const { data: product, isLoading } = useQuery({
-    queryKey: ["featured-product", "helix-midnight-luxe"],
-    queryFn: () => fetchProductByHandle("helix-midnight-luxe"),
+    queryKey: ["featured-product", "helix-midnight-luxe-1"],
+    queryFn: () => fetchProductByHandle("helix-midnight-luxe-1"),
   });
 
   const addItem = useCartStore((state) => state.addItem);
@@ -91,10 +91,10 @@ export const FeaturedProduct = () => {
                 </div>
                 <div className="space-y-2">
                   <p className="price-display text-3xl text-foreground">
-                    ${parseFloat(product.variants.edges.find(v => v.node.title === "Queen")?.node.price.amount || price.amount).toFixed(0)}
+                    ${parseFloat(product.variants.edges.find(v => v.node.selectedOptions?.find(o => o.name === "Size")?.value === "Queen")?.node.price.amount || price.amount).toFixed(0)}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    Queen size
+                    Queen size starting price
                   </p>
                 </div>
               </div>
