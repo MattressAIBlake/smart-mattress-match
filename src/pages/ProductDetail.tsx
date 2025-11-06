@@ -95,6 +95,21 @@ const ProductDetail = () => {
     const sizeMatch = v.node.selectedOptions.find((o) => o.name === "Size")?.value === selectedSize;
     const coolingMatch = v.node.selectedOptions.find((o) => o.name === "Cooling")?.value === selectedCooling;
     const supportMatch = v.node.selectedOptions.find((o) => o.name === "Support")?.value === selectedSupport;
+    
+    // Debug logging
+    if (selectedSize !== "Twin" && selectedSize !== "Twin XL") {
+      console.log("Variant matching debug:", {
+        variantTitle: v.node.title,
+        selectedSize,
+        selectedCooling,
+        selectedSupport,
+        sizeMatch,
+        coolingMatch,
+        supportMatch,
+        variantOptions: v.node.selectedOptions
+      });
+    }
+    
     return sizeMatch && coolingMatch && supportMatch;
   })?.node;
 
