@@ -197,9 +197,7 @@ const ProductDetail = () => {
                 {selectedVariant ? (
                   `$${parseFloat(selectedVariant.price.amount).toFixed(0)}`
                 ) : (
-                  <span>
-                    Starting at ${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(0)}
-                  </span>
+                  `$${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(0)}`
                 )}
               </p>
               {selectedVariant && (
