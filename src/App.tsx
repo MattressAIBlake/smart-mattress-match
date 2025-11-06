@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import { ProductGridSkeleton } from "@/components/skeletons/ProductGridSkeleton";
 import NotFound from "./pages/NotFound";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 // Lazy load route components for code splitting
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
@@ -35,6 +36,7 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route
