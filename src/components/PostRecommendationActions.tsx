@@ -1,68 +1,45 @@
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Share2, Gift, User } from "lucide-react";
+import { Share2, Gift } from "lucide-react";
 
 interface PostRecommendationActionsProps {
-  onShareProfile: () => void;
+  onShare: () => void;
   onReferFriends: () => void;
-  onShareChat: () => void;
 }
 
-export const PostRecommendationActions = ({
-  onShareProfile,
-  onReferFriends,
-  onShareChat
-}: PostRecommendationActionsProps) => {
+export const PostRecommendationActions = ({ onShare, onReferFriends }: PostRecommendationActionsProps) => {
   return (
-    <div className="grid md:grid-cols-3 gap-4 mt-6">
-      <Card className="p-6 hover:border-primary/50 transition-all cursor-pointer" onClick={onShareProfile}>
-        <div className="text-center space-y-3">
-          <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-            <User className="h-6 w-6 text-primary" />
-          </div>
-          <div>
-            <h3 className="font-semibold mb-1">Share Your Sleep Profile</h3>
-            <p className="text-sm text-muted-foreground">
-              Show friends your perfect match
-            </p>
-          </div>
-          <Button variant="outline" className="w-full">
-            Create Profile
-          </Button>
-        </div>
-      </Card>
-      
-      <Card className="p-6 hover:border-primary/50 transition-all cursor-pointer bg-gradient-to-br from-primary/5 via-purple-500/5 to-pink-500/5" onClick={onReferFriends}>
-        <div className="text-center space-y-3">
-          <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-            <Gift className="h-6 w-6 text-primary" />
-          </div>
-          <div>
-            <h3 className="font-semibold mb-1">Refer Friends ($100)</h3>
-            <p className="text-sm text-muted-foreground">
-              You both get $100 rewards
-            </p>
-          </div>
-          <Button variant="default" className="w-full">
-            Get Your Code
-          </Button>
-        </div>
-      </Card>
-      
-      <Card className="p-6 hover:border-primary/50 transition-all cursor-pointer" onClick={onShareChat}>
-        <div className="text-center space-y-3">
-          <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+    <div className="grid md:grid-cols-2 gap-4 mt-6">
+      <Card 
+        className="p-6 hover:shadow-lg transition-all cursor-pointer border-primary/20 hover:border-primary/40 bg-gradient-to-br from-primary/5 to-purple-500/5"
+        onClick={onShare}
+      >
+        <div className="flex items-start gap-4">
+          <div className="p-3 rounded-full bg-primary/10">
             <Share2 className="h-6 w-6 text-primary" />
           </div>
-          <div>
-            <h3 className="font-semibold mb-1">Share This Chat</h3>
+          <div className="flex-1">
+            <h3 className="font-semibold text-lg mb-1">Share Your Match</h3>
             <p className="text-sm text-muted-foreground">
-              Screenshot & post on social
+              Download your personalized recommendation and share on social media
             </p>
           </div>
-          <Button variant="outline" className="w-full">
-            Share Now
-          </Button>
+        </div>
+      </Card>
+      
+      <Card 
+        className="p-6 hover:shadow-lg transition-all cursor-pointer border-green-500/20 hover:border-green-500/40 bg-gradient-to-br from-green-500/5 to-emerald-500/5"
+        onClick={onReferFriends}
+      >
+        <div className="flex items-start gap-4">
+          <div className="p-3 rounded-full bg-green-500/10">
+            <Gift className="h-6 w-6 text-green-600" />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-semibold text-lg mb-1">Refer Friends ($100)</h3>
+            <p className="text-sm text-muted-foreground">
+              Share your code and you both get $100 rewards
+            </p>
+          </div>
         </div>
       </Card>
     </div>

@@ -6,9 +6,8 @@ import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { TypingIndicator } from "./TypingIndicator";
 import { PostRecommendationActions } from "./PostRecommendationActions";
-import { ShareProfileDialog } from "./ShareProfileDialog";
-import { ShareChatDialog } from "./ShareChatDialog";
-import { analyzeChatForProfile, saveSleepProfile } from "@/lib/profileGenerator";
+import { RecommendationShareCard } from "./RecommendationShareCard";
+import { analyzeChatForProfile, saveSleepProfile, SleepProfile } from "@/lib/profileGenerator";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -101,8 +100,8 @@ export const MattressAIChat = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [streamBuffer, setStreamBuffer] = useState("");
   const [showActions, setShowActions] = useState(false);
-  const [shareProfileOpen, setShareProfileOpen] = useState(false);
-  const [shareChatOpen, setShareChatOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [profile, setProfile] = useState<SleepProfile | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
@@ -217,15 +216,12 @@ export const MattressAIChat = () => {
     }
   };
 
-  const handleShareProfile = async () => {
-    const profile = analyzeChatForProfile(messages);
-    const conversationSummary = messages.slice(1).map(m => m.content).join(' ').slice(0, 500);
-    await saveSleepProfile(profile, conversationSummary);
-    setShareProfileOpen(true);
-  };
-
-  const handleShareChat = () => {
-    setShareChatOpen(true);
+  const handleShare = async () => {
+    if (!profile) {
+      const generatedProfile = analyzeChatForProfile(messages);
+      setProfile(generatedProfile);
+    }
+    setShareOpen(true);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -298,11 +294,10 @@ export const MattressAIChat = () => {
           
           {/* Post-Recommendation Actions */}
           {showActions && (
-            <PostRecommendationActions
-              onShareProfile={handleShareProfile}
-              onReferFriends={() => navigate('/referral')}
-              onShareChat={handleShareChat}
-            />
+          <PostRecommendationActions 
+            onShare={handleShare}
+            onReferFriends={() => navigate('/referral')}
+          />
           )}
         </div>
       )}
@@ -352,17 +347,14 @@ export const MattressAIChat = () => {
       </div>
       <div ref={scrollRef} />
       
-      {/* Share Dialogs */}
-      <ShareProfileDialog
-        open={shareProfileOpen}
-        onOpenChange={setShareProfileOpen}
-        profile={analyzeChatForProfile(messages)}
-      />
-      <ShareChatDialog
-        open={shareChatOpen}
-        onOpenChange={setShareChatOpen}
-        messageElement={lastMessageRef.current}
-      />
+      {/* Share Dialog */}
+      {profile && (
+        <RecommendationShareCard
+          open={shareOpen}
+          onOpenChange={setShareOpen}
+          profile={profile}
+        />
+      )}
     </div>
   );
 };
