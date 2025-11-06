@@ -60,14 +60,26 @@ const CART_CREATE_MUTATION = `
   }
 `;
 
-async function createStorefrontCheckout(items: CartItem[]): Promise<string> {
+async function createStorefrontCheckout(items: CartItem[], referralCode?: string | null): Promise<string> {
   const lines = items.map(item => ({
     quantity: item.quantity,
     merchandiseId: item.variantId,
   }));
 
+  const input: any = { lines };
+  
+  // Add referral code as custom attribute if present
+  if (referralCode) {
+    input.attributes = [
+      {
+        key: 'referral_code',
+        value: referralCode
+      }
+    ];
+  }
+
   const cartData = await storefrontApiRequest(CART_CREATE_MUTATION, {
-    input: { lines },
+    input,
   });
 
   if (cartData.data.cartCreate.userErrors.length > 0) {
@@ -143,12 +155,12 @@ export const useCartStore = create<CartStore>()(
       closeCart: () => set({ isCartOpen: false }),
 
       createCheckout: async () => {
-        const { items, setLoading, setCheckoutUrl } = get();
+        const { items, referralCode, setLoading, setCheckoutUrl } = get();
         if (items.length === 0) return;
 
         setLoading(true);
         try {
-          const checkoutUrl = await createStorefrontCheckout(items);
+          const checkoutUrl = await createStorefrontCheckout(items, referralCode);
           setCheckoutUrl(checkoutUrl);
         } catch (error) {
           console.error('Failed to create checkout:', error);
