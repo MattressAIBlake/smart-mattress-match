@@ -235,17 +235,6 @@ export const MattressAIChat = () => {
 
   return (
     <div className="w-full flex flex-col">
-      {/* Sale Announcement Badge */}
-      {SALE_CONFIG.SALE_ACTIVE && (
-        <div className="flex justify-center mb-4 animate-fade-in">
-          <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-2xl border-2 border-amber-400/50">
-            <span className="text-sm font-bold tracking-wide">
-              🔥 {SALE_CONFIG.SALE_NAME} - {SALE_CONFIG.DISCOUNT_PERCENT}% OFF ALL MATTRESSES
-            </span>
-          </div>
-        </div>
-      )}
-      
       {/* Header Badge */}
       <div className="flex justify-center mb-6">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/20">
