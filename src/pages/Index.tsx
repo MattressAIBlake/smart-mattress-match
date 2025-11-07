@@ -3,6 +3,7 @@ import { FeaturedProduct } from "@/components/FeaturedProduct";
 import { MattressAIChat } from "@/components/MattressAIChat";
 import { CartDrawer } from "@/components/CartDrawer";
 import { ReferralButton } from "@/components/ReferralButton";
+import { FloatingReferralWidget } from "@/components/FloatingReferralWidget";
 import { PromoBar } from "@/components/PromoBar";
 import { ReferralShareCard } from "@/components/ReferralShareCard";
 import { Badge } from "@/components/ui/badge";
@@ -135,6 +136,9 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      {/* Floating Referral Widget */}
+      <FloatingReferralWidget />
     </div>
   );
 };

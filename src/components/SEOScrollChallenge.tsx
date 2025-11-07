@@ -10,10 +10,10 @@ export const SEOScrollChallenge = () => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!contentRef.current) return;
+    const handleScroll = (e: Event) => {
+      const element = e.target as HTMLElement;
+      if (!element) return;
       
-      const element = contentRef.current;
       const scrollTop = element.scrollTop;
       const scrollHeight = element.scrollHeight - element.clientHeight;
       const progress = (scrollTop / scrollHeight) * 100;
@@ -26,10 +26,11 @@ export const SEOScrollChallenge = () => {
       }
     };
 
-    const element = contentRef.current;
-    if (element) {
-      element.addEventListener('scroll', handleScroll);
-      return () => element.removeEventListener('scroll', handleScroll);
+    // ScrollArea uses a viewport element, we need to find it
+    const scrollAreaViewport = document.querySelector('[data-radix-scroll-area-viewport]');
+    if (scrollAreaViewport) {
+      scrollAreaViewport.addEventListener('scroll', handleScroll);
+      return () => scrollAreaViewport.removeEventListener('scroll', handleScroll);
     }
   }, [isUnlocked]);
 
