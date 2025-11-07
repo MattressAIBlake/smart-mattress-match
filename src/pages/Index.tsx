@@ -87,7 +87,7 @@ const Index = () => {
       </header>
 
       {/* Hero Section with AI Chat */}
-      <section className="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30 py-16 md:py-24 min-h-[70vh] flex items-center relative overflow-hidden">
+      <section className="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30 pt-8 pb-16 md:pt-12 md:pb-24 min-h-[70vh] flex items-center relative overflow-hidden">
         <div className="container mx-auto px-4">
           {SALE_CONFIG.SALE_ACTIVE && (
             <div className="max-w-4xl mx-auto mb-6 animate-fade-in">
