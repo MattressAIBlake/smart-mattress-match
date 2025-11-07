@@ -2,11 +2,12 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchProducts, fetchProductByHandle } from "@/lib/shopify";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { CartDrawer } from "@/components/CartDrawer";
 import { ReferralButton } from "@/components/ReferralButton";
 import { useCartStore } from "@/stores/cartStore";
-import { ShoppingCart, ArrowLeft, Gift } from "lucide-react";
+import { ShoppingCart, ArrowLeft, Gift, Tag } from "lucide-react";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { LazyImage } from "@/components/LazyImage";
@@ -14,6 +15,7 @@ import { ProductDetailSkeleton } from "@/components/skeletons/ProductDetailSkele
 import { ProductSchema } from "@/components/seo/ProductSchema";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { SALE_CONFIG, calculateSalePrice } from "@/config/sale";
 
 const ProductDetail = () => {
   const { handle } = useParams();
@@ -190,7 +192,13 @@ const ProductDetail = () => {
 
         <div className="grid md:grid-cols-2 gap-12">
           {/* Product Image */}
-          <div className="space-y-4">
+          <div className="space-y-4 relative">
+            {SALE_CONFIG.SALE_ACTIVE && (
+              <Badge className="absolute top-4 left-4 z-10 bg-gradient-to-r from-red-600 to-orange-600 text-white font-bold shadow-lg animate-pulse px-4 py-2 text-lg">
+                <Tag className="h-4 w-4 mr-2" />
+                {SALE_CONFIG.BADGE_TEXT} -{SALE_CONFIG.DISCOUNT_PERCENT}%
+              </Badge>
+            )}
             {image ? (
               <div className="aspect-square bg-muted rounded-lg overflow-hidden">
                 <LazyImage
@@ -210,13 +218,40 @@ const ProductDetail = () => {
           <div className="space-y-6">
             <div>
               <h1 className="text-4xl font-bold mb-4">{product.node.title}</h1>
-              <p className="price-display text-4xl text-foreground mb-2">
-                {selectedVariant ? (
-                  `$${parseFloat(selectedVariant.price.amount).toFixed(0)}`
-                ) : (
-                  `$${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(0)}`
-                )}
-              </p>
+              {SALE_CONFIG.SALE_ACTIVE ? (
+                <>
+                  <div className="flex items-baseline gap-3 mb-2">
+                    <p className="price-display text-4xl text-red-600 font-bold">
+                      {selectedVariant ? (
+                        `$${parseFloat(calculateSalePrice(selectedVariant.price.amount)).toFixed(0)}`
+                      ) : (
+                        `$${parseFloat(calculateSalePrice(product.node.priceRange.minVariantPrice.amount)).toFixed(0)}`
+                      )}
+                    </p>
+                    <p className="price-display text-2xl text-muted-foreground line-through">
+                      {selectedVariant ? (
+                        `$${parseFloat(selectedVariant.price.amount).toFixed(0)}`
+                      ) : (
+                        `$${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(0)}`
+                      )}
+                    </p>
+                  </div>
+                  <p className="text-lg font-bold text-red-600 mb-2">
+                    Save ${selectedVariant 
+                      ? (parseFloat(selectedVariant.price.amount) - parseFloat(calculateSalePrice(selectedVariant.price.amount))).toFixed(0)
+                      : (parseFloat(product.node.priceRange.minVariantPrice.amount) - parseFloat(calculateSalePrice(product.node.priceRange.minVariantPrice.amount))).toFixed(0)
+                    } - {SALE_CONFIG.SALE_NAME}!
+                  </p>
+                </>
+              ) : (
+                <p className="price-display text-4xl text-foreground mb-2">
+                  {selectedVariant ? (
+                    `$${parseFloat(selectedVariant.price.amount).toFixed(0)}`
+                  ) : (
+                    `$${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(0)}`
+                  )}
+                </p>
+              )}
               {selectedVariant && (
                 <p className="text-sm text-muted-foreground">
                   {selectedVariant.title}

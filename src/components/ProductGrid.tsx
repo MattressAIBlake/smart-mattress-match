@@ -2,12 +2,14 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchProducts, fetchProductByHandle } from "@/lib/shopify";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Loader2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ShoppingCart, Loader2, Tag } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { LazyImage } from "@/components/LazyImage";
 import { ProductGridSkeleton } from "@/components/skeletons/ProductGridSkeleton";
+import { SALE_CONFIG, calculateSalePrice } from "@/config/sale";
 
 export const ProductGrid = () => {
   const { data: products, isLoading, error } = useQuery({
@@ -101,7 +103,13 @@ export const ProductGrid = () => {
             }}
           >
             <Link to={`/product/${product.node.handle}`}>
-              <CardHeader className="p-0">
+              <CardHeader className="p-0 relative">
+                {SALE_CONFIG.SALE_ACTIVE && (
+                  <Badge className="absolute top-4 left-4 z-10 bg-gradient-to-r from-red-600 to-orange-600 text-white font-bold shadow-lg animate-pulse">
+                    <Tag className="h-3 w-3 mr-1" />
+                    {SALE_CONFIG.BADGE_TEXT} -{SALE_CONFIG.DISCOUNT_PERCENT}%
+                  </Badge>
+                )}
                 {image ? (
                   <div className="aspect-square bg-muted overflow-hidden">
                     <LazyImage
@@ -128,9 +136,25 @@ export const ProductGrid = () => {
                 {product.node.description || "Premium mattress for exceptional sleep"}
               </CardDescription>
               <div className="space-y-2">
-                <p className="price-display text-2xl text-foreground">
-                  ${parseFloat(price.amount).toFixed(0)}
-                </p>
+                {SALE_CONFIG.SALE_ACTIVE ? (
+                  <>
+                    <div className="flex items-baseline gap-2">
+                      <p className="price-display text-2xl text-red-600 font-bold">
+                        ${parseFloat(calculateSalePrice(price.amount)).toFixed(0)}
+                      </p>
+                      <p className="text-lg text-muted-foreground line-through">
+                        ${parseFloat(price.amount).toFixed(0)}
+                      </p>
+                    </div>
+                    <p className="text-xs font-semibold text-red-600">
+                      Save ${(parseFloat(price.amount) - parseFloat(calculateSalePrice(price.amount))).toFixed(0)} - {SALE_CONFIG.SALE_NAME}
+                    </p>
+                  </>
+                ) : (
+                  <p className="price-display text-2xl text-foreground">
+                    ${parseFloat(price.amount).toFixed(0)}
+                  </p>
+                )}
                 <p className="text-xs text-muted-foreground">
                   Queen size price
                 </p>

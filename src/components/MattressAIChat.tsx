@@ -92,7 +92,7 @@ export const MattressAIChat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "I'll help you find the perfect mattress. What's your primary sleep position?",
+      content: "🔥 **BLACK FRIDAY SALE - 25% OFF ALL MATTRESSES!** 🔥\n\nI'll help you find the perfect mattress at incredible savings. What's your primary sleep position?",
     },
   ]);
   const [input, setInput] = useState("");
