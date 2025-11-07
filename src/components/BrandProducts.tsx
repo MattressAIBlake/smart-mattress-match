@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchProducts, fetchProductByHandle } from "@/lib/shopify";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ShoppingCart, Loader2 } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
@@ -10,6 +11,7 @@ import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { LazyImage } from "@/components/LazyImage";
 import { ProductGridSkeleton } from "@/components/skeletons/ProductGridSkeleton";
+import { SALE_CONFIG, calculateSalePrice } from "@/config/sale";
 
 const BRANDS = [
   { name: "All Brands", value: "all" },
@@ -177,7 +179,14 @@ export const BrandProducts = () => {
                       }}
                     >
                       <Link to={`/product/${product.node.handle}`}>
-                        <CardHeader className="p-0">
+                        <CardHeader className="p-0 relative">
+                          {SALE_CONFIG.SALE_ACTIVE && (
+                            <div className="absolute top-3 right-3 z-10">
+                              <Badge className="bg-gradient-to-br from-amber-600 to-amber-700 text-white font-bold text-xs px-2.5 py-1.5 shadow-lg border border-amber-400/50">
+                                {SALE_CONFIG.BADGE_TEXT}
+                              </Badge>
+                            </div>
+                          )}
                           {image ? (
                             <div className="aspect-square bg-muted overflow-hidden">
                               <LazyImage
@@ -205,9 +214,25 @@ export const BrandProducts = () => {
                           {product.node.description || "Premium mattress for exceptional sleep"}
                         </CardDescription>
                         <div className="space-y-1">
-                          <p className="text-xl font-bold text-primary">
-                            ${parseFloat(price.amount).toFixed(0)}
-                          </p>
+                          {SALE_CONFIG.SALE_ACTIVE ? (
+                            <>
+                              <div className="flex items-baseline gap-2">
+                                <p className="text-xl font-bold text-amber-600 dark:text-amber-500">
+                                  ${parseFloat(calculateSalePrice(price.amount)).toFixed(0)}
+                                </p>
+                                <p className="text-sm text-muted-foreground line-through">
+                                  ${parseFloat(price.amount).toFixed(0)}
+                                </p>
+                              </div>
+                              <p className="text-xs font-semibold text-amber-700 dark:text-amber-400">
+                                Save ${(parseFloat(price.amount) - parseFloat(calculateSalePrice(price.amount))).toFixed(0)}
+                              </p>
+                            </>
+                          ) : (
+                            <p className="text-xl font-bold text-primary">
+                              ${parseFloat(price.amount).toFixed(0)}
+                            </p>
+                          )}
                           <p className="text-xs text-muted-foreground">
                             Queen size price
                           </p>

@@ -8,6 +8,8 @@ import { TypingIndicator } from "./TypingIndicator";
 import { PostRecommendationActions } from "./PostRecommendationActions";
 import { RecommendationShareCard } from "./RecommendationShareCard";
 import { analyzeChatForProfile, saveSleepProfile, SleepProfile } from "@/lib/profileGenerator";
+import { SALE_CONFIG } from "@/config/sale";
+import { Badge } from "@/components/ui/badge";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -233,6 +235,17 @@ export const MattressAIChat = () => {
 
   return (
     <div className="w-full flex flex-col">
+      {/* Sale Announcement Badge */}
+      {SALE_CONFIG.SALE_ACTIVE && (
+        <div className="flex justify-center mb-4 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-2xl border-2 border-amber-400/50">
+            <span className="text-sm font-bold tracking-wide">
+              🔥 {SALE_CONFIG.SALE_NAME} - {SALE_CONFIG.DISCOUNT_PERCENT}% OFF ALL MATTRESSES
+            </span>
+          </div>
+        </div>
+      )}
+      
       {/* Header Badge */}
       <div className="flex justify-center mb-6">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/20">
@@ -257,6 +270,11 @@ export const MattressAIChat = () => {
           <p className="text-lg md:text-xl text-foreground/80 leading-relaxed font-medium">
             {messages[0].content}
           </p>
+          {SALE_CONFIG.SALE_ACTIVE && (
+            <p className="text-base text-amber-700 dark:text-amber-400 font-semibold mt-4">
+              Plus, save {SALE_CONFIG.DISCOUNT_PERCENT}% on your perfect match!
+            </p>
+          )}
         </div>
       )}
 
@@ -310,7 +328,7 @@ export const MattressAIChat = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Tell me about your sleep needs..."
+              placeholder={SALE_CONFIG.SALE_ACTIVE ? `Tell me about your sleep needs... (${SALE_CONFIG.DISCOUNT_PERCENT}% off all recommendations!)` : "Tell me about your sleep needs..."}
               disabled={isLoading}
               className="flex-1 border-0 bg-transparent text-lg placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:ring-offset-0 h-14"
             />

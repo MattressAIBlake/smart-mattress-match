@@ -57,9 +57,11 @@ export const FeaturedProduct = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           {SALE_CONFIG.SALE_ACTIVE && (
-            <Badge className="mb-4 px-4 py-1.5 text-sm bg-slate-900 text-white font-semibold shadow-md">
-              {SALE_CONFIG.BADGE_TEXT}
-            </Badge>
+            <div className="mb-6">
+              <Badge className="px-6 py-2.5 text-base bg-gradient-to-r from-amber-600 to-amber-700 text-white font-bold shadow-2xl border-2 border-amber-400/50">
+                🔥 {SALE_CONFIG.BADGE_TEXT} - {SALE_CONFIG.SALE_NAME} 🔥
+              </Badge>
+            </div>
           )}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-4">
             <Star className="h-4 w-4 fill-current" />
@@ -97,20 +99,27 @@ export const FeaturedProduct = () => {
                   ))}
                   <span className="text-sm text-muted-foreground">(2,847 reviews)</span>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {SALE_CONFIG.SALE_ACTIVE ? (
                     <>
+                      <div className="inline-block">
+                        <Badge className="bg-gradient-to-r from-amber-600 to-amber-700 text-white text-sm font-bold px-3 py-1">
+                          LIMITED TIME OFFER
+                        </Badge>
+                      </div>
                       <div className="flex items-baseline gap-3">
-                        <p className="price-display text-3xl font-bold">
+                        <p className="price-display text-5xl font-bold text-amber-600 dark:text-amber-500">
                           ${parseFloat(calculateSalePrice(queenPrice)).toFixed(0)}
                         </p>
-                        <p className="text-xl text-muted-foreground line-through">
+                        <p className="text-2xl text-muted-foreground line-through">
                           ${parseFloat(queenPrice).toFixed(0)}
                         </p>
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        Save ${(parseFloat(queenPrice) - parseFloat(calculateSalePrice(queenPrice))).toFixed(0)}
-                      </p>
+                      <div className="bg-gradient-to-r from-amber-50 to-amber-100 dark:from-amber-950/30 dark:to-amber-900/30 border-2 border-amber-500/30 rounded-lg p-3">
+                        <p className="text-lg font-bold text-amber-900 dark:text-amber-100">
+                          🎉 You Save ${(parseFloat(queenPrice) - parseFloat(calculateSalePrice(queenPrice))).toFixed(0)} Today!
+                        </p>
+                      </div>
                     </>
                   ) : (
                     <p className="price-display text-3xl text-foreground">

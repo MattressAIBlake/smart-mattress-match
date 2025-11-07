@@ -16,6 +16,7 @@ import { ProductSchema } from "@/components/seo/ProductSchema";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { SALE_CONFIG, calculateSalePrice } from "@/config/sale";
+import { SaleCountdown } from "@/components/SaleCountdown";
 
 const ProductDetail = () => {
   const { handle } = useParams();
@@ -215,32 +216,60 @@ const ProductDetail = () => {
 
           {/* Product Info */}
           <div className="space-y-6">
+            {/* Sale Banner */}
+            {SALE_CONFIG.SALE_ACTIVE && (
+              <div className="bg-gradient-to-br from-black via-amber-950 to-black text-white rounded-xl p-6 shadow-2xl border-2 border-amber-500/30 relative overflow-hidden animate-fade-in">
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-transparent to-amber-500/10 pointer-events-none" />
+                <div className="relative z-10 text-center space-y-3">
+                  <Badge className="bg-amber-500 text-black font-bold text-xs px-3 py-1">
+                    {SALE_CONFIG.SALE_NAME}
+                  </Badge>
+                  <p className="text-2xl font-bold tracking-tight">
+                    Save {SALE_CONFIG.DISCOUNT_PERCENT}% Today!
+                  </p>
+                  <SaleCountdown size="md" showLabel={true} className="justify-center text-white" />
+                </div>
+              </div>
+            )}
+
             <div>
               <h1 className="text-4xl font-bold mb-4">{product.node.title}</h1>
               {SALE_CONFIG.SALE_ACTIVE ? (
                 <>
-                  <div className="flex items-baseline gap-3 mb-2">
-                    <p className="price-display text-4xl font-bold">
-                      {selectedVariant ? (
-                        `$${parseFloat(calculateSalePrice(selectedVariant.price.amount)).toFixed(0)}`
-                      ) : (
-                        `$${parseFloat(calculateSalePrice(product.node.priceRange.minVariantPrice.amount)).toFixed(0)}`
-                      )}
-                    </p>
-                    <p className="price-display text-2xl text-muted-foreground line-through">
-                      {selectedVariant ? (
-                        `$${parseFloat(selectedVariant.price.amount).toFixed(0)}`
-                      ) : (
-                        `$${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(0)}`
-                      )}
-                    </p>
+                  <div className="bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/30 dark:to-amber-900/30 border-2 border-amber-500/40 rounded-xl p-5 mb-4 shadow-lg">
+                    <div className="flex items-center justify-between mb-3">
+                      <Badge className="bg-gradient-to-r from-amber-600 to-amber-700 text-white text-sm font-bold px-3 py-1">
+                        LIMITED TIME
+                      </Badge>
+                    </div>
+                    <div className="flex items-baseline gap-3 mb-2">
+                      <p className="price-display text-5xl font-bold text-amber-600 dark:text-amber-500">
+                        {selectedVariant ? (
+                          `$${parseFloat(calculateSalePrice(selectedVariant.price.amount)).toFixed(0)}`
+                        ) : (
+                          `$${parseFloat(calculateSalePrice(product.node.priceRange.minVariantPrice.amount)).toFixed(0)}`
+                        )}
+                      </p>
+                      <p className="price-display text-3xl text-muted-foreground line-through">
+                        {selectedVariant ? (
+                          `$${parseFloat(selectedVariant.price.amount).toFixed(0)}`
+                        ) : (
+                          `$${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(0)}`
+                        )}
+                      </p>
+                    </div>
+                    <div className="bg-white/70 dark:bg-black/30 rounded-lg p-3 border border-amber-500/20">
+                      <p className="text-xl font-bold text-amber-900 dark:text-amber-100">
+                        💰 Your Savings: ${selectedVariant 
+                          ? (parseFloat(selectedVariant.price.amount) - parseFloat(calculateSalePrice(selectedVariant.price.amount))).toFixed(0)
+                          : (parseFloat(product.node.priceRange.minVariantPrice.amount) - parseFloat(calculateSalePrice(product.node.priceRange.minVariantPrice.amount))).toFixed(0)
+                        }
+                      </p>
+                      <p className="text-sm text-amber-800 dark:text-amber-200 mt-1">
+                        This deal won't last - prices return to normal soon!
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    Save ${selectedVariant 
-                      ? (parseFloat(selectedVariant.price.amount) - parseFloat(calculateSalePrice(selectedVariant.price.amount))).toFixed(0)
-                      : (parseFloat(product.node.priceRange.minVariantPrice.amount) - parseFloat(calculateSalePrice(product.node.priceRange.minVariantPrice.amount))).toFixed(0)
-                    }
-                  </p>
                 </>
               ) : (
                 <p className="price-display text-4xl text-foreground mb-2">
@@ -304,9 +333,13 @@ const ProductDetail = () => {
               </div>
             ))}
 
-            <Button size="lg" className="w-full text-lg" onClick={handleAddToCart}>
+            <Button 
+              size="lg" 
+              className={`w-full text-lg ${SALE_CONFIG.SALE_ACTIVE ? 'bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white shadow-2xl border-2 border-amber-400/50 font-bold' : ''}`}
+              onClick={handleAddToCart}
+            >
               <ShoppingCart className="w-5 h-5 mr-2" />
-              Add to Cart
+              {SALE_CONFIG.SALE_ACTIVE ? `Add to Cart - Save ${SALE_CONFIG.DISCOUNT_PERCENT}%` : 'Add to Cart'}
             </Button>
 
             <div className="border-t pt-6 space-y-4">

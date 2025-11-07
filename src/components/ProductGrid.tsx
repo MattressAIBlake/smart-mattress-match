@@ -105,9 +105,11 @@ export const ProductGrid = () => {
             <Link to={`/product/${product.node.handle}`}>
               <CardHeader className="p-0 relative">
                 {SALE_CONFIG.SALE_ACTIVE && (
-                  <Badge className="absolute top-3 right-3 z-10 bg-slate-900/90 backdrop-blur-sm text-white text-xs font-semibold px-2 py-1 shadow-md">
-                    {SALE_CONFIG.BADGE_TEXT}
-                  </Badge>
+                  <div className="absolute top-3 right-3 z-10">
+                    <Badge className="bg-gradient-to-br from-amber-600 to-amber-700 text-white font-bold text-sm px-3 py-2 shadow-xl border-2 border-amber-400/50">
+                      {SALE_CONFIG.BADGE_TEXT}
+                    </Badge>
+                  </div>
                 )}
                 {image ? (
                   <div className="aspect-square bg-muted overflow-hidden">
@@ -137,16 +139,21 @@ export const ProductGrid = () => {
               <div className="space-y-2">
                 {SALE_CONFIG.SALE_ACTIVE ? (
                   <>
+                    <div className="inline-block">
+                      <Badge className="bg-gradient-to-r from-amber-600 to-amber-700 text-white text-xs font-bold px-2 py-0.5 mb-2">
+                        LIMITED TIME
+                      </Badge>
+                    </div>
                     <div className="flex items-baseline gap-2">
-                      <p className="price-display text-2xl font-bold">
+                      <p className="price-display text-3xl font-bold text-amber-600 dark:text-amber-500">
                         ${parseFloat(calculateSalePrice(price.amount)).toFixed(0)}
                       </p>
-                      <p className="text-base text-muted-foreground line-through">
+                      <p className="text-lg text-muted-foreground line-through">
                         ${parseFloat(price.amount).toFixed(0)}
                       </p>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Save ${(parseFloat(price.amount) - parseFloat(calculateSalePrice(price.amount))).toFixed(0)}
+                    <p className="text-sm font-semibold text-amber-700 dark:text-amber-400">
+                      Save ${(parseFloat(price.amount) - parseFloat(calculateSalePrice(price.amount))).toFixed(0)} Today!
                     </p>
                   </>
                 ) : (

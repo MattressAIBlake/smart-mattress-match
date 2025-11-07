@@ -88,6 +88,45 @@ const Index = () => {
       {/* Hero Section with AI Chat */}
       <section className="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30 py-16 md:py-24 min-h-[70vh] flex items-center relative overflow-hidden">
         <div className="container mx-auto px-4">
+          {SALE_CONFIG.SALE_ACTIVE && (
+            <div className="max-w-4xl mx-auto mb-12 animate-fade-in">
+              <div className="bg-gradient-to-br from-black via-amber-950 to-black text-white rounded-2xl p-6 md:p-8 shadow-2xl border-2 border-amber-500/30 relative overflow-hidden">
+                {/* Decorative gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-transparent to-amber-500/10 pointer-events-none" />
+                
+                <div className="relative z-10 text-center space-y-4">
+                  <div className="inline-block">
+                    <Badge className="bg-amber-500 text-black font-bold text-sm px-4 py-1.5 shadow-lg">
+                      LIMITED TIME
+                    </Badge>
+                  </div>
+                  <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
+                    {SALE_CONFIG.SALE_NAME}
+                  </h2>
+                  <p className="text-xl md:text-2xl font-semibold text-amber-100">
+                    Save {SALE_CONFIG.DISCOUNT_PERCENT}% on All Premium Mattresses
+                  </p>
+                  <div className="flex justify-center pt-2">
+                    <div className="inline-block">
+                      <p className="text-sm text-amber-200 mb-2">Offer ends in:</p>
+                      <div className="bg-black/30 backdrop-blur-sm rounded-xl px-6 py-3 border border-amber-500/20">
+                        <div className="flex items-center justify-center">
+                          <div className="font-mono text-2xl md:text-3xl font-bold text-amber-400">
+                            {new Date(SALE_CONFIG.SALE_END_DATE).toLocaleDateString('en-US', { 
+                              month: 'short', 
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           <MattressAIChat />
         </div>
       </section>
