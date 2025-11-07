@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProductByHandle } from "@/lib/shopify";
 import { Card } from "@/components/ui/card";
@@ -6,6 +7,13 @@ import { ShoppingCart, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface ProductRecommendationCardProps {
   handle: string;
@@ -22,6 +30,9 @@ export const ProductRecommendationCard = ({
   features,
   price,
 }: ProductRecommendationCardProps) => {
+  const [showSizeDialog, setShowSizeDialog] = useState(false);
+  const [selectedSize, setSelectedSize] = useState<string>("");
+  
   const { data: product } = useQuery({
     queryKey: ["product", handle],
     queryFn: () => fetchProductByHandle(handle),
@@ -32,36 +43,66 @@ export const ProductRecommendationCard = ({
 
   // Parse query params to find exact variant
   const params = new URLSearchParams(queryParams || "");
-  const size = params.get("size");
+  const recommendedSize = params.get("size");
   const cooling = params.get("cooling");
   const support = params.get("support");
 
-  const matchingVariant = product?.variants.edges.find((v) => {
-    const sizeMatch = v.node.selectedOptions.find((o) => o.name === "Size")?.value === size;
-    const coolingMatch = !cooling || v.node.selectedOptions.find((o) => o.name === "Cooling")?.value === cooling;
-    const supportMatch = !support || v.node.selectedOptions.find((o) => o.name === "Support")?.value === support;
-    return sizeMatch && coolingMatch && supportMatch;
-  })?.node;
+  // Get available sizes from product
+  const sizeOption = product?.options.find(opt => opt.name === "Size");
+  const availableSizes = sizeOption?.values || [];
 
-  // Fallback to first available variant if no exact match
-  const selectedVariant = matchingVariant || product?.variants.edges[0]?.node;
+  // Find matching variant based on selected or recommended size
+  const getVariantForSize = (sizeValue: string) => {
+    return product?.variants.edges.find((v) => {
+      const sizeMatch = v.node.selectedOptions.find((o) => o.name === "Size")?.value === sizeValue;
+      const coolingMatch = !cooling || v.node.selectedOptions.find((o) => o.name === "Cooling")?.value === cooling;
+      const supportMatch = !support || v.node.selectedOptions.find((o) => o.name === "Support")?.value === support;
+      return sizeMatch && coolingMatch && supportMatch;
+    })?.node;
+  };
 
-  const handleQuickAdd = () => {
-    if (!selectedVariant || !product) {
-      toast.error("Product unavailable");
+  const handleAddToCartClick = () => {
+    // If there are multiple sizes, show the size selection dialog
+    if (availableSizes.length > 1) {
+      setSelectedSize(recommendedSize || availableSizes[0]);
+      setShowSizeDialog(true);
+    } else {
+      // If only one size, add directly
+      const variant = getVariantForSize(availableSizes[0]);
+      if (variant && product) {
+        addToCart(variant);
+      }
+    }
+  };
+
+  const addToCart = (variant: any) => {
+    if (!variant || !product) {
+      toast.error("Product variant unavailable");
       return;
     }
 
     addItem({
       product: { node: product },
-      variantId: selectedVariant.id,
-      variantTitle: selectedVariant.title,
-      price: selectedVariant.price,
+      variantId: variant.id,
+      variantTitle: variant.title,
+      price: variant.price,
       quantity: 1,
-      selectedOptions: selectedVariant.selectedOptions,
+      selectedOptions: variant.selectedOptions,
+    });
+    
+    toast.success("Added to cart", {
+      description: `${product.title} - ${variant.title}`,
     });
     
     openCart();
+    setShowSizeDialog(false);
+  };
+
+  const handleConfirmSize = () => {
+    const variant = getVariantForSize(selectedSize);
+    if (variant) {
+      addToCart(variant);
+    }
   };
 
   if (!product) return null;
@@ -86,9 +127,9 @@ export const ProductRecommendationCard = ({
           <p className="text-sm text-muted-foreground mb-2 line-clamp-2">{reason}</p>
 
           {/* Configuration */}
-          {(size || cooling || support) && (
+          {(recommendedSize || cooling || support) && (
             <div className="text-xs text-muted-foreground mb-2">
-              {size && <span>{size}</span>}
+              {recommendedSize && <span>Recommended: {recommendedSize}</span>}
               {cooling && <span> • {cooling}</span>}
               {support && <span> • {support}</span>}
             </div>
@@ -111,7 +152,7 @@ export const ProductRecommendationCard = ({
                   View
                 </Button>
               </Link>
-              <Button size="sm" onClick={handleQuickAdd} className="h-8 text-xs">
+              <Button size="sm" onClick={handleAddToCartClick} className="h-8 text-xs">
                 <ShoppingCart className="w-3 h-3 mr-1" />
                 Add to Cart
               </Button>
@@ -119,6 +160,54 @@ export const ProductRecommendationCard = ({
           </div>
         </div>
       </div>
+
+      {/* Size Selection Dialog */}
+      <Dialog open={showSizeDialog} onOpenChange={setShowSizeDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Select Mattress Size</DialogTitle>
+            <DialogDescription>
+              Choose the size for {product?.title}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-2">
+              {availableSizes.map((size) => {
+                const variant = getVariantForSize(size);
+                const isRecommended = size === recommendedSize;
+                return (
+                  <Button
+                    key={size}
+                    variant={selectedSize === size ? "default" : "outline"}
+                    onClick={() => setSelectedSize(size)}
+                    className="h-auto py-3 flex flex-col items-start relative"
+                  >
+                    {isRecommended && (
+                      <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                        Recommended
+                      </span>
+                    )}
+                    <span className="font-semibold">{size}</span>
+                    {variant && (
+                      <span className="text-xs text-muted-foreground">
+                        ${parseFloat(variant.price.amount).toFixed(0)}
+                      </span>
+                    )}
+                  </Button>
+                );
+              })}
+            </div>
+            <Button 
+              onClick={handleConfirmSize} 
+              className="w-full"
+              disabled={!selectedSize}
+            >
+              <ShoppingCart className="w-4 h-4 mr-2" />
+              Add to Cart - {selectedSize}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };

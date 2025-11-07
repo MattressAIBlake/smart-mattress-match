@@ -14,7 +14,10 @@ export const SaleCountdown = ({ className = "", showLabel = true, size = "md" }:
     if (!SALE_CONFIG.SALE_ACTIVE) return;
 
     const calculateTimeLeft = () => {
-      const difference = +new Date(SALE_CONFIG.SALE_END_DATE) - +new Date();
+      // Parse the sale end date properly
+      const endDate = new Date(SALE_CONFIG.SALE_END_DATE + 'T23:59:59');
+      const now = new Date();
+      const difference = endDate.getTime() - now.getTime();
       
       if (difference > 0) {
         setTimeLeft({
@@ -23,6 +26,9 @@ export const SaleCountdown = ({ className = "", showLabel = true, size = "md" }:
           minutes: Math.floor((difference / 1000 / 60) % 60),
           seconds: Math.floor((difference / 1000) % 60),
         });
+      } else {
+        // Sale has ended
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
     };
 
