@@ -89,15 +89,6 @@ const Index = () => {
       {/* Hero Section with AI Chat */}
       <section className="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30 pt-8 pb-16 md:pt-12 md:pb-24 min-h-[70vh] flex items-center relative overflow-hidden">
         <div className="container mx-auto px-4">
-          {SALE_CONFIG.SALE_ACTIVE && (
-            <div className="max-w-4xl mx-auto mb-6 animate-fade-in">
-              <div className="bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-lg px-4 py-2.5 shadow-lg border border-amber-400/50 text-center">
-                <p className="text-sm md:text-base font-semibold">
-                  {SALE_CONFIG.SALE_NAME}: Save {SALE_CONFIG.DISCOUNT_PERCENT}% on All Premium Mattresses
-                </p>
-              </div>
-            </div>
-          )}
           <MattressAIChat />
         </div>
       </section>
