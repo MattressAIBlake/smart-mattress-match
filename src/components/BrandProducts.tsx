@@ -55,6 +55,10 @@ export const BrandProducts = () => {
 
   const filteredProducts = products
     ?.filter((product) => {
+      // Exclude BedTech (adjustable bases) and bedding bundles
+      if (product.node.vendor === "BedTech") return false;
+      if (product.node.title.toLowerCase().includes("bedding bundle")) return false;
+      
       if (selectedBrand === "all") return product.node.title !== "Helix Midnight Luxe";
       return product.node.vendor === selectedBrand;
     })
