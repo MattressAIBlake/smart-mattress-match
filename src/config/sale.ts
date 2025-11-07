@@ -7,7 +7,7 @@ export const SALE_CONFIG = {
   DISCOUNT_PERCENT: 25,
   SALE_END_DATE: "2025-12-02", // Cyber Monday
   BADGE_TEXT: "25% OFF",
-  PROMO_MESSAGE: "Black Friday Event: Save 25% on All Premium Mattresses"
+  PROMO_MESSAGE: "Black Friday Event: Save 25% + Free Shipping on All Premium Mattresses"
 } as const;
 
 export function calculateSalePrice(originalPrice: string | number): string {

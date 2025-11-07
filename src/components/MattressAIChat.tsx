@@ -317,7 +317,7 @@ export const MattressAIChat = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder={SALE_CONFIG.SALE_ACTIVE ? `Tell me about your sleep needs... (${SALE_CONFIG.DISCOUNT_PERCENT}% off all recommendations!)` : "Tell me about your sleep needs..."}
+              placeholder="Tell me about your sleep needs..."
               disabled={isLoading}
               className="flex-1 border-0 bg-transparent text-lg placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:ring-offset-0 h-14"
             />

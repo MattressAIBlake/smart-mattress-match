@@ -321,6 +321,10 @@ export const CartDrawer = () => {
                     <span className="text-muted-foreground">Subtotal</span>
                     <span>${totalPrice.toFixed(2)}</span>
                   </div>
+                  <div className="flex justify-between items-center text-sm text-primary">
+                    <span className="font-semibold">Free Shipping</span>
+                    <span className="font-semibold">$0.00</span>
+                  </div>
                   {referralCode && (
                     <div className="flex justify-between items-center text-sm text-primary">
                       <span>Referral Discount ({REFERRAL_DISCOUNT_PERCENT}%)</span>
