@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import { FeaturedProduct } from "@/components/FeaturedProduct";
 import { MattressAIChat } from "@/components/MattressAIChat";
 import { CartDrawer } from "@/components/CartDrawer";
+import { ReferralButton } from "@/components/ReferralButton";
 import { PromoBar } from "@/components/PromoBar";
 import { ReferralShareCard } from "@/components/ReferralShareCard";
 import { Link, useNavigate } from "react-router-dom";
@@ -74,7 +75,10 @@ const Index = () => {
               <p className="text-xs text-muted-foreground">Premium Sleep Solutions</p>
             </div>
           </Link>
-          <CartDrawer />
+          <div className="flex items-center gap-2">
+            <ReferralButton />
+            <CartDrawer />
+          </div>
         </div>
       </header>
 

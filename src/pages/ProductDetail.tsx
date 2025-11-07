@@ -4,6 +4,7 @@ import { fetchProducts, fetchProductByHandle } from "@/lib/shopify";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { CartDrawer } from "@/components/CartDrawer";
+import { ReferralButton } from "@/components/ReferralButton";
 import { useCartStore } from "@/stores/cartStore";
 import { ShoppingCart, ArrowLeft, Gift } from "lucide-react";
 import { toast } from "sonner";
@@ -172,7 +173,10 @@ const ProductDetail = () => {
               <p className="text-xs text-muted-foreground">Premium Sleep Solutions</p>
             </div>
           </Link>
-          <CartDrawer />
+          <div className="flex items-center gap-2">
+            <ReferralButton />
+            <CartDrawer />
+          </div>
         </div>
       </header>
 
