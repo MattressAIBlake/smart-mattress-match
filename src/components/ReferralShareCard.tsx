@@ -3,23 +3,52 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Copy, Check, Users } from "lucide-react";
+import { Copy, Check, Users, Loader2 } from "lucide-react";
 import { generateReferralCode, getShareableReferralLink, REFERRAL_DISCOUNT_PERCENT } from "@/lib/referralUtils";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const ReferralShareCard = () => {
   const [name, setName] = useState("");
   const [myCode, setMyCode] = useState("");
   const [copied, setCopied] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
-  const handleGenerateCode = () => {
+  const handleGenerateCode = async () => {
     if (!name.trim()) {
       toast.error("Please enter your name");
       return;
     }
-    const code = generateReferralCode(name);
-    setMyCode(code);
-    toast.success("Referral code generated!");
+    
+    setIsGenerating(true);
+    try {
+      const code = generateReferralCode(name);
+      
+      // Create the discount code in Shopify
+      const { data, error } = await supabase.functions.invoke('create-referral-discount', {
+        body: { code, name }
+      });
+
+      if (error) {
+        console.error('Error creating discount code:', error);
+        toast.error("Failed to create referral code. Please try again.");
+        return;
+      }
+
+      if (!data?.success) {
+        console.error('Failed to create discount code:', data?.error);
+        toast.error("Failed to create referral code. Please try again.");
+        return;
+      }
+
+      setMyCode(code);
+      toast.success("Referral code created and ready to use!");
+    } catch (error) {
+      console.error('Error generating referral code:', error);
+      toast.error("Failed to create referral code. Please try again.");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handleCopyLink = () => {
@@ -63,8 +92,19 @@ export const ReferralShareCard = () => {
                 className="h-12 text-base border-primary/20 focus:border-primary/40 transition-all"
               />
             </div>
-            <Button onClick={handleGenerateCode} className="w-full h-12 text-base bg-gradient-to-r from-primary to-purple-500 hover:from-primary/90 hover:to-purple-500/90 shadow-lg hover:shadow-xl transition-all">
-              Generate My Referral Code
+            <Button 
+              onClick={handleGenerateCode}
+              disabled={isGenerating}
+              className="w-full h-12 text-base bg-gradient-to-r from-primary to-purple-500 hover:from-primary/90 hover:to-purple-500/90 shadow-lg hover:shadow-xl transition-all"
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating Code...
+                </>
+              ) : (
+                "Generate My Referral Code"
+              )}
             </Button>
           </div>
         ) : (

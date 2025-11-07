@@ -45,8 +45,16 @@ const CART_CREATE_MUTATION = `
         id
         checkoutUrl
         totalQuantity
+        discountCodes {
+          applicable
+          code
+        }
         cost {
           totalAmount {
+            amount
+            currencyCode
+          }
+          subtotalAmount {
             amount
             currencyCode
           }
@@ -68,16 +76,13 @@ async function createStorefrontCheckout(items: CartItem[], referralCode?: string
 
   const input: any = { lines };
   
-  // Add referral code as note/attribute if present
+  // Apply referral discount code if present
   if (referralCode) {
+    input.discountCodes = [referralCode];
     input.attributes = [
       {
         key: 'referral_code',
         value: referralCode
-      },
-      {
-        key: 'discount_note',
-        value: '10% referral discount - 100 night trial waived'
       }
     ];
   }

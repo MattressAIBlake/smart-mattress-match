@@ -53,8 +53,7 @@ export const CartDrawer = () => {
   
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
-  const discountAmount = referralCode ? totalPrice * (REFERRAL_DISCOUNT_PERCENT / 100) : 0;
-  const finalPrice = totalPrice - discountAmount;
+  const finalPrice = totalPrice;
 
   const handleApplyReferral = () => {
     if (!referralInput.trim()) return;
@@ -326,9 +325,15 @@ export const CartDrawer = () => {
                     <span className="font-semibold">$0.00</span>
                   </div>
                   {referralCode && (
-                    <div className="flex justify-between items-center text-sm text-primary">
-                      <span>Referral Discount ({REFERRAL_DISCOUNT_PERCENT}%)</span>
-                      <span>-${discountAmount.toFixed(2)}</span>
+                    <div className="flex justify-between items-center text-sm">
+                      <div className="flex items-center gap-1">
+                        <Check className="h-3 w-3 text-green-600" />
+                        <span className="text-muted-foreground">Referral Code Applied</span>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-green-600 font-medium">{referralCode}</div>
+                        <div className="text-xs text-muted-foreground">{REFERRAL_DISCOUNT_PERCENT}% off at checkout</div>
+                      </div>
                     </div>
                   )}
                   <div className="flex justify-between items-center pt-2 border-t">
@@ -337,6 +342,11 @@ export const CartDrawer = () => {
                       ${finalPrice.toFixed(2)}
                     </span>
                   </div>
+                  {referralCode && (
+                    <p className="text-xs text-center text-muted-foreground">
+                      Discount will be applied at Shopify checkout
+                    </p>
+                  )}
                 </div>
                 
                 <Button
