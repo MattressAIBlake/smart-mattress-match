@@ -105,9 +105,8 @@ export const ProductGrid = () => {
             <Link to={`/product/${product.node.handle}`}>
               <CardHeader className="p-0 relative">
                 {SALE_CONFIG.SALE_ACTIVE && (
-                  <Badge className="absolute top-4 left-4 z-10 bg-gradient-to-r from-red-600 to-orange-600 text-white font-bold shadow-lg animate-pulse">
-                    <Tag className="h-3 w-3 mr-1" />
-                    {SALE_CONFIG.BADGE_TEXT} -{SALE_CONFIG.DISCOUNT_PERCENT}%
+                  <Badge className="absolute top-3 right-3 z-10 bg-slate-900/90 backdrop-blur-sm text-white text-xs font-semibold px-2 py-1 shadow-md">
+                    {SALE_CONFIG.BADGE_TEXT}
                   </Badge>
                 )}
                 {image ? (
@@ -139,15 +138,15 @@ export const ProductGrid = () => {
                 {SALE_CONFIG.SALE_ACTIVE ? (
                   <>
                     <div className="flex items-baseline gap-2">
-                      <p className="price-display text-2xl text-red-600 font-bold">
+                      <p className="price-display text-2xl font-bold">
                         ${parseFloat(calculateSalePrice(price.amount)).toFixed(0)}
                       </p>
-                      <p className="text-lg text-muted-foreground line-through">
+                      <p className="text-base text-muted-foreground line-through">
                         ${parseFloat(price.amount).toFixed(0)}
                       </p>
                     </div>
-                    <p className="text-xs font-semibold text-red-600">
-                      Save ${(parseFloat(price.amount) - parseFloat(calculateSalePrice(price.amount))).toFixed(0)} - {SALE_CONFIG.SALE_NAME}
+                    <p className="text-xs text-muted-foreground">
+                      Save ${(parseFloat(price.amount) - parseFloat(calculateSalePrice(price.amount))).toFixed(0)}
                     </p>
                   </>
                 ) : (

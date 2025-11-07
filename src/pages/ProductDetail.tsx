@@ -194,9 +194,8 @@ const ProductDetail = () => {
           {/* Product Image */}
           <div className="space-y-4 relative">
             {SALE_CONFIG.SALE_ACTIVE && (
-              <Badge className="absolute top-4 left-4 z-10 bg-gradient-to-r from-red-600 to-orange-600 text-white font-bold shadow-lg animate-pulse px-4 py-2 text-lg">
-                <Tag className="h-4 w-4 mr-2" />
-                {SALE_CONFIG.BADGE_TEXT} -{SALE_CONFIG.DISCOUNT_PERCENT}%
+              <Badge className="absolute top-4 right-4 z-10 bg-slate-900/90 backdrop-blur-sm text-white text-sm font-semibold px-3 py-1.5 shadow-md">
+                {SALE_CONFIG.BADGE_TEXT}
               </Badge>
             )}
             {image ? (
@@ -221,7 +220,7 @@ const ProductDetail = () => {
               {SALE_CONFIG.SALE_ACTIVE ? (
                 <>
                   <div className="flex items-baseline gap-3 mb-2">
-                    <p className="price-display text-4xl text-red-600 font-bold">
+                    <p className="price-display text-4xl font-bold">
                       {selectedVariant ? (
                         `$${parseFloat(calculateSalePrice(selectedVariant.price.amount)).toFixed(0)}`
                       ) : (
@@ -236,11 +235,11 @@ const ProductDetail = () => {
                       )}
                     </p>
                   </div>
-                  <p className="text-lg font-bold text-red-600 mb-2">
+                  <p className="text-sm text-muted-foreground mb-2">
                     Save ${selectedVariant 
                       ? (parseFloat(selectedVariant.price.amount) - parseFloat(calculateSalePrice(selectedVariant.price.amount))).toFixed(0)
                       : (parseFloat(product.node.priceRange.minVariantPrice.amount) - parseFloat(calculateSalePrice(product.node.priceRange.minVariantPrice.amount))).toFixed(0)
-                    } - {SALE_CONFIG.SALE_NAME}!
+                    }
                   </p>
                 </>
               ) : (

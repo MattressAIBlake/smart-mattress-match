@@ -87,14 +87,6 @@ const Index = () => {
 
       {/* Hero Section with AI Chat */}
       <section className="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30 py-16 md:py-24 min-h-[70vh] flex items-center relative overflow-hidden">
-        {SALE_CONFIG.SALE_ACTIVE && (
-          <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20">
-            <Badge className="px-8 py-3 text-xl md:text-2xl bg-gradient-to-r from-red-600 to-orange-600 text-white font-black shadow-2xl animate-pulse">
-              <Tag className="h-6 w-6 mr-3" />
-              {SALE_CONFIG.BADGE_TEXT} - {SALE_CONFIG.DISCOUNT_PERCENT}% OFF ALL MATTRESSES
-            </Badge>
-          </div>
-        )}
         <div className="container mx-auto px-4">
           <MattressAIChat />
         </div>

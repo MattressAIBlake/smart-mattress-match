@@ -57,9 +57,8 @@ export const FeaturedProduct = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           {SALE_CONFIG.SALE_ACTIVE && (
-            <Badge className="mb-4 px-6 py-2 text-lg bg-gradient-to-r from-red-600 to-orange-600 text-white font-bold shadow-lg animate-pulse">
-              <Tag className="h-5 w-5 mr-2" />
-              {SALE_CONFIG.BADGE_TEXT} - {SALE_CONFIG.DISCOUNT_PERCENT}% OFF
+            <Badge className="mb-4 px-4 py-1.5 text-sm bg-slate-900 text-white font-semibold shadow-md">
+              {SALE_CONFIG.BADGE_TEXT}
             </Badge>
           )}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary mb-4">
@@ -102,15 +101,15 @@ export const FeaturedProduct = () => {
                   {SALE_CONFIG.SALE_ACTIVE ? (
                     <>
                       <div className="flex items-baseline gap-3">
-                        <p className="price-display text-3xl text-red-600 font-bold">
+                        <p className="price-display text-3xl font-bold">
                           ${parseFloat(calculateSalePrice(queenPrice)).toFixed(0)}
                         </p>
-                        <p className="text-2xl text-muted-foreground line-through">
+                        <p className="text-xl text-muted-foreground line-through">
                           ${parseFloat(queenPrice).toFixed(0)}
                         </p>
                       </div>
-                      <p className="text-sm font-semibold text-red-600">
-                        Save ${(parseFloat(queenPrice) - parseFloat(calculateSalePrice(queenPrice))).toFixed(0)} - {SALE_CONFIG.SALE_NAME}!
+                      <p className="text-sm text-muted-foreground">
+                        Save ${(parseFloat(queenPrice) - parseFloat(calculateSalePrice(queenPrice))).toFixed(0)}
                       </p>
                     </>
                   ) : (
