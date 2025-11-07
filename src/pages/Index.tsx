@@ -104,12 +104,6 @@ const Index = () => {
       {/* Featured Product */}
       <FeaturedProduct />
 
-      {/* Referral Share Section */}
-      <section className="py-16 bg-gradient-to-br from-primary/5 via-background to-purple-500/5">
-        <div className="container mx-auto px-4">
-          <ReferralShareCard />
-        </div>
-      </section>
 
       {/* Brand Products - Lazy loaded */}
       <Suspense fallback={<div className="py-16"><div className="container mx-auto px-4"><ProductGridSkeleton count={12} /></div></div>}>

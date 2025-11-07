@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Gift } from "lucide-react";
-import { ReferralShareCard } from "./ReferralShareCard";
+import { SEOScrollChallenge } from "./SEOScrollChallenge";
 
 export const ReferralButton = () => {
   const [open, setOpen] = useState(false);
@@ -14,8 +14,8 @@ export const ReferralButton = () => {
           <Gift className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-3xl">
-        <ReferralShareCard />
+      <DialogContent className="max-w-4xl p-0">
+        <SEOScrollChallenge />
       </DialogContent>
     </Dialog>
   );
