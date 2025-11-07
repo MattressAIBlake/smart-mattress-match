@@ -5,7 +5,7 @@ export const SALE_CONFIG = {
   SALE_ACTIVE: true,
   SALE_NAME: "BLACK FRIDAY SALE",
   DISCOUNT_PERCENT: 25,
-  SALE_END_DATE: "2024-12-02", // Cyber Monday
+  SALE_END_DATE: "2025-12-02", // Cyber Monday
   BADGE_TEXT: "25% OFF",
   PROMO_MESSAGE: "Black Friday Event: Save 25% on All Premium Mattresses"
 } as const;
