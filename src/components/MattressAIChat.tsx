@@ -101,7 +101,7 @@ export const MattressAIChat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "I'll help you find the perfect mattress at incredible savings. What's your primary sleep position?",
+      content: "What's your primary sleep position?",
     },
   ]);
   const [input, setInput] = useState("");
@@ -252,12 +252,14 @@ export const MattressAIChat = () => {
 
       {/* Hero Title */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 tracking-tight">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-4 tracking-tight">
           Find Your Perfect Mattress
         </h1>
-        <p className="text-xl md:text-2xl text-muted-foreground font-light max-w-3xl mx-auto">
-          Expert guidance. Real recommendations.
-        </p>
+        {SALE_CONFIG.SALE_ACTIVE && (
+          <p className="text-lg md:text-xl text-amber-700 dark:text-amber-400 font-semibold">
+            Save {SALE_CONFIG.DISCOUNT_PERCENT}% Today
+          </p>
+        )}
       </div>
 
       {/* Initial Centered Greeting - Only show if it's the first message */}
@@ -266,11 +268,6 @@ export const MattressAIChat = () => {
           <p className="text-lg md:text-xl text-foreground/80 leading-relaxed font-medium">
             {messages[0].content}
           </p>
-          {SALE_CONFIG.SALE_ACTIVE && (
-            <p className="text-base text-amber-700 dark:text-amber-400 font-semibold mt-4">
-              Plus, save {SALE_CONFIG.DISCOUNT_PERCENT}% on your perfect match!
-            </p>
-          )}
         </div>
       )}
 

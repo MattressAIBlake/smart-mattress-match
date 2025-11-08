@@ -124,14 +124,6 @@ const Index = () => {
       {/* Hero Section with AI Chat */}
       <section className="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30 pt-8 pb-16 md:pt-12 md:pb-24 min-h-[70vh] flex items-center relative overflow-hidden">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-8 max-w-4xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold mb-3 text-foreground">
-              Find Your Perfect Mattress with AI Technology
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Get personalized recommendations from premium American brands based on your sleep position, body type, and preferences
-            </p>
-          </div>
           <MattressAIChat />
         </div>
       </section>
