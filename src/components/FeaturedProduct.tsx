@@ -93,12 +93,6 @@ export const FeaturedProduct = () => {
 
             <div className="flex flex-col justify-center">
               <div className="mb-6">
-                <div className="flex items-center gap-2 mb-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className="h-5 w-5 fill-primary text-primary" />
-                  ))}
-                  <span className="text-sm text-muted-foreground">(2,847 reviews)</span>
-                </div>
                 <div className="space-y-3">
                   {SALE_CONFIG.SALE_ACTIVE ? (
                     <>
