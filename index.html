@@ -4,13 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- DNS Prefetch & Preconnect -->
+    <!-- DNS Prefetch & Preconnect for critical resources -->
     <link rel="dns-prefetch" href="https://cdn.shopify.com">
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
     <link rel="dns-prefetch" href="https://smart-mattress-match-4z87c.myshopify.com">
     <link rel="preconnect" href="https://smart-mattress-match-4z87c.myshopify.com" crossorigin>
     <link rel="dns-prefetch" href="https://hfdyxsxlwfogtwgjahkg.supabase.co">
     <link rel="preconnect" href="https://hfdyxsxlwfogtwgjahkg.supabase.co" crossorigin>
+    
+    <!-- Preload critical assets -->
+    <link rel="modulepreload" href="/src/main.tsx">
+    <link rel="modulepreload" href="/src/App.tsx">
     
     <title>Mattress Wizard - AI-Powered Mattress Recommendations | Find Your Perfect Sleep</title>
     <meta name="description" content="Discover your ideal mattress with AI-powered recommendations. Shop premium mattresses from Helix, Leesa, Birch, Plank, and Brooklyn Bedding. Expert guidance for better sleep." />

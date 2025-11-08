@@ -21,10 +21,22 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'query': ['@tanstack/react-query'],
-          'ui': ['@radix-ui/react-slot', '@radix-ui/react-tabs', '@radix-ui/react-dialog'],
+          'ui-radix': ['@radix-ui/react-slot', '@radix-ui/react-tabs', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-popover'],
+          'ui-form': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          'framer': ['framer-motion'],
+          'charts': ['recharts'],
+          'supabase': ['@supabase/supabase-js'],
+          'utils': ['date-fns', 'clsx', 'tailwind-merge'],
         },
       },
     },
     chunkSizeWarningLimit: 1000,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
   },
 }));
