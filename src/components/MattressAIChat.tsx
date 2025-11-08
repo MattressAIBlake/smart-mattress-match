@@ -251,18 +251,13 @@ export const MattressAIChat = () => {
       </div>
 
       {/* Hero Title */}
-      <div className="text-center mb-8">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-4 tracking-tight">
+      <div className="text-center mb-6">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-foreground mb-3 tracking-tight leading-tight">
           Find Your Perfect Mattress
         </h1>
-        <p className="text-lg md:text-xl text-foreground/90 font-medium max-w-2xl mx-auto mb-3">
+        <p className="text-base sm:text-lg md:text-xl text-foreground/90 font-medium max-w-2xl mx-auto px-4">
           Answer a few quick questions, get 3 expert-picked matches in under 60 seconds, and buy with confidence.
         </p>
-        {SALE_CONFIG.SALE_ACTIVE && (
-          <p className="text-lg md:text-xl text-amber-700 dark:text-amber-400 font-semibold">
-            Save {SALE_CONFIG.DISCOUNT_PERCENT}% Today
-          </p>
-        )}
       </div>
 
       {/* Initial Centered Greeting - Only show if it's the first message */}
@@ -317,8 +312,18 @@ export const MattressAIChat = () => {
 
       {/* Input Area */}
       <div className="max-w-5xl mx-auto w-full px-4">
-        <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl border border-white/40 dark:border-white/20 p-5">
-          <div className="flex items-center gap-3">
+        <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl border border-white/40 dark:border-white/20 p-4 sm:p-5">
+          {/* Extra 10% Badge */}
+          {SALE_CONFIG.SALE_ACTIVE && (
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500 text-white text-xs font-semibold shadow-lg animate-pulse">
+                <Sparkles className="h-3 w-3" />
+                <span>Earn Extra 10% Below</span>
+              </div>
+            </div>
+          )}
+          
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <Input
               ref={inputRef}
               value={input}
@@ -326,23 +331,24 @@ export const MattressAIChat = () => {
               onKeyPress={handleKeyPress}
               placeholder="Tell me how you sleep, your pains, and your budget..."
               disabled={isLoading}
-              className="flex-1 border-0 bg-transparent text-lg placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:ring-offset-0 h-14"
+              className="flex-1 border-0 bg-transparent text-base sm:text-lg placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:ring-offset-0 h-12 sm:h-14"
             />
             <Button 
               onClick={sendMessage} 
               disabled={isLoading || !input.trim()} 
               size="lg"
-              className="h-14 px-8 rounded-full transition-transform hover:scale-105 shadow-lg font-semibold"
+              className="h-12 sm:h-14 px-6 sm:px-8 rounded-full transition-transform hover:scale-105 shadow-lg font-semibold whitespace-nowrap"
             >
               {isLoading ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin mr-2" />
                   <span className="hidden sm:inline">Matching...</span>
+                  <span className="sm:hidden">...</span>
                 </>
               ) : (
                 <>
                   <Send className="h-5 w-5 sm:mr-2" />
-                  <span className="hidden sm:inline">Start My Match</span>
+                  <span>Start My Match</span>
                 </>
               )}
             </Button>
@@ -351,22 +357,17 @@ export const MattressAIChat = () => {
             Try: "I sleep on my side" or "I run hot at night"
           </p>
         </div>
-
-        {/* Trust Indicators */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground/80">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <span>Expert AI Guidance</span>
-          </div>
-          <div className="hidden sm:block w-1 h-1 rounded-full bg-muted-foreground/40" />
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-foreground">5 Premium Brands</span>
-          </div>
-          <div className="hidden sm:block w-1 h-1 rounded-full bg-muted-foreground/40" />
-          <div className="flex items-center gap-2">
-            <span>Unbiased Recommendations</span>
-          </div>
+        
+        {/* Secondary Browse Action */}
+        <div className="text-center mt-4">
+          <Link 
+            to="/brands" 
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors underline-offset-4 hover:underline"
+          >
+            Prefer to browse? View all mattresses →
+          </Link>
         </div>
+
       </div>
       <div ref={scrollRef} />
       

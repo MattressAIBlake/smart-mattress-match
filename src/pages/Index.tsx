@@ -6,6 +6,7 @@ import { ReferralButton } from "@/components/ReferralButton";
 import { ShopByBrand } from "@/components/ShopByBrand";
 import { FloatingReferralWidget } from "@/components/FloatingReferralWidget";
 import { PromoBar } from "@/components/PromoBar";
+import { TrustBar } from "@/components/TrustBar";
 import { ReferralShareCard } from "@/components/ReferralShareCard";
 import { MattressBuyingGuide } from "@/components/MattressBuyingGuide";
 import { DetailedFAQ } from "@/components/DetailedFAQ";
@@ -122,11 +123,14 @@ const Index = () => {
       </header>
 
       {/* Hero Section with AI Chat */}
-      <section className="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30 pt-8 pb-16 md:pt-12 md:pb-24 min-h-[70vh] flex items-center relative overflow-hidden">
+      <section className="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30 pt-8 pb-12 md:pt-12 md:pb-16 flex items-center relative overflow-hidden">
         <div className="container mx-auto px-4">
           <MattressAIChat />
         </div>
       </section>
+
+      {/* Trust Bar */}
+      <TrustBar />
 
       {/* Featured Product */}
       <FeaturedProduct />
