@@ -46,8 +46,8 @@ const BrandPage = () => {
     <>
       {/* SEO Meta Tags */}
       <SEOHead
-        title={`${brandInfo.name} Mattresses - Premium Sleep Solutions | Mattress Wizard`}
-        description={`Shop ${brandInfo.name} mattresses with AI-powered recommendations. ${brandInfo.tagline}. Free shipping, 100-night trials, and expert guidance for better sleep.`}
+        title={`${brandInfo.name} Mattresses 2024 - ${brandInfo.tagline} | Mattress Wizard`}
+        description={`${brandInfo.name} mattresses ${brandInfo.madeIn}. ${brandInfo.description.slice(0, 120)}. Free shipping, 100-night trial, AI recommendations. Compare models & prices. Expert reviews.`}
         canonical={`https://mattresswizard.com/brand/${brandInfo.slug}`}
       />
       
@@ -115,14 +115,36 @@ const BrandPage = () => {
         <section className="py-12 border-b border-border">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl font-bold mb-6 text-center">Why Choose {brandInfo.name}?</h2>
-              <div className="grid md:grid-cols-2 gap-4">
+              <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+                Why Choose {brandInfo.name} Mattresses?
+              </h2>
+              <div className="grid md:grid-cols-2 gap-4 mb-8">
                 {brandInfo.features.map((feature, index) => (
                   <div key={index} className="flex items-start gap-3">
                     <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                     <span className="text-foreground/80">{feature}</span>
                   </div>
                 ))}
+              </div>
+              
+              {/* SEO-Rich Brand Description */}
+              <div className="mt-8 space-y-4 text-muted-foreground">
+                <p className="leading-relaxed">
+                  {brandInfo.name} stands out as one of America's premier mattress manufacturers, proudly {brandInfo.madeIn.toLowerCase()}. 
+                  Each {brandInfo.name} mattress undergoes rigorous quality control to ensure you receive a premium sleep surface 
+                  that delivers exceptional comfort, support, and durability for years to come.
+                </p>
+                <p className="leading-relaxed">
+                  Whether you're a side sleeper seeking pressure relief, a back sleeper needing spinal support, or a hot sleeper 
+                  requiring advanced cooling technology, {brandInfo.name} offers carefully engineered solutions. Their mattresses 
+                  feature premium materials, innovative construction techniques, and thoughtful design elements that cater to 
+                  diverse sleep preferences and body types.
+                </p>
+                <p className="leading-relaxed">
+                  With generous trial periods, comprehensive warranties, and free shipping, {brandInfo.name} makes it risk-free 
+                  to discover your ideal mattress. Compare different {brandInfo.name} models below and use our AI-powered 
+                  recommendation tool to find the perfect match for your unique sleep needs.
+                </p>
               </div>
             </div>
           </div>

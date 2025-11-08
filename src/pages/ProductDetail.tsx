@@ -143,8 +143,8 @@ const ProductDetail = () => {
     <div className="min-h-screen bg-background">
       {/* SEO Meta Tags */}
       <SEOHead
-        title={`${product.node.title} - ${product.node.vendor} Mattress | Mattress Wizard`}
-        description={`${product.node.title} - ${product.node.description?.slice(0, 140) || `Premium ${product.node.vendor} mattress`}. Starting at $${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(0)}. Free shipping & 100-night trial.`}
+        title={`${product.node.title} Review 2024 - ${product.node.vendor} Mattress | Mattress Wizard`}
+        description={`${product.node.title} ${product.node.vendor} mattress. ${product.node.description?.slice(0, 100) || `Premium mattress with advanced comfort & support`}. $${parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(0)}+. Free shipping, 100-night trial. Made in USA. Expert review & AI recommendations.`}
         canonical={`https://mattresswizard.com/product/${product.node.handle}`}
         ogImage={product.node.images.edges[0]?.node.url}
         ogType="product"

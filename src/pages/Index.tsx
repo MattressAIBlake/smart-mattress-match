@@ -7,6 +7,8 @@ import { ShopByBrand } from "@/components/ShopByBrand";
 import { FloatingReferralWidget } from "@/components/FloatingReferralWidget";
 import { PromoBar } from "@/components/PromoBar";
 import { ReferralShareCard } from "@/components/ReferralShareCard";
+import { MattressBuyingGuide } from "@/components/MattressBuyingGuide";
+import { DetailedFAQ } from "@/components/DetailedFAQ";
 import { Badge } from "@/components/ui/badge";
 import { Tag } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -41,8 +43,8 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* SEO Meta Tags */}
       <SEOHead
-        title="Mattress Wizard - AI-Powered Mattress Recommendations | Find Your Perfect Sleep"
-        description="Discover your ideal mattress with AI-powered recommendations. Shop premium mattresses from Helix, Leesa, Birch, Plank, and Brooklyn Bedding. Expert guidance for better sleep, with free shipping and 100-night trials."
+        title="Best Mattress 2024 - AI-Powered Sleep Recommendations | Mattress Wizard"
+        description="Find the perfect mattress with our AI recommendation system. Compare top-rated Helix, Leesa, Birch, and Brooklyn Bedding mattresses. Expert reviews, free shipping, 100-night trials. Made in USA. Get personalized sleep solutions for side sleepers, back pain, hot sleepers & more."
         canonical="https://mattresswizard.com/"
       />
       
@@ -122,6 +124,14 @@ const Index = () => {
       {/* Hero Section with AI Chat */}
       <section className="bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30 pt-8 pb-16 md:pt-12 md:pb-24 min-h-[70vh] flex items-center relative overflow-hidden">
         <div className="container mx-auto px-4">
+          <div className="text-center mb-8 max-w-4xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold mb-3 text-foreground">
+              Find Your Perfect Mattress with AI Technology
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Get personalized recommendations from premium American brands based on your sleep position, body type, and preferences
+            </p>
+          </div>
           <MattressAIChat />
         </div>
       </section>
@@ -136,6 +146,12 @@ const Index = () => {
       <Suspense fallback={<div className="py-16"><div className="container mx-auto px-4"><ProductGridSkeleton count={12} /></div></div>}>
         <BrandProducts />
       </Suspense>
+
+      {/* Mattress Buying Guide */}
+      <MattressBuyingGuide />
+
+      {/* Detailed FAQ Section */}
+      <DetailedFAQ />
 
       {/* Footer with Brand Links */}
       <footer className="border-t py-12 bg-muted/50">
