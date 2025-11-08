@@ -11,6 +11,7 @@ import { Tag } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { FAQSchema } from "@/components/seo/FAQSchema";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
+import { SEOHead } from "@/components/seo/SEOHead";
 import { ProductGridSkeleton } from "@/components/skeletons/ProductGridSkeleton";
 import { useCartStore } from "@/stores/cartStore";
 import { SALE_CONFIG } from "@/config/sale";
@@ -36,6 +37,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* SEO Meta Tags */}
+      <SEOHead
+        title="Mattress Wizard - AI-Powered Mattress Recommendations | Find Your Perfect Sleep"
+        description="Discover your ideal mattress with AI-powered recommendations. Shop premium mattresses from Helix, Leesa, Birch, Plank, and Brooklyn Bedding. Expert guidance for better sleep, with free shipping and 100-night trials."
+        canonical="https://mattresswizard.com/"
+      />
+      
       {/* SEO Schemas */}
       <FAQSchema
         questions={[

@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Home, Search } from "lucide-react";
 import { LazyImage } from "@/components/LazyImage";
+import { SEOHead } from "@/components/seo/SEOHead";
+import { Helmet } from "react-helmet";
 
 const NotFound = () => {
   const { data: products } = useQuery({
@@ -14,6 +16,13 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* SEO Meta Tags - Prevent indexing of 404 page */}
+      <Helmet>
+        <title>404 - Page Not Found | Mattress Wizard</title>
+        <meta name="description" content="The page you're looking for doesn't exist. Explore our AI-powered mattress recommendations and find your perfect sleep solution." />
+        <meta name="robots" content="noindex,nofollow" />
+      </Helmet>
+      
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-6xl font-bold mb-4 text-primary">404</h1>

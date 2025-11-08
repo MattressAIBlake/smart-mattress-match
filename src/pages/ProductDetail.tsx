@@ -15,6 +15,7 @@ import { ProductDetailSkeleton } from "@/components/skeletons/ProductDetailSkele
 import { ProductSchema } from "@/components/seo/ProductSchema";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { Breadcrumb } from "@/components/Breadcrumb";
 import { SALE_CONFIG, calculateSalePrice } from "@/config/sale";
 import { SaleCountdown } from "@/components/SaleCountdown";
 
@@ -185,11 +186,19 @@ const ProductDetail = () => {
 
       <div className="container mx-auto px-4 py-8">
         <Link to="/">
-          <Button variant="ghost" className="mb-6">
+          <Button variant="ghost" className="mb-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Products
           </Button>
         </Link>
+        
+        {/* Breadcrumb Navigation */}
+        <Breadcrumb
+          items={[
+            { label: product.node.vendor, href: `/brand/${product.node.vendor.toLowerCase().replace(/\s+/g, '-')}` },
+            { label: product.node.title, href: `/product/${product.node.handle}` },
+          ]}
+        />
 
         <div className="grid md:grid-cols-2 gap-12">
           {/* Product Image */}

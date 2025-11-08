@@ -8,6 +8,8 @@ import { ArrowLeft, Check } from "lucide-react";
 import { LazyImage } from "@/components/LazyImage";
 import { ProductGridSkeleton } from "@/components/skeletons/ProductGridSkeleton";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
+import { Breadcrumb } from "@/components/Breadcrumb";
 import { Helmet } from "react-helmet";
 
 const BrandPage = () => {
@@ -31,16 +33,20 @@ const BrandPage = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{`${brandInfo.name} Mattresses - Premium Sleep Solutions | Mattress Wizard`}</title>
-        <meta 
-          name="description" 
-          content={`${brandInfo.description.slice(0, 155)}...`} 
-        />
-        <meta property="og:title" content={`${brandInfo.name} Mattresses | Mattress Wizard`} />
-        <meta property="og:description" content={brandInfo.tagline} />
-        <link rel="canonical" href={`https://mattresswizard.com/brand/${brandInfo.slug}`} />
-      </Helmet>
+      {/* SEO Meta Tags */}
+      <SEOHead
+        title={`${brandInfo.name} Mattresses - Premium Sleep Solutions | Mattress Wizard`}
+        description={`Shop ${brandInfo.name} mattresses with AI-powered recommendations. ${brandInfo.tagline}. Free shipping, 100-night trials, and expert guidance for better sleep.`}
+        canonical={`https://mattresswizard.com/brand/${brandInfo.slug}`}
+      />
+      
+      {/* Breadcrumb Schema */}
+      <BreadcrumbSchema
+        items={[
+          { name: "Home", url: "https://mattresswizard.com" },
+          { name: `${brandInfo.name} Mattresses`, url: `https://mattresswizard.com/brand/${brandInfo.slug}` },
+        ]}
+      />
 
       <div className="min-h-screen bg-background">
         {/* Header */}
@@ -53,6 +59,15 @@ const BrandPage = () => {
               </Button>
             </Link>
           </div>
+        </div>
+        
+        {/* Breadcrumb Navigation */}
+        <div className="container mx-auto px-4 pt-6">
+          <Breadcrumb
+            items={[
+              { label: brandInfo.name, href: `/brand/${brandInfo.slug}` },
+            ]}
+          />
         </div>
 
         {/* Brand Hero */}
