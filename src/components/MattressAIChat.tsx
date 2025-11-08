@@ -255,6 +255,9 @@ export const MattressAIChat = () => {
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-4 tracking-tight">
           Find Your Perfect Mattress
         </h1>
+        <p className="text-lg md:text-xl text-foreground/90 font-medium max-w-2xl mx-auto mb-3">
+          Answer a few quick questions, get 3 expert-picked matches in under 60 seconds, and buy with confidence.
+        </p>
         {SALE_CONFIG.SALE_ACTIVE && (
           <p className="text-lg md:text-xl text-amber-700 dark:text-amber-400 font-semibold">
             Save {SALE_CONFIG.DISCOUNT_PERCENT}% Today
@@ -321,17 +324,27 @@ export const MattressAIChat = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Tell me about your sleep needs..."
+              placeholder="Tell me how you sleep, your pains, and your budget..."
               disabled={isLoading}
               className="flex-1 border-0 bg-transparent text-lg placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:ring-offset-0 h-14"
             />
             <Button 
               onClick={sendMessage} 
               disabled={isLoading || !input.trim()} 
-              size="icon"
-              className="h-14 w-14 rounded-full transition-transform hover:scale-110 shadow-lg"
+              size="lg"
+              className="h-14 px-8 rounded-full transition-transform hover:scale-105 shadow-lg font-semibold"
             >
-              {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
+              {isLoading ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                  <span className="hidden sm:inline">Matching...</span>
+                </>
+              ) : (
+                <>
+                  <Send className="h-5 w-5 sm:mr-2" />
+                  <span className="hidden sm:inline">Start My Match</span>
+                </>
+              )}
             </Button>
           </div>
           <p className="text-xs text-muted-foreground/70 mt-3 text-center">
