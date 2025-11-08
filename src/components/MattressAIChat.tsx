@@ -22,10 +22,15 @@ const renderMessageContent = (content: string) => {
   const productRecommendations: any[] = [];
 
   lines.forEach((line, lineIdx) => {
-    // Check for product recommendation format
-    if (line.startsWith('PRODUCT_RECOMMENDATION:')) {
+    // Trim whitespace and check for product recommendation format
+    const trimmedLine = line.trim();
+    if (trimmedLine.startsWith('PRODUCT_RECOMMENDATION:')) {
       // Parse: handle?params|reason|features|price
-      const parts = line.replace('PRODUCT_RECOMMENDATION:', '').split('|');
+      const dataStr = trimmedLine.replace('PRODUCT_RECOMMENDATION:', '').trim();
+      const parts = dataStr.split('|');
+      
+      console.log('Parsing product recommendation:', { line: trimmedLine, parts, partsLength: parts.length });
+      
       if (parts.length >= 4) {
         const [handleWithParams, reason, featuresStr, priceStr] = parts;
         const [handle, queryParams] = handleWithParams.split('?');
@@ -37,6 +42,8 @@ const renderMessageContent = (content: string) => {
           features: featuresStr.split(',').map(f => f.trim()),
           price: priceStr.trim().replace('$', ''),
         });
+      } else {
+        console.warn('Invalid product recommendation format:', { line: trimmedLine, parts });
       }
       return; // Skip this line in text rendering
     }

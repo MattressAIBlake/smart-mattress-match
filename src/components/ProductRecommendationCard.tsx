@@ -33,9 +33,10 @@ export const ProductRecommendationCard = ({
   const [showSizeDialog, setShowSizeDialog] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string>("");
   
-  const { data: product } = useQuery({
+  const { data: product, isLoading, error } = useQuery({
     queryKey: ["product", handle],
     queryFn: () => fetchProductByHandle(handle),
+    retry: 2,
   });
 
   const addItem = useCartStore((state) => state.addItem);
@@ -105,7 +106,33 @@ export const ProductRecommendationCard = ({
     }
   };
 
-  if (!product) return null;
+  // Show loading skeleton while product is fetching
+  if (isLoading) {
+    return (
+      <Card className="p-4 border-2 animate-pulse">
+        <div className="flex gap-4">
+          <div className="w-20 h-20 bg-muted rounded-lg flex-shrink-0" />
+          <div className="flex-1 space-y-2">
+            <div className="h-4 bg-muted rounded w-3/4" />
+            <div className="h-3 bg-muted rounded w-full" />
+            <div className="h-3 bg-muted rounded w-5/6" />
+          </div>
+        </div>
+      </Card>
+    );
+  }
+
+  // Show error message if product failed to load
+  if (error || !product) {
+    console.error('Failed to load product:', { handle, error });
+    return (
+      <Card className="p-4 border-2 border-destructive/50">
+        <div className="text-sm text-destructive">
+          Unable to load product details. Please try again later.
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className="p-4 hover:shadow-lg transition-shadow border-2">
