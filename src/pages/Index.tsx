@@ -11,6 +11,7 @@ import { Tag } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { FAQSchema } from "@/components/seo/FAQSchema";
 import { OrganizationSchema } from "@/components/seo/OrganizationSchema";
+import { LocalBusinessSchema } from "@/components/seo/LocalBusinessSchema";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { ProductGridSkeleton } from "@/components/skeletons/ProductGridSkeleton";
 import { useCartStore } from "@/stores/cartStore";
@@ -73,6 +74,29 @@ const Index = () => {
         name="Mattress Wizard"
         description="AI-powered mattress recommendations from premium brands including Helix, Leesa, Birch, Plank, and Brooklyn Bedding"
         url="https://mattresswizard.com"
+        socialLinks={{
+          facebook: "https://facebook.com/mattresswizard",
+          twitter: "https://twitter.com/mattresswizard",
+          instagram: "https://instagram.com/mattresswizard",
+          youtube: "https://youtube.com/@mattresswizard",
+        }}
+        contactInfo={{
+          email: "support@mattresswizard.com",
+        }}
+      />
+      <LocalBusinessSchema
+        name="Mattress Wizard"
+        description="AI-powered mattress recommendations and premium sleep solutions available online 24/7"
+        url="https://mattresswizard.com"
+        email="support@mattresswizard.com"
+        address={{
+          addressLocality: "Online",
+          addressRegion: "Nationwide",
+          addressCountry: "US",
+        }}
+        priceRange="$$-$$$"
+        openingHours={["Mo-Su 00:00-24:00"]}
+        paymentAccepted={["Credit Card", "Debit Card", "PayPal", "Affirm"]}
       />
 
       {/* Promo Bar */}
