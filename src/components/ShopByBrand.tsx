@@ -3,28 +3,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Star } from "lucide-react";
 import { BRAND_INFO } from "@/data/brandInfo";
-
-const brandColors = {
-  helix: "from-blue-500/10 to-purple-500/10 border-blue-500/20",
-  leesa: "from-green-500/10 to-emerald-500/10 border-green-500/20",
-  birch: "from-amber-500/10 to-green-600/10 border-amber-500/20",
-  "brooklyn-bedding": "from-slate-500/10 to-blue-500/10 border-slate-500/20",
-  bear: "from-orange-500/10 to-red-500/10 border-orange-500/20",
-};
-
-const brandIcons = {
-  helix: "🌙",
-  leesa: "💚",
-  birch: "🌿",
-  "brooklyn-bedding": "🏭",
-  bear: "🐻",
-};
+import helixLogo from "@/assets/brand-logos/helix-logo.jpg";
+import leesaLogo from "@/assets/brand-logos/leesa-logo.jpg";
+import birchLogo from "@/assets/brand-logos/birch-logo.png";
+import brooklynLogo from "@/assets/brand-logos/brooklyn-bedding-logo.jpg";
 
 export const ShopByBrand = () => {
   // Display main brands (exclude bear as it's not in the footer)
   const mainBrands = Object.values(BRAND_INFO).filter(
     brand => brand.slug !== "bear"
   );
+
+  const brandLogos: Record<string, string> = {
+    helix: helixLogo,
+    leesa: leesaLogo,
+    birch: birchLogo,
+    "brooklyn-bedding": brooklynLogo,
+  };
 
   return (
     <section className="py-16 bg-muted/30">
@@ -34,7 +29,7 @@ export const ShopByBrand = () => {
             Shop Premium Mattress Brands
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover top-rated mattresses from trusted manufacturers. Each brand offers unique features tailored to different sleep preferences.
+            Discover top-rated mattresses from trusted American manufacturers. All brands are proudly made in Arizona, USA.
           </p>
         </div>
 
@@ -42,14 +37,19 @@ export const ShopByBrand = () => {
           {mainBrands.map((brand) => (
             <Card
               key={brand.slug}
-              className={`group hover:shadow-lg transition-all duration-300 border-2 bg-gradient-to-br ${
-                brandColors[brand.slug as keyof typeof brandColors]
-              }`}
+              className="group hover:shadow-lg transition-all duration-300 border-2 bg-background overflow-hidden"
             >
-              <CardHeader>
-                <div className="flex items-start justify-between mb-2">
-                  <div className="text-4xl mb-2">
-                    {brandIcons[brand.slug as keyof typeof brandIcons]}
+              <CardHeader className="pb-4">
+                <div className="flex items-start justify-between mb-4">
+                  <div 
+                    className="w-32 h-16 flex items-center justify-center rounded-lg overflow-hidden"
+                    style={{ backgroundColor: brand.brandColor }}
+                  >
+                    <img 
+                      src={brandLogos[brand.slug as keyof typeof brandLogos]} 
+                      alt={`${brand.name} logo`}
+                      className="w-full h-full object-contain p-2"
+                    />
                   </div>
                   <div className="flex items-center gap-1 text-amber-500">
                     <Star className="w-4 h-4 fill-amber-500" />
@@ -62,6 +62,9 @@ export const ShopByBrand = () => {
                 <CardDescription className="text-sm font-medium">
                   {brand.tagline}
                 </CardDescription>
+                <p className="text-xs text-primary font-semibold mt-2">
+                  🇺🇸 {brand.madeIn}
+                </p>
               </CardHeader>
               
               <CardContent className="space-y-4">
