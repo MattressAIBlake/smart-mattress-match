@@ -11,6 +11,10 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { Helmet } from "react-helmet";
+import helixLogo from "@/assets/brand-logos/helix-logo.jpg";
+import leesaLogo from "@/assets/brand-logos/leesa-logo.jpg";
+import birchLogo from "@/assets/brand-logos/birch-logo.png";
+import brooklynLogo from "@/assets/brand-logos/brooklyn-bedding-logo.jpg";
 
 const BrandPage = () => {
   const { brandSlug } = useParams<{ brandSlug: string }>();
@@ -22,6 +26,13 @@ const BrandPage = () => {
     queryFn: () => fetchProducts(50),
     enabled: !!brandInfo,
   });
+
+  const brandLogos: Record<string, string> = {
+    helix: helixLogo,
+    leesa: leesaLogo,
+    birch: birchLogo,
+    "brooklyn-bedding": brooklynLogo,
+  };
 
   if (!brandInfo) {
     return <Navigate to="/" replace />;
@@ -74,8 +85,27 @@ const BrandPage = () => {
         <section className="py-16 bg-gradient-soft">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
+              {/* Brand Logo */}
+              {brandInfo.logo && (
+                <div className="flex justify-center mb-8">
+                  <div 
+                    className="w-64 h-32 flex items-center justify-center rounded-2xl overflow-hidden shadow-lg"
+                    style={{ backgroundColor: brandInfo.brandColor }}
+                  >
+                    <img 
+                      src={brandLogos[brandInfo.slug as keyof typeof brandLogos]} 
+                      alt={`${brandInfo.name} logo`}
+                      className="w-full h-full object-contain p-6"
+                    />
+                  </div>
+                </div>
+              )}
+              
               <h1 className="text-4xl md:text-5xl font-bold mb-4">{brandInfo.name} Mattresses</h1>
-              <p className="text-xl text-muted-foreground mb-6">{brandInfo.tagline}</p>
+              <p className="text-xl text-muted-foreground mb-4">{brandInfo.tagline}</p>
+              <p className="text-sm text-primary font-semibold mb-6 flex items-center justify-center gap-2">
+                🇺🇸 {brandInfo.madeIn}
+              </p>
               <p className="text-lg text-foreground/80 leading-relaxed">{brandInfo.description}</p>
             </div>
           </div>
