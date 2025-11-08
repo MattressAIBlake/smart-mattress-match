@@ -256,7 +256,7 @@ export const MattressAIChat = () => {
           Find Your Perfect Mattress
         </h1>
         <p className="text-base sm:text-lg md:text-xl text-foreground/90 font-medium max-w-3xl mx-auto px-4">
-          Get 3 expert matches in 60 seconds—answer quick questions and buy with confidence
+          3 expert matches in 60 seconds—buy with confidence
         </p>
       </div>
 
