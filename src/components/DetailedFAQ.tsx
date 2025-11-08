@@ -16,15 +16,15 @@ export const DetailedFAQ = () => {
     },
     {
       question: "What's the best mattress for hot sleepers and night sweats?",
-      answer: "Hot sleepers should look for mattresses with advanced cooling technology. Gel-infused memory foam helps dissipate heat, while hybrid designs with innerspring coils provide better airflow than all-foam models. Look for mattresses with breathable covers made from moisture-wicking materials. The Helix Midnight Luxe and Brooklyn Bedding Aurora feature excellent cooling technology. Natural latex mattresses like Birch also sleep cooler than traditional memory foam due to their open-cell structure and breathable design."
+      answer: "Hot sleepers should look for mattresses with advanced cooling technology. Gel-infused memory foam helps dissipate heat, while hybrid designs with individually wrapped coils provide better airflow than all-foam models. Look for mattresses with breathable covers made from moisture-wicking materials. The Helix Midnight Luxe and Brooklyn Bedding Aurora feature excellent cooling technology. Natural latex mattresses like Birch also sleep cooler than traditional memory foam due to their open-cell structure and breathable design."
     },
     {
       question: "How long do mattresses last and when should I replace mine?",
-      answer: "Quality mattresses typically last 8-10 years with proper care, though this varies by type and usage. Memory foam and latex mattresses often last 10+ years, while innerspring mattresses may need replacement after 7-8 years. Replace your mattress if you notice visible sagging (over 1.5 inches), consistent back pain, poor sleep quality, or if it's over 8 years old. Using a mattress protector and rotating your mattress every 3-6 months (if recommended by manufacturer) extends its lifespan significantly."
+      answer: "Quality mattresses typically last 8-10 years with proper care, though this varies by type and usage. Memory foam and latex mattresses often last 10+ years. Replace your mattress if you notice visible sagging (over 1.5 inches), consistent back pain, poor sleep quality, or if it's over 8 years old. Using a mattress protector and rotating your mattress every 3-6 months (if recommended by manufacturer) extends its lifespan significantly."
     },
     {
       question: "What's included in mattress trial periods and return policies?",
-      answer: "Most premium mattress brands offer 100-night (or longer) risk-free trials. During this period, you can test the mattress at home and return it for a full refund if unsatisfied. Most companies require a 30-day break-in period before accepting returns. Returns are typically hassle-free - the company arranges pickup and donation of the mattress. Helix offers 100 nights, Brooklyn Bedding provides 120 nights, and Leesa also offers 100 nights. All featured brands include free shipping both ways during the trial period."
+      answer: "Premium mattress brands offer generous risk-free trials. During this period, you can test the mattress at home and return it for a full refund if unsatisfied. Most companies require a 30-day break-in period before accepting returns. Returns are typically hassle-free - the company arranges pickup and donation of the mattress. All featured brands include free shipping both ways during the trial period."
     },
     {
       question: "Do I need a box spring or special foundation for my new mattress?",
@@ -32,7 +32,7 @@ export const DetailedFAQ = () => {
     },
     {
       question: "What's the difference between memory foam, hybrid, and latex mattresses?",
-      answer: "Memory foam mattresses contour closely to your body, providing excellent pressure relief and motion isolation - ideal for couples and side sleepers. They may sleep warmer unless featuring cooling technology. Hybrid mattresses combine memory foam comfort layers with innerspring coils, offering balanced support, better airflow, and more bounce - great for combination sleepers. Latex mattresses (like Birch) provide responsive support, natural temperature regulation, and durability. They're eco-friendly, hypoallergenic, and sleep cooler than memory foam while offering similar pressure relief with more bounce."
+      answer: "Memory foam mattresses contour closely to your body, providing excellent pressure relief and motion isolation - ideal for couples and side sleepers. They may sleep warmer unless featuring cooling technology. Hybrid mattresses combine memory foam comfort layers with individually wrapped coils, offering balanced support, superior motion isolation, enhanced breathability, and compatibility with adjustable bases. Latex mattresses (like Birch) provide responsive support, natural temperature regulation, and durability. They're eco-friendly, hypoallergenic, and sleep cooler than memory foam while offering similar pressure relief with more bounce."
     },
     {
       question: "Are mattresses really made in USA, and why does it matter?",

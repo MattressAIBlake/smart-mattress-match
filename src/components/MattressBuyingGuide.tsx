@@ -24,7 +24,7 @@ export const MattressBuyingGuide = () => {
     {
       icon: <Moon className="w-8 h-8 text-primary" />,
       title: "Mattress Types Explained",
-      description: "Memory foam offers excellent pressure relief and motion isolation. Hybrid mattresses combine foam comfort with innerspring support. Latex provides responsive, eco-friendly support. Choose based on your comfort preferences and sleep needs.",
+      description: "Memory foam offers excellent pressure relief and motion isolation. Hybrid mattresses combine foam comfort with individually wrapped coils for superior support and motion isolation. Latex provides responsive, eco-friendly support. Choose based on your comfort preferences and sleep needs.",
       keywords: "memory foam vs hybrid, best mattress type, latex mattress benefits"
     },
     {
@@ -35,8 +35,8 @@ export const MattressBuyingGuide = () => {
     },
     {
       icon: <Truck className="w-8 h-8 text-primary" />,
-      title: "Trial & Warranty",
-      description: "Look for 100-night sleep trials (minimum) to ensure the mattress works for you. Quality brands offer 10-25 year warranties covering manufacturing defects. Free shipping and returns are standard for reputable online mattress companies.",
+      title: "Returns & Warranty",
+      description: "Look for generous sleep trial periods to ensure the mattress works for you. Quality brands offer 10-25 year warranties covering manufacturing defects. Free shipping and returns are standard for reputable online mattress companies.",
       keywords: "mattress trial period, mattress warranty, free mattress shipping"
     }
   ];
@@ -85,7 +85,7 @@ export const MattressBuyingGuide = () => {
               Best Mattress Materials for Different Sleepers
             </h3>
             <p className="leading-relaxed">
-              Memory foam mattresses excel at pressure relief and motion isolation, making them perfect for side sleepers and couples. Hybrid mattresses combine memory foam comfort with innerspring support, offering the best of both worlds with enhanced breathability. Natural latex mattresses provide responsive, eco-friendly support with excellent durability. Innerspring mattresses offer traditional bounce and airflow at affordable prices.
+              Memory foam mattresses excel at pressure relief and motion isolation, making them perfect for side sleepers and couples. Hybrid mattresses combine memory foam comfort with individually wrapped coils, offering superior motion isolation, enhanced breathability, and compatibility with adjustable bases. Natural latex mattresses provide responsive, eco-friendly support with excellent durability. All premium mattresses feature individually wrapped coils that minimize motion transfer for undisturbed sleep.
             </p>
           </div>
 
@@ -94,7 +94,7 @@ export const MattressBuyingGuide = () => {
               Understanding Mattress Trial Periods and Warranties
             </h3>
             <p className="leading-relaxed">
-              Reputable mattress brands offer risk-free trial periods (typically 100-365 nights) allowing you to test the mattress at home. Most quality mattresses come with 10-25 year warranties covering manufacturing defects like sagging, indentations, and structural issues. Always read warranty terms carefully, as most require using a proper foundation and mattress protector to maintain coverage.
+              Reputable mattress brands offer generous risk-free trial periods allowing you to test the mattress at home. Most quality mattresses come with 10-25 year warranties covering manufacturing defects like sagging, indentations, and structural issues. Always read warranty terms carefully, as most require using a proper foundation and mattress protector to maintain coverage.
             </p>
           </div>
         </div>

@@ -23,7 +23,7 @@ export const BRAND_INFO: Record<string, BrandInfo> = {
       "Cooling technology with breathable materials",
       "Excellent motion isolation for couples",
       "Made in the USA with premium materials",
-      "100-night sleep trial with free returns",
+      "Free returns and comprehensive warranty",
     ],
   },
   leesa: {
@@ -39,7 +39,7 @@ export const BRAND_INFO: Record<string, BrandInfo> = {
       "Breathable cover for temperature regulation",
       "Universal comfort that fits most sleep styles",
       "Social impact: One mattress donated for every 10 sold",
-      "100-night risk-free trial",
+      "Risk-free purchase with easy returns",
     ],
   },
   birch: {
@@ -71,7 +71,7 @@ export const BRAND_INFO: Record<string, BrandInfo> = {
       "Multiple firmness options and specialty models",
       "Advanced cooling technology in premium lines",
       "Factory-direct pricing for exceptional value",
-      "120-night sleep trial with free shipping",
+      "Extended sleep trial with free shipping",
     ],
   },
   bear: {
@@ -87,7 +87,7 @@ export const BRAND_INFO: Record<string, BrandInfo> = {
       "Gel memory foam for pressure relief",
       "Cooling technology for temperature regulation",
       "Ideal for athletes and active individuals",
-      "100-night trial and 10-year warranty",
+      "Extended trial period and 10-year warranty",
     ],
   },
 };

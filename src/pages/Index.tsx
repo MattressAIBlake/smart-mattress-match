@@ -44,7 +44,7 @@ const Index = () => {
       {/* SEO Meta Tags */}
       <SEOHead
         title="Best Mattress 2024 - AI-Powered Sleep Recommendations | Mattress Wizard"
-        description="Find the perfect mattress with our AI recommendation system. Compare top-rated Helix, Leesa, Birch, and Brooklyn Bedding mattresses. Expert reviews, free shipping, 100-night trials. Made in USA. Get personalized sleep solutions for side sleepers, back pain, hot sleepers & more."
+        description="Find the perfect mattress with our AI recommendation system. Compare top-rated Helix, Leesa, Birch, and Brooklyn Bedding mattresses. Expert reviews, free shipping, generous trial periods. Made in USA. Get personalized sleep solutions for side sleepers, back pain, hot sleepers & more."
         canonical="https://mattresswizard.com/"
       />
       
@@ -69,7 +69,7 @@ const Index = () => {
           },
           {
             question: "Do you offer free shipping and returns?",
-            answer: "Most of our partner brands offer free shipping and generous trial periods (typically 100 nights) with hassle-free returns. Check individual product pages for specific brand policies.",
+            answer: "Most of our partner brands offer free shipping and generous trial periods with hassle-free returns. Check individual product pages for specific brand policies.",
           },
         ]}
       />
@@ -246,7 +246,7 @@ const Index = () => {
           <div className="border-t pt-6 text-center text-sm text-muted-foreground">
             <p>&copy; 2024 Mattress Wizard. All rights reserved.</p>
             <p className="mt-2">
-              Premium mattresses from Helix, Leesa, Birch, Brooklyn Bedding, and Plank with free shipping and 100-night trials.
+              Premium mattresses from Helix, Leesa, Birch, Brooklyn Bedding, and Plank with free shipping and generous trial periods.
             </p>
           </div>
         </div>

@@ -47,7 +47,7 @@ const BrandPage = () => {
       {/* SEO Meta Tags */}
       <SEOHead
         title={`${brandInfo.name} Mattresses 2024 - ${brandInfo.tagline} | Mattress Wizard`}
-        description={`${brandInfo.name} mattresses ${brandInfo.madeIn}. ${brandInfo.description.slice(0, 120)}. Free shipping, 100-night trial, AI recommendations. Compare models & prices. Expert reviews.`}
+        description={`${brandInfo.name} mattresses ${brandInfo.madeIn}. ${brandInfo.description.slice(0, 120)}. Free shipping, generous trial period, AI recommendations. Compare models & prices. Expert reviews.`}
         canonical={`https://mattresswizard.com/brand/${brandInfo.slug}`}
       />
       
