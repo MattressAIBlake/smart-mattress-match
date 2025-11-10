@@ -60,9 +60,7 @@ export const CartDrawer = () => {
     
     if (validateReferralCode(referralInput.trim())) {
       setReferralCode(referralInput.trim());
-      toast.success(`${REFERRAL_DISCOUNT_PERCENT}% discount applied!`, {
-        description: "Note: Sleep trial is waived with this discount"
-      });
+      toast.success(`${REFERRAL_DISCOUNT_PERCENT}% discount applied!`);
       setReferralExpanded(false);
     } else {
       toast.error("Invalid referral code format. Use SLEEP-XXX");
@@ -275,12 +273,6 @@ export const CartDrawer = () => {
                             You'll save {REFERRAL_DISCOUNT_PERCENT}% at checkout!
                           </p>
                         </div>
-                        <div className="p-2 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-start gap-2">
-                          <AlertCircle className="h-4 w-4 text-amber-600 flex-shrink-0 mt-0.5" />
-                          <p className="text-xs text-amber-800 dark:text-amber-200">
-                            <strong>Important:</strong> By using this discount code, you waive the standard sleep trial period.
-                          </p>
-                        </div>
                       </div>
                     ) : (
                       <div className="space-y-2">
@@ -296,7 +288,7 @@ export const CartDrawer = () => {
                           </Button>
                         </div>
                         <p className="text-xs text-muted-foreground">
-                          Get {REFERRAL_DISCOUNT_PERCENT}% off (sleep trial waived)
+                          Get {REFERRAL_DISCOUNT_PERCENT}% off your order
                         </p>
                       </div>
                     )}

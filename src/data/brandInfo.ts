@@ -39,7 +39,7 @@ export const BRAND_INFO: Record<string, BrandInfo> = {
       "Breathable cover for temperature regulation",
       "Universal comfort that fits most sleep styles",
       "Social impact: One mattress donated for every 10 sold",
-      "Risk-free purchase with easy returns",
+      "Easy returns and quality warranty",
     ],
   },
   birch: {
@@ -71,7 +71,7 @@ export const BRAND_INFO: Record<string, BrandInfo> = {
       "Multiple firmness options and specialty models",
       "Advanced cooling technology in premium lines",
       "Factory-direct pricing for exceptional value",
-      "Extended sleep trial with free shipping",
+      "Free shipping and quality warranty",
     ],
   },
   bear: {
@@ -87,7 +87,7 @@ export const BRAND_INFO: Record<string, BrandInfo> = {
       "Gel memory foam for pressure relief",
       "Cooling technology for temperature regulation",
       "Ideal for athletes and active individuals",
-      "Extended trial period and 10-year warranty",
+      "10-year warranty and quality guarantee",
     ],
   },
 };

@@ -18,8 +18,8 @@ export const ProductTrustBadges = () => {
         
         <Card className="p-6 text-center hover:shadow-md transition-shadow">
           <Clock className="w-8 h-8 mx-auto mb-3 text-primary" />
-          <h4 className="font-semibold text-sm mb-1">100+ Night Trial</h4>
-          <p className="text-xs text-muted-foreground">Risk-free testing</p>
+          <h4 className="font-semibold text-sm mb-1">Fast Delivery</h4>
+          <p className="text-xs text-muted-foreground">Ships in 1-3 days</p>
         </Card>
         
         <Card className="p-6 text-center hover:shadow-md transition-shadow">

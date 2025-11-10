@@ -138,11 +138,6 @@ export const ReferralShareCard = () => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30 rounded-xl p-4 backdrop-blur-sm">
-              <p className="text-sm text-amber-900 dark:text-amber-100 leading-relaxed">
-                <strong className="font-semibold">⚠️ Important:</strong> Using this code waives the standard sleep trial period. All sales are final with referral discount codes.
-              </p>
-            </div>
 
             <Button
               variant="ghost"

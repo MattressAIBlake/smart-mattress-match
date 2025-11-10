@@ -16,12 +16,6 @@ export const ProductFAQ = () => {
       
       <Card className="p-8 max-w-4xl mx-auto">
         <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="trial">
-            <AccordionTrigger className="text-left">How long is the sleep trial?</AccordionTrigger>
-            <AccordionContent className="text-muted-foreground">
-              Most of our mattresses come with a 100-365 night sleep trial (varies by brand). We recommend sleeping on your new mattress for at least 30 nights to allow your body to adjust. If you're not completely satisfied after the trial period, we'll arrange a free pickup and provide a full refund.
-            </AccordionContent>
-          </AccordionItem>
 
           <AccordionItem value="shipping">
             <AccordionTrigger className="text-left">How is the mattress shipped?</AccordionTrigger>

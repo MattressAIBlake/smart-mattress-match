@@ -135,13 +135,6 @@ export const ProductDetailTabs = ({ description, brand }: ProductDetailTabsProps
                 </div>
               </div>
               <div className="flex items-start gap-4">
-                <Package className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                <div>
-                  <h4 className="font-semibold text-lg mb-2">Sleep Trial</h4>
-                  <p className="text-muted-foreground">Try your new mattress risk-free for 100-365 nights (varies by brand). If you're not completely satisfied, we'll arrange a free pickup and full refund. We recommend sleeping on it for at least 30 nights to allow your body to adjust.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
                 <Shield className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
                 <div>
                   <h4 className="font-semibold text-lg mb-2">Easy Returns</h4>

@@ -8,7 +8,7 @@ export const DetailedFAQ = () => {
     },
     {
       question: "What makes Helix, Leesa, Birch, and Brooklyn Bedding the best mattress brands?",
-      answer: "These four brands represent the top tier of American-made mattresses. Helix offers personalized sleep solutions with multiple firmness options across Core, Luxe, and Elite collections. Leesa combines premium comfort with social responsibility, donating mattresses to those in need. Birch provides 100% natural and organic materials for eco-conscious sleepers, with GREENGUARD Gold certification. Brooklyn Bedding has been handcrafting quality mattresses since 1995, offering exceptional value with factory-direct pricing. All four brands are made in Arizona, USA, with premium materials and generous trial periods."
+      answer: "These four brands represent the top tier of American-made mattresses. Helix offers personalized sleep solutions with multiple firmness options across Core, Luxe, and Elite collections. Leesa combines premium comfort with social responsibility, donating mattresses to those in need. Birch provides 100% natural and organic materials for eco-conscious sleepers, with GREENGUARD Gold certification. Brooklyn Bedding has been handcrafting quality mattresses since 1995, offering exceptional value with factory-direct pricing. All four brands are made in Arizona, USA, with premium materials and exceptional warranties."
     },
     {
       question: "How do I choose the right mattress firmness for my sleep position?",
@@ -23,8 +23,8 @@ export const DetailedFAQ = () => {
       answer: "Quality mattresses typically last 8-10 years with proper care, though this varies by type and usage. Memory foam and latex mattresses often last 10+ years. Replace your mattress if you notice visible sagging (over 1.5 inches), consistent back pain, poor sleep quality, or if it's over 8 years old. Using a mattress protector and rotating your mattress every 3-6 months (if recommended by manufacturer) extends its lifespan significantly."
     },
     {
-      question: "What's included in mattress trial periods and return policies?",
-      answer: "Premium mattress brands offer generous risk-free trials. During this period, you can test the mattress at home and return it for a full refund if unsatisfied. Most companies require a 30-day break-in period before accepting returns. Returns are typically hassle-free - the company arranges pickup and donation of the mattress. All featured brands include free shipping both ways during the trial period."
+      question: "What are the return policies for these mattresses?",
+      answer: "Each brand has its own return policy. Please check the specific brand's terms and conditions for details on their return process. Returns are typically arranged through the manufacturer, and the mattress may be donated to charity when possible. All featured brands include free shipping for delivery."
     },
     {
       question: "Do I need a box spring or special foundation for my new mattress?",

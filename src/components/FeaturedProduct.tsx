@@ -141,7 +141,7 @@ export const FeaturedProduct = () => {
                 </div>
                 <div className="flex items-start gap-2">
                   <span className="text-primary">✓</span>
-                  <span>Extended sleep trial & 15-year warranty</span>
+                  <span>15-year warranty for peace of mind</span>
                 </div>
               </div>
 

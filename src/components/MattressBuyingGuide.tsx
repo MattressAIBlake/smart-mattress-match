@@ -30,14 +30,14 @@ export const MattressBuyingGuide = () => {
     {
       icon: <DollarSign className="w-8 h-8 text-primary" />,
       title: "Budget & Value",
-      description: "Quality mattresses range from $800-$3000. Consider total value: warranty length, trial period, shipping costs, and expected lifespan (8-10 years). Investing in better sleep improves health, productivity, and quality of life.",
+      description: "Quality mattresses range from $800-$3000. Consider total value: warranty length, shipping costs, and expected lifespan (8-10 years). Investing in better sleep improves health, productivity, and quality of life.",
       keywords: "best mattress value, mattress price guide, affordable premium mattress"
     },
     {
       icon: <Truck className="w-8 h-8 text-primary" />,
-      title: "Returns & Warranty",
-      description: "Look for generous sleep trial periods to ensure the mattress works for you. Quality brands offer 10-25 year warranties covering manufacturing defects. Free shipping and returns are standard for reputable online mattress companies.",
-      keywords: "mattress trial period, mattress warranty, free mattress shipping"
+      title: "Warranty & Returns",
+      description: "Quality brands offer 10-25 year warranties covering manufacturing defects. Check each brand's specific return policy for details. Free shipping is standard for reputable online mattress companies.",
+      keywords: "mattress warranty, free mattress shipping, mattress return policy"
     }
   ];
 
@@ -91,10 +91,10 @@ export const MattressBuyingGuide = () => {
 
           <div>
             <h3 className="text-2xl font-bold text-foreground mb-3">
-              Understanding Mattress Trial Periods and Warranties
+              Understanding Mattress Warranties
             </h3>
             <p className="leading-relaxed">
-              Reputable mattress brands offer generous risk-free trial periods allowing you to test the mattress at home. Most quality mattresses come with 10-25 year warranties covering manufacturing defects like sagging, indentations, and structural issues. Always read warranty terms carefully, as most require using a proper foundation and mattress protector to maintain coverage.
+              Most quality mattresses come with 10-25 year warranties covering manufacturing defects like sagging, indentations, and structural issues. Always read warranty terms carefully, as most require using a proper foundation and mattress protector to maintain coverage. Check each brand's specific return policy for details on their procedures.
             </p>
           </div>
         </div>

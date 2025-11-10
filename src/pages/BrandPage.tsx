@@ -47,7 +47,7 @@ const BrandPage = () => {
       {/* SEO Meta Tags */}
       <SEOHead
         title={`${brandInfo.name} Mattresses 2024 - ${brandInfo.tagline} | Mattress Wizard`}
-        description={`${brandInfo.name} mattresses ${brandInfo.madeIn}. ${brandInfo.description.slice(0, 120)}. Free shipping, generous trial period, AI recommendations. Compare models & prices. Expert reviews.`}
+        description={`${brandInfo.name} mattresses ${brandInfo.madeIn}. ${brandInfo.description.slice(0, 120)}. Free shipping, quality warranty, AI recommendations. Compare models & prices. Expert reviews.`}
         canonical={`https://mattresswizard.com/brand/${brandInfo.slug}`}
       />
       
@@ -141,8 +141,8 @@ const BrandPage = () => {
                   diverse sleep preferences and body types.
                 </p>
                 <p className="leading-relaxed">
-                  With generous trial periods, comprehensive warranties, and free shipping, {brandInfo.name} makes it risk-free 
-                  to discover your ideal mattress. Compare different {brandInfo.name} models below and use our AI-powered 
+                  With comprehensive warranties and free shipping, {brandInfo.name} offers quality mattresses backed by 
+                  exceptional craftsmanship. Compare different {brandInfo.name} models below and use our AI-powered 
                   recommendation tool to find the perfect match for your unique sleep needs.
                 </p>
               </div>

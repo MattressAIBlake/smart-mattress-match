@@ -100,7 +100,7 @@ export const ShopByBrand = () => {
 
         <div className="text-center mt-8">
           <p className="text-sm text-muted-foreground">
-            All brands offer free shipping, generous trial periods, and expert support
+            All brands offer free shipping, comprehensive warranties, and expert support
           </p>
         </div>
       </div>
