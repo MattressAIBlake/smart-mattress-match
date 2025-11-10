@@ -18,6 +18,9 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { SALE_CONFIG, calculateSalePrice } from "@/config/sale";
 import { SaleCountdown } from "@/components/SaleCountdown";
+import { ProductDetailTabs } from "@/components/ProductDetailTabs";
+import { ProductTrustBadges } from "@/components/ProductTrustBadges";
+import { ProductFAQ } from "@/components/ProductFAQ";
 
 const ProductDetail = () => {
   const { handle } = useParams();
@@ -201,8 +204,8 @@ const ProductDetail = () => {
         />
 
         <div className="grid md:grid-cols-2 gap-12">
-          {/* Product Image */}
-          <div className="space-y-4 relative">
+          {/* Product Image - Sticky on desktop */}
+          <div className="space-y-4 relative md:sticky md:top-24 md:self-start">
             {SALE_CONFIG.SALE_ACTIVE && (
               <Badge className="absolute top-4 right-4 z-10 bg-slate-900/90 backdrop-blur-sm text-white text-sm font-semibold px-3 py-1.5 shadow-md">
                 {SALE_CONFIG.BADGE_TEXT}
@@ -362,6 +365,16 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Full-Width Content Sections */}
+        <ProductDetailTabs 
+          description={product.node.description}
+          brand={product.node.vendor}
+        />
+        
+        <ProductFAQ />
+        
+        <ProductTrustBadges />
 
         {/* Related Products */}
         {relatedProducts && relatedProducts.length > 0 && (
