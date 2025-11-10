@@ -35,9 +35,9 @@ export const MattressBuyingGuide = () => {
     },
     {
       icon: <Truck className="w-8 h-8 text-primary" />,
-      title: "Warranty & Returns",
-      description: "Quality brands offer 10-25 year warranties covering manufacturing defects. Check each brand's specific return policy for details. Free shipping is standard for reputable online mattress companies.",
-      keywords: "mattress warranty, free mattress shipping, mattress return policy"
+      title: "Warranty & Shipping",
+      description: "Quality brands offer 10-25 year warranties covering manufacturing defects. Free shipping is standard for reputable online mattress companies.",
+      keywords: "mattress warranty, free mattress shipping"
     }
   ];
 
@@ -94,7 +94,7 @@ export const MattressBuyingGuide = () => {
               Understanding Mattress Warranties
             </h3>
             <p className="leading-relaxed">
-              Most quality mattresses come with 10-25 year warranties covering manufacturing defects like sagging, indentations, and structural issues. Always read warranty terms carefully, as most require using a proper foundation and mattress protector to maintain coverage. Check each brand's specific return policy for details on their procedures.
+              Most quality mattresses come with 10-25 year warranties covering manufacturing defects like sagging, indentations, and structural issues. Always read warranty terms carefully, as most require using a proper foundation and mattress protector to maintain coverage.
             </p>
           </div>
         </div>

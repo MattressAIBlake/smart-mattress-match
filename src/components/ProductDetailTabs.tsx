@@ -15,7 +15,7 @@ export const ProductDetailTabs = ({ description, brand }: ProductDetailTabsProps
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="specs">Specifications</TabsTrigger>
           <TabsTrigger value="features">Features</TabsTrigger>
-          <TabsTrigger value="shipping">Shipping & Returns</TabsTrigger>
+          <TabsTrigger value="shipping">Shipping & Delivery</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="mt-8">
@@ -125,7 +125,7 @@ export const ProductDetailTabs = ({ description, brand }: ProductDetailTabsProps
 
         <TabsContent value="shipping" className="mt-8">
           <Card className="p-8">
-            <h3 className="text-2xl font-bold mb-6">Shipping & Returns</h3>
+            <h3 className="text-2xl font-bold mb-6">Shipping & Delivery</h3>
             <div className="space-y-6">
               <div className="flex items-start gap-4">
                 <Truck className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
@@ -135,10 +135,17 @@ export const ProductDetailTabs = ({ description, brand }: ProductDetailTabsProps
                 </div>
               </div>
               <div className="flex items-start gap-4">
+                <Package className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
+                <div>
+                  <h4 className="font-semibold text-lg mb-2">Delivery & Setup</h4>
+                  <p className="text-muted-foreground">Your mattress arrives compressed and rolled in a box. Simply unbox, unroll, and allow 24-48 hours for the mattress to fully expand. Each mattress comes with detailed setup instructions.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
                 <Shield className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
                 <div>
-                  <h4 className="font-semibold text-lg mb-2">Easy Returns</h4>
-                  <p className="text-muted-foreground">Returns are hassle-free. Simply contact our customer service team, and we'll coordinate pickup at no cost to you. All returned mattresses are donated to local charities when possible.</p>
+                  <h4 className="font-semibold text-lg mb-2">Quality Guarantee</h4>
+                  <p className="text-muted-foreground">All mattresses are backed by comprehensive warranties. Check with the specific brand for their warranty terms and conditions.</p>
                 </div>
               </div>
             </div>

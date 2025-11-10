@@ -23,8 +23,8 @@ export const DetailedFAQ = () => {
       answer: "Quality mattresses typically last 8-10 years with proper care, though this varies by type and usage. Memory foam and latex mattresses often last 10+ years. Replace your mattress if you notice visible sagging (over 1.5 inches), consistent back pain, poor sleep quality, or if it's over 8 years old. Using a mattress protector and rotating your mattress every 3-6 months (if recommended by manufacturer) extends its lifespan significantly."
     },
     {
-      question: "What are the return policies for these mattresses?",
-      answer: "Each brand has its own return policy. Please check the specific brand's terms and conditions for details on their return process. Returns are typically arranged through the manufacturer, and the mattress may be donated to charity when possible. All featured brands include free shipping for delivery."
+      question: "What is the shipping policy?",
+      answer: "Each brand has its own shipping policy. All featured brands include free shipping for delivery to the contiguous United States. Most orders ship within 1-3 business days and arrive compressed in a box for easy setup."
     },
     {
       question: "Do I need a box spring or special foundation for my new mattress?",
