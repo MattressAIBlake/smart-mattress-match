@@ -312,10 +312,10 @@ export const MattressAIChat = () => {
 
       {/* Input Area */}
       <div className="max-w-5xl mx-auto w-full px-4">
-        <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl border border-white/40 dark:border-white/20 p-4 sm:p-5">
+        <div className="relative bg-white/80 dark:bg-white/10 backdrop-blur-md rounded-3xl shadow-2xl border border-white/40 dark:border-white/20 p-3 sm:p-5">
           {/* Extra 10% Badge */}
           {SALE_CONFIG.SALE_ACTIVE && (
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 hidden md:block">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500 text-white text-xs font-semibold shadow-lg animate-pulse">
                 <Sparkles className="h-3 w-3" />
                 <span>Earn Extra 10% Below</span>
@@ -329,7 +329,7 @@ export const MattressAIChat = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Tell me how you sleep, your pains, and your budget..."
+              placeholder="Your sleep style, pains, budget..."
               disabled={isLoading}
               className="flex-1 border-0 bg-transparent text-base sm:text-lg placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:ring-offset-0 h-12 sm:h-14"
             />
@@ -337,23 +337,22 @@ export const MattressAIChat = () => {
               onClick={sendMessage} 
               disabled={isLoading || !input.trim()} 
               size="lg"
-              className="h-12 sm:h-14 px-6 sm:px-8 rounded-full transition-transform hover:scale-105 shadow-lg font-semibold whitespace-nowrap"
+              className="h-12 sm:h-14 px-4 sm:px-8 rounded-full transition-transform hover:scale-105 shadow-lg font-semibold whitespace-nowrap"
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                  <Loader2 className="h-5 w-5 animate-spin sm:mr-2" />
                   <span className="hidden sm:inline">Matching...</span>
-                  <span className="sm:hidden">...</span>
                 </>
               ) : (
                 <>
                   <Send className="h-5 w-5 sm:mr-2" />
-                  <span>Start My Match</span>
+                  <span className="hidden sm:inline">Start My Match</span>
                 </>
               )}
             </Button>
           </div>
-          <p className="text-xs text-muted-foreground/70 mt-3 text-center">
+          <p className="text-xs text-muted-foreground/70 mt-3 text-center hidden sm:block">
             Try: "I sleep on my side" or "I run hot at night"
           </p>
         </div>
