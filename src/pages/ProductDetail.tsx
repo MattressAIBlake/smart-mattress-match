@@ -244,7 +244,41 @@ const ProductDetail = () => {
               </div>
             )}
 
-            <div>
+            <p className="text-muted-foreground text-lg leading-relaxed">
+              {product.node.description || "Premium mattress designed for exceptional comfort and support."}
+            </p>
+
+            {/* Option Selectors */}
+            {hasOptions && product.node.options.map((option) => (
+              <div key={option.name}>
+                <label className="block text-sm font-medium mb-3">{option.name}</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {option.values.map((value) => {
+                    const isSelected = 
+                      (option.name === "Size" && value === selectedSize) ||
+                      (option.name === "Cooling" && value === selectedCooling) ||
+                      (option.name === "Support" && value === selectedSupport);
+                    
+                    return (
+                      <Button
+                        key={value}
+                        variant={isSelected ? "default" : "outline"}
+                        onClick={() => {
+                          if (option.name === "Size") setSelectedSize(value);
+                          if (option.name === "Cooling") setSelectedCooling(value);
+                          if (option.name === "Support") setSelectedSupport(value);
+                        }}
+                        className="w-full text-sm"
+                      >
+                        {value}
+                      </Button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+
+            <div className="border-t pt-6">
               <h1 className="text-4xl font-bold mb-4">{product.node.title}</h1>
               {SALE_CONFIG.SALE_ACTIVE ? (
                 <>
@@ -310,40 +344,6 @@ const ProductDetail = () => {
                 </div>
               </div>
             )}
-
-            <p className="text-muted-foreground text-lg leading-relaxed">
-              {product.node.description || "Premium mattress designed for exceptional comfort and support."}
-            </p>
-
-            {/* Option Selectors */}
-            {hasOptions && product.node.options.map((option) => (
-              <div key={option.name}>
-                <label className="block text-sm font-medium mb-3">{option.name}</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {option.values.map((value) => {
-                    const isSelected = 
-                      (option.name === "Size" && value === selectedSize) ||
-                      (option.name === "Cooling" && value === selectedCooling) ||
-                      (option.name === "Support" && value === selectedSupport);
-                    
-                    return (
-                      <Button
-                        key={value}
-                        variant={isSelected ? "default" : "outline"}
-                        onClick={() => {
-                          if (option.name === "Size") setSelectedSize(value);
-                          if (option.name === "Cooling") setSelectedCooling(value);
-                          if (option.name === "Support") setSelectedSupport(value);
-                        }}
-                        className="w-full text-sm"
-                      >
-                        {value}
-                      </Button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
 
             <Button 
               size="lg" 
