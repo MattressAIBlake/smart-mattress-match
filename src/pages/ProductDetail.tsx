@@ -244,6 +244,8 @@ const ProductDetail = () => {
               </div>
             )}
 
+            <h1 className="text-4xl font-bold">{product.node.title}</h1>
+
             <p className="text-muted-foreground text-lg leading-relaxed">
               {product.node.description || "Premium mattress designed for exceptional comfort and support."}
             </p>
@@ -279,7 +281,6 @@ const ProductDetail = () => {
             ))}
 
             <div className="border-t pt-6">
-              <h1 className="text-4xl font-bold mb-4">{product.node.title}</h1>
               {SALE_CONFIG.SALE_ACTIVE ? (
                 <>
                   <div className="bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-950/30 dark:to-amber-900/30 border-2 border-amber-500/40 rounded-xl p-5 mb-4 shadow-lg">
