@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { SleepStyleQuestion } from "@/components/sleepstyle/SleepStyleQuestion";
 import { SleepStyleResult } from "@/components/sleepstyle/SleepStyleResult";
 import { ShareCelebration } from "@/components/sleepstyle/ShareCelebration";
+import { PreQuizSharePrompt } from "@/components/sleepstyle/PreQuizSharePrompt";
 import { 
   SLEEP_STYLE_QUESTIONS, 
   calculateSleepPersonality,
@@ -16,12 +17,22 @@ import { useToast } from "@/hooks/use-toast";
 import { SEOHead } from "@/components/seo/SEOHead";
 
 export default function SleepStyleQuiz() {
+  const [showPreQuizPrompt, setShowPreQuizPrompt] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isComplete, setIsComplete] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [shareUrl, setShareUrl] = useState<string>();
   const { toast } = useToast();
+
+  // Show pre-quiz share prompt on first load
+  useEffect(() => {
+    const hasSeenPrompt = sessionStorage.getItem('sleep-style-pre-quiz-prompt');
+    if (!hasSeenPrompt) {
+      setShowPreQuizPrompt(true);
+      sessionStorage.setItem('sleep-style-pre-quiz-prompt', 'true');
+    }
+  }, []);
 
   const progress = ((currentQuestion + 1) / SLEEP_STYLE_QUESTIONS.length) * 100;
   const currentQ = SLEEP_STYLE_QUESTIONS[currentQuestion];
@@ -141,6 +152,12 @@ export default function SleepStyleQuiz() {
       <SEOHead
         title="Sleep Style Quiz - Dating Ice Breaker | Mattress Wizard"
         description="Discover your sleep style personality! Perfect ice breaker for dating apps. Are you a Cuddle Monster or a Starfish? Take our fun 30-second quiz!"
+      />
+      
+      {/* Pre-Quiz Share Prompt */}
+      <PreQuizSharePrompt
+        isOpen={showPreQuizPrompt}
+        onClose={() => setShowPreQuizPrompt(false)}
       />
       
       {/* Share Celebration Modal */}
