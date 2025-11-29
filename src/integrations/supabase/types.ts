@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      mattress_comparisons: {
+        Row: {
+          compared_products: Json
+          created_at: string | null
+          id: string
+          personal_note: string | null
+          profile_data: Json
+          sender_email: string | null
+          sender_name: string | null
+          views_count: number | null
+        }
+        Insert: {
+          compared_products: Json
+          created_at?: string | null
+          id?: string
+          personal_note?: string | null
+          profile_data: Json
+          sender_email?: string | null
+          sender_name?: string | null
+          views_count?: number | null
+        }
+        Update: {
+          compared_products?: Json
+          created_at?: string | null
+          id?: string
+          personal_note?: string | null
+          profile_data?: Json
+          sender_email?: string | null
+          sender_name?: string | null
+          views_count?: number | null
+        }
+        Relationships: []
+      }
       referral_transactions: {
         Row: {
           completed_at: string | null
