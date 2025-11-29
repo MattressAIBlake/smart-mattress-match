@@ -14,6 +14,8 @@ const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const BrandPage = lazy(() => import("./pages/BrandPage"));
 const Auth = lazy(() => import("./pages/Auth"));
 const SharedComparison = lazy(() => import("./pages/SharedComparison"));
+const SleepStyleQuiz = lazy(() => import("./pages/SleepStyleQuiz"));
+const SleepStyleProfile = lazy(() => import("./pages/SleepStyleProfile"));
 
 const App = () => {
   const [queryClient] = useState(
@@ -68,6 +70,22 @@ const App = () => {
               element={
                 <Suspense fallback={<div className="container mx-auto px-4 py-8"><ProductGridSkeleton count={2} /></div>}>
                   <SharedComparison />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/sleepstyle"
+              element={
+                <Suspense fallback={<div className="container mx-auto px-4 py-8"><ProductGridSkeleton count={1} /></div>}>
+                  <SleepStyleQuiz />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/sleepstyle/:id"
+              element={
+                <Suspense fallback={<div className="container mx-auto px-4 py-8"><ProductGridSkeleton count={1} /></div>}>
+                  <SleepStyleProfile />
                 </Suspense>
               }
             />

@@ -5,7 +5,8 @@ import { CartDrawer } from "@/components/CartDrawer";
 import { ReferralButton } from "@/components/ReferralButton";
 import { ShopByBrand } from "@/components/ShopByBrand";
 import { FloatingReferralWidget } from "@/components/FloatingReferralWidget";
-import { PromoBar } from "@/components/PromoBar";
+import { SmartPromoBar } from "@/components/SmartPromoBar";
+import { FloatingSleepStyleWidget } from "@/components/FloatingSleepStyleWidget";
 import { TrustBar } from "@/components/TrustBar";
 import { ReferralShareCard } from "@/components/ReferralShareCard";
 import { MattressBuyingGuide } from "@/components/MattressBuyingGuide";
@@ -104,7 +105,7 @@ const Index = () => {
       />
 
       {/* Promo Bar */}
-      <PromoBar />
+      <SmartPromoBar />
 
       {/* Header */}
       <header className="border-b sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -228,6 +229,11 @@ const Index = () => {
                   </Link>
                 </li>
                 <li>
+                  <Link to="/sleepstyle" className="text-muted-foreground hover:text-primary transition-colors">
+                    Sleep Style Quiz 💕
+                  </Link>
+                </li>
+                <li>
                   <a href="#faq" className="text-muted-foreground hover:text-primary transition-colors">
                     Mattress Buying Guide
                   </a>
@@ -258,6 +264,7 @@ const Index = () => {
 
       {/* Floating Referral Widget */}
       <FloatingReferralWidget />
+      <FloatingSleepStyleWidget />
     </div>
   );
 };
