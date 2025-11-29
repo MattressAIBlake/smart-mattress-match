@@ -311,8 +311,8 @@ export const MattressAIChat = () => {
 
       {/* Initial Centered Greeting + Visual Position Selector */}
       {messages.length === 1 && messages[0].role === "assistant" && (
-        <div className="text-center mb-12 px-4 max-w-4xl mx-auto animate-fade-in">
-          <p className="text-lg md:text-xl text-foreground/80 leading-relaxed font-medium mb-8">
+        <div className="text-center mb-8 px-4 max-w-4xl mx-auto animate-fade-in">
+          <p className="text-base md:text-lg text-foreground/80 leading-relaxed font-medium mb-6">
             {messages[0].content}
           </p>
           {showPositionSelector && (
