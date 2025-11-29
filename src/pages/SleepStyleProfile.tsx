@@ -80,12 +80,16 @@ export default function SleepStyleProfile() {
     );
   }
 
+  const shareUrl = `${window.location.origin}/sleepstyle/${id}`;
+
   return (
     <>
       <SEOHead
-        title={`${personality.name} - Sleep Style | Mattress Wizard`}
-        description={`${personality.tagline} - ${personality.description}`}
+        title={`${personality.name} ${personality.emoji} - Sleep Style | Mattress Wizard`}
+        description={`I'm ${personality.name}! ${personality.tagline} Find out your sleep style and discover your perfect mattress match.`}
         ogImage={`${window.location.origin}/og-sleep-style.png`}
+        ogType="profile"
+        ogUrl={shareUrl}
       />
       <div className="min-h-screen bg-background py-12 px-4">
         <div className="container mx-auto max-w-4xl">
