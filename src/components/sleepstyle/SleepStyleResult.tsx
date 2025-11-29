@@ -5,7 +5,9 @@ import { Share2, Download, Link2, Heart, MessageCircle, Smartphone } from "lucid
 import { SleepPersonality } from "@/lib/sleepStyleTypes";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { ShareableCard } from "./ShareableCard";
+import { createRoot } from "react-dom/client";
 
 interface SleepStyleResultProps {
   personality: SleepPersonality;
@@ -54,20 +56,45 @@ export const SleepStyleResult = ({ personality, onShare, shareUrl }: SleepStyleR
   };
 
   const handleDownloadImage = async (format: 'square' | 'story' = 'square') => {
-    if (!resultRef.current) return;
-
     try {
-      const canvas = await html2canvas(resultRef.current, {
-        backgroundColor: '#000000',
-        scale: 2,
-        width: format === 'story' ? 1080 : 1080,
+      // Create a temporary container
+      const container = document.createElement('div');
+      container.style.position = 'absolute';
+      container.style.left = '-9999px';
+      container.style.top = '-9999px';
+      document.body.appendChild(container);
+
+      // Render the ShareableCard
+      const root = createRoot(container);
+      root.render(
+        <ShareableCard 
+          personality={personality} 
+          format={format}
+          quizUrl={shareUrl || 'mattresswizard.com/sleepstyle'}
+        />
+      );
+
+      // Wait for images to load
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Capture the image
+      const canvas = await html2canvas(container.firstChild as HTMLElement, {
+        backgroundColor: null,
+        scale: 1,
+        width: 1080,
         height: format === 'story' ? 1920 : 1080,
+        logging: false,
       });
-      
+
+      // Download the image
       const link = document.createElement('a');
       link.download = `sleep-style-${personality.id}-${format}.png`;
-      link.href = canvas.toDataURL();
+      link.href = canvas.toDataURL('image/png');
       link.click();
+
+      // Cleanup
+      root.unmount();
+      document.body.removeChild(container);
 
       toast({
         title: "Image downloaded!",
