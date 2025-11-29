@@ -24,51 +24,56 @@ type Message = { role: "user" | "assistant"; content: string };
 
 // Convert markdown links, bold text, product recommendations, quick replies, comparisons, and firmness visuals to React elements
 const renderMessageContent = (content: string, onQuickReply?: (option: string) => void, isLoading?: boolean) => {
-  const lines = content.split('\n');
-  const elements: React.ReactNode[] = [];
+  // First, extract all special formats (even if inline) and clean the content
+  let cleanedContent = content;
   const productRecommendations: any[] = [];
   let quickReplyOptions: string[] = [];
   let comparisonHandles: string[] = [];
   let firmnessRange: [number, number] | null = null;
   let socialProofs: Array<{ type: 'popular' | 'rated' | 'trending'; text: string }> = [];
 
+  // Extract COMPARISON (can be inline or on separate line)
+  const comparisonMatch = cleanedContent.match(/COMPARISON:([^\s\n]+)/);
+  if (comparisonMatch) {
+    const handlesStr = comparisonMatch[1].trim();
+    comparisonHandles = handlesStr.split('|').map(h => h.trim());
+    cleanedContent = cleanedContent.replace(/COMPARISON:[^\s\n]+\s*/g, '').trim();
+  }
+
+  // Extract FIRMNESS_VISUAL (can be inline or on separate line)
+  const firmnessMatch = cleanedContent.match(/FIRMNESS_VISUAL:(\d+-\d+)/);
+  if (firmnessMatch) {
+    const rangeStr = firmnessMatch[1];
+    const [min, max] = rangeStr.split('-').map(n => parseInt(n.trim()));
+    if (!isNaN(min) && !isNaN(max)) {
+      firmnessRange = [min, max];
+    }
+    cleanedContent = cleanedContent.replace(/FIRMNESS_VISUAL:\d+-\d+\s*/g, '').trim();
+  }
+
+  // Extract SOCIAL_PROOF (can be inline or on separate line)
+  const socialProofRegex = /SOCIAL_PROOF:(popular|rated|trending)\|([^\n]+)/g;
+  let socialMatch;
+  while ((socialMatch = socialProofRegex.exec(cleanedContent)) !== null) {
+    const [fullMatch, type, text] = socialMatch;
+    socialProofs.push({ type: type as any, text: text.trim() });
+    cleanedContent = cleanedContent.replace(fullMatch, '').trim();
+  }
+
+  // Extract QUICK_REPLIES
+  const quickReplyMatch = cleanedContent.match(/QUICK_REPLIES:([^\n]+)/);
+  if (quickReplyMatch) {
+    const optionsStr = quickReplyMatch[1].trim();
+    quickReplyOptions = optionsStr.split('|').map(opt => opt.trim());
+    cleanedContent = cleanedContent.replace(/QUICK_REPLIES:[^\n]+\s*/g, '').trim();
+  }
+
+  // Now split the cleaned content into lines
+  const lines = cleanedContent.split('\n');
+  const elements: React.ReactNode[] = [];
+
   lines.forEach((line, lineIdx) => {
-    // Trim whitespace and check for special formats
     const trimmedLine = line.trim();
-    
-    // Check for comparison format: COMPARISON:handle1|handle2
-    if (trimmedLine.startsWith('COMPARISON:')) {
-      const handlesStr = trimmedLine.replace('COMPARISON:', '').trim();
-      comparisonHandles = handlesStr.split('|').map(h => h.trim());
-      return; // Skip this line in text rendering
-    }
-    
-    // Check for firmness visual format: FIRMNESS_VISUAL:4-6
-    if (trimmedLine.startsWith('FIRMNESS_VISUAL:')) {
-      const rangeStr = trimmedLine.replace('FIRMNESS_VISUAL:', '').trim();
-      const [min, max] = rangeStr.split('-').map(n => parseInt(n.trim()));
-      if (!isNaN(min) && !isNaN(max)) {
-        firmnessRange = [min, max];
-      }
-      return; // Skip this line in text rendering
-    }
-    
-    // Check for social proof format: SOCIAL_PROOF:type|text
-    if (trimmedLine.startsWith('SOCIAL_PROOF:')) {
-      const proofStr = trimmedLine.replace('SOCIAL_PROOF:', '').trim();
-      const [type, text] = proofStr.split('|');
-      if (type && text && ['popular', 'rated', 'trending'].includes(type)) {
-        socialProofs.push({ type: type as any, text: text.trim() });
-      }
-      return; // Skip this line in text rendering
-    }
-    
-    // Check for quick reply format: QUICK_REPLIES:option1|option2|option3
-    if (trimmedLine.startsWith('QUICK_REPLIES:')) {
-      const optionsStr = trimmedLine.replace('QUICK_REPLIES:', '').trim();
-      quickReplyOptions = optionsStr.split('|').map(opt => opt.trim());
-      return; // Skip this line in text rendering
-    }
     
     if (trimmedLine.startsWith('PRODUCT_RECOMMENDATION:')) {
       // Parse: handle?params|reason|features|price|matchPercentage
