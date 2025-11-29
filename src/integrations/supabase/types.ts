@@ -140,6 +140,30 @@ export type Database = {
         }
         Relationships: []
       }
+      sleep_style_profiles: {
+        Row: {
+          answers: Json
+          created_at: string
+          id: string
+          personality_type: string
+          share_count: number
+        }
+        Insert: {
+          answers: Json
+          created_at?: string
+          id?: string
+          personality_type: string
+          share_count?: number
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          id?: string
+          personality_type?: string
+          share_count?: number
+        }
+        Relationships: []
+      }
       user_profiles: {
         Row: {
           created_at: string | null
@@ -186,6 +210,10 @@ export type Database = {
     }
     Functions: {
       increment_share_count: {
+        Args: { profile_id: string }
+        Returns: undefined
+      }
+      increment_sleep_style_share_count: {
         Args: { profile_id: string }
         Returns: undefined
       }
