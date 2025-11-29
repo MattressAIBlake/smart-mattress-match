@@ -109,16 +109,17 @@ export const ProductRecommendationCard = ({
     }
   };
 
-  // Show loading skeleton while product is fetching
+  // Show loading skeleton while product is fetching - consistent height
   if (isLoading) {
     return (
-      <Card className="p-4 border-2 animate-pulse">
-        <div className="flex gap-4">
+      <Card className="p-4 border-2 relative min-h-[140px]">
+        <div className="flex gap-4 animate-pulse">
           <div className="w-20 h-20 bg-muted rounded-lg flex-shrink-0" />
           <div className="flex-1 space-y-2">
             <div className="h-4 bg-muted rounded w-3/4" />
             <div className="h-3 bg-muted rounded w-full" />
             <div className="h-3 bg-muted rounded w-5/6" />
+            <div className="h-8 bg-muted rounded w-24 mt-4" />
           </div>
         </div>
       </Card>
@@ -138,7 +139,7 @@ export const ProductRecommendationCard = ({
   }
 
   return (
-    <Card className="p-4 hover:shadow-lg transition-shadow border-2 relative">
+    <Card className="p-4 hover:shadow-lg transition-shadow border-2 relative min-h-[140px]">
       {/* Match Badge */}
       {matchScore && (
         <div className="absolute -top-2 -right-2 z-10">
