@@ -14,19 +14,54 @@ import { ProductRecommendationCard } from "./ProductRecommendationCard";
 import { QuickReplyChips } from "./QuickReplyChips";
 import { SleepPositionSelector } from "./SleepPositionSelector";
 import { ProgressIndicator } from "./ProgressIndicator";
+import { ComparisonTable } from "./ComparisonTable";
+import { FirmnessScale } from "./FirmnessScale";
+import { VoiceInput } from "./VoiceInput";
+import { OnboardingTooltip } from "./OnboardingTooltip";
+import { SocialProofBadge } from "./SocialProofBadge";
 
 type Message = { role: "user" | "assistant"; content: string };
 
-// Convert markdown links, bold text, product recommendations, and quick replies to React elements
+// Convert markdown links, bold text, product recommendations, quick replies, comparisons, and firmness visuals to React elements
 const renderMessageContent = (content: string, onQuickReply?: (option: string) => void, isLoading?: boolean) => {
   const lines = content.split('\n');
   const elements: React.ReactNode[] = [];
   const productRecommendations: any[] = [];
   let quickReplyOptions: string[] = [];
+  let comparisonHandles: string[] = [];
+  let firmnessRange: [number, number] | null = null;
+  let socialProofs: Array<{ type: 'popular' | 'rated' | 'trending'; text: string }> = [];
 
   lines.forEach((line, lineIdx) => {
-    // Trim whitespace and check for product recommendation format
+    // Trim whitespace and check for special formats
     const trimmedLine = line.trim();
+    
+    // Check for comparison format: COMPARISON:handle1|handle2
+    if (trimmedLine.startsWith('COMPARISON:')) {
+      const handlesStr = trimmedLine.replace('COMPARISON:', '').trim();
+      comparisonHandles = handlesStr.split('|').map(h => h.trim());
+      return; // Skip this line in text rendering
+    }
+    
+    // Check for firmness visual format: FIRMNESS_VISUAL:4-6
+    if (trimmedLine.startsWith('FIRMNESS_VISUAL:')) {
+      const rangeStr = trimmedLine.replace('FIRMNESS_VISUAL:', '').trim();
+      const [min, max] = rangeStr.split('-').map(n => parseInt(n.trim()));
+      if (!isNaN(min) && !isNaN(max)) {
+        firmnessRange = [min, max];
+      }
+      return; // Skip this line in text rendering
+    }
+    
+    // Check for social proof format: SOCIAL_PROOF:type|text
+    if (trimmedLine.startsWith('SOCIAL_PROOF:')) {
+      const proofStr = trimmedLine.replace('SOCIAL_PROOF:', '').trim();
+      const [type, text] = proofStr.split('|');
+      if (type && text && ['popular', 'rated', 'trending'].includes(type)) {
+        socialProofs.push({ type: type as any, text: text.trim() });
+      }
+      return; // Skip this line in text rendering
+    }
     
     // Check for quick reply format: QUICK_REPLIES:option1|option2|option3
     if (trimmedLine.startsWith('QUICK_REPLIES:')) {
@@ -100,6 +135,35 @@ const renderMessageContent = (content: string, onQuickReply?: (option: string) =
       <div className="mt-4 space-y-3" key="product-recommendations">
         {productRecommendations.map((rec, i) => (
           <ProductRecommendationCard key={`rec-${i}`} {...rec} />
+        ))}
+      </div>
+    );
+  }
+
+  // Add comparison table if handles provided
+  if (comparisonHandles.length > 0) {
+    elements.push(
+      <div className="mt-4" key="comparison-table">
+        <ComparisonTable productHandles={comparisonHandles} />
+      </div>
+    );
+  }
+
+  // Add firmness scale if range provided
+  if (firmnessRange) {
+    elements.push(
+      <div key="firmness-scale">
+        <FirmnessScale recommendedRange={firmnessRange} />
+      </div>
+    );
+  }
+
+  // Add social proof badges if any
+  if (socialProofs.length > 0) {
+    elements.push(
+      <div className="flex flex-wrap gap-2 mt-3" key="social-proofs">
+        {socialProofs.map((proof, i) => (
+          <SocialProofBadge key={i} type={proof.type} text={proof.text} />
         ))}
       </div>
     );
@@ -286,6 +350,9 @@ export const MattressAIChat = () => {
 
   return (
     <div className="w-full flex flex-col">
+      {/* Onboarding Tooltip */}
+      <OnboardingTooltip />
+      
       {/* Header Badge */}
       <div className="flex justify-center mb-6">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/20">
@@ -380,6 +447,7 @@ export const MattressAIChat = () => {
           )}
           
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <VoiceInput onTranscript={(text) => sendMessage(text)} disabled={isLoading} />
             <Input
               ref={inputRef}
               value={input}
