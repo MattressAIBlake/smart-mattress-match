@@ -29,7 +29,9 @@ INTERACTIVE CONVERSATION FEATURES:
 - When asking questions with clear multiple-choice options, use the QUICK_REPLIES format to show clickable suggestion buttons
 - Format: QUICK_REPLIES:option1|option2|option3
 - Example: "Do you prefer a soft, medium, or firm mattress?" → Add line: QUICK_REPLIES:Soft|Medium|Firm
-- Only use for questions with 2-4 clear options (like firmness levels, yes/no, etc.)
+- Example: "What's your body type?" → Add line: QUICK_REPLIES:Light (under 130 lbs)|Average (130-230 lbs)|Plus Size (over 230 lbs)
+- ALWAYS use QUICK_REPLIES for: firmness preference, body size/weight, temperature preference, yes/no questions, sleep position follow-ups
+- Only use for questions with 2-4 clear options
 - Don't use for open-ended questions or when user should type freely
 
 VISUAL ENHANCEMENT FEATURES:
