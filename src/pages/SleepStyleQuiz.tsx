@@ -5,6 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { SleepStyleQuestion } from "@/components/sleepstyle/SleepStyleQuestion";
 import { SleepStyleResult } from "@/components/sleepstyle/SleepStyleResult";
+import { ShareCelebration } from "@/components/sleepstyle/ShareCelebration";
 import { 
   SLEEP_STYLE_QUESTIONS, 
   calculateSleepPersonality,
@@ -18,6 +19,7 @@ export default function SleepStyleQuiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isComplete, setIsComplete] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
   const [shareUrl, setShareUrl] = useState<string>();
   const { toast } = useToast();
 
@@ -55,7 +57,7 @@ export default function SleepStyleQuiz() {
 
       const url = `${window.location.origin}/sleepstyle/${data.id}`;
       setShareUrl(url);
-      setIsComplete(true);
+      setShowCelebration(true);
     } catch (error) {
       console.error('Error saving profile:', error);
       toast({
@@ -65,6 +67,11 @@ export default function SleepStyleQuiz() {
       });
       setIsComplete(true);
     }
+  };
+
+  const handleCloseCelebration = () => {
+    setShowCelebration(false);
+    setIsComplete(true);
   };
 
   const handleBack = () => {
@@ -97,7 +104,7 @@ export default function SleepStyleQuiz() {
     }
   };
 
-  const personalityType = isComplete ? calculateSleepPersonality(answers) : null;
+  const personalityType = (isComplete || showCelebration) ? calculateSleepPersonality(answers) : null;
   const personality = personalityType ? SLEEP_PERSONALITIES[personalityType] : null;
 
   if (isComplete && personality) {
@@ -135,6 +142,17 @@ export default function SleepStyleQuiz() {
         title="Sleep Style Quiz - Dating Ice Breaker | Mattress Wizard"
         description="Discover your sleep style personality! Perfect ice breaker for dating apps. Are you a Cuddle Monster or a Starfish? Take our fun 30-second quiz!"
       />
+      
+      {/* Share Celebration Modal */}
+      {showCelebration && personality && shareUrl && (
+        <ShareCelebration
+          isOpen={showCelebration}
+          onClose={handleCloseCelebration}
+          personality={personality}
+          shareUrl={shareUrl}
+        />
+      )}
+
       <div className="min-h-screen bg-background py-12 px-4">
         <div className="container mx-auto max-w-4xl">
           {/* Header */}
