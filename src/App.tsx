@@ -13,6 +13,7 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const BrandPage = lazy(() => import("./pages/BrandPage"));
 const Auth = lazy(() => import("./pages/Auth"));
+const SharedComparison = lazy(() => import("./pages/SharedComparison"));
 
 const App = () => {
   const [queryClient] = useState(
@@ -59,6 +60,14 @@ const App = () => {
               element={
                 <Suspense fallback={<div className="container mx-auto px-4 py-8"><ProductGridSkeleton count={1} /></div>}>
                   <Auth />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/compare/:id"
+              element={
+                <Suspense fallback={<div className="container mx-auto px-4 py-8"><ProductGridSkeleton count={2} /></div>}>
+                  <SharedComparison />
                 </Suspense>
               }
             />

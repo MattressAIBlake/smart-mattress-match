@@ -7,6 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { TypingIndicator } from "./TypingIndicator";
 import { PostRecommendationActions } from "./PostRecommendationActions";
 import { RecommendationShareCard } from "./RecommendationShareCard";
+import { EnhancedComparisonCard } from "./EnhancedComparisonCard";
+import { PartnerShareDialog } from "./PartnerShareDialog";
 import { analyzeChatForProfile, saveSleepProfile, SleepProfile } from "@/lib/profileGenerator";
 import { SALE_CONFIG } from "@/config/sale";
 import { Badge } from "@/components/ui/badge";
@@ -205,6 +207,8 @@ export const MattressAIChat = () => {
   const [streamBuffer, setStreamBuffer] = useState("");
   const [showActions, setShowActions] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [partnerShareOpen, setPartnerShareOpen] = useState(false);
+  const [comparisonData, setComparisonData] = useState<any>(null);
   const [profile, setProfile] = useState<SleepProfile | null>(null);
   const [showPositionSelector, setShowPositionSelector] = useState(true);
   const [conversationStep, setConversationStep] = useState(0);
@@ -215,6 +219,20 @@ export const MattressAIChat = () => {
   const scrollToBottom = () => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   };
+  
+  // Detect comparisons in messages and enable partner share
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage?.role === 'assistant' && lastMessage.content.includes('COMPARISON:')) {
+      // Enable comparison data for partner sharing
+      const profileData = analyzeChatForProfile(messages);
+      setComparisonData({
+        products: [], // Will be populated when user clicks share
+        profileSummary: `${profileData.sleepPosition} • ${profileData.firmness} Feel • ${profileData.temperaturePreference}`,
+        aiVerdict: 'Both are excellent choices based on your sleep needs.',
+      });
+    }
+  }, [messages]);
 
   useEffect(() => {
     scrollToBottom();
@@ -338,6 +356,14 @@ export const MattressAIChat = () => {
     setShareOpen(true);
   };
 
+  const handlePartnerShare = () => {
+    if (!comparisonData) {
+      toast.error("Please generate a comparison first");
+      return;
+    }
+    setPartnerShareOpen(true);
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -433,6 +459,7 @@ export const MattressAIChat = () => {
           {showActions && (
           <PostRecommendationActions 
             onShare={handleShare}
+            onCompare={comparisonData ? handlePartnerShare : undefined}
           />
           )}
         </div>
@@ -505,6 +532,15 @@ export const MattressAIChat = () => {
           open={shareOpen}
           onOpenChange={setShareOpen}
           profile={profile}
+        />
+      )}
+      
+      {/* Partner Share Dialog */}
+      {comparisonData && (
+        <PartnerShareDialog
+          open={partnerShareOpen}
+          onOpenChange={setPartnerShareOpen}
+          comparisonData={comparisonData}
         />
       )}
     </div>
