@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Share2, Download, Copy, Heart } from "lucide-react";
+import { Share2, Download, Link2, Heart, MessageCircle, Smartphone } from "lucide-react";
 import { SleepPersonality } from "@/lib/sleepStyleTypes";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
@@ -17,33 +17,61 @@ export const SleepStyleResult = ({ personality, onShare, shareUrl }: SleepStyleR
   const { toast } = useToast();
   const resultRef = useRef<HTMLDivElement>(null);
 
+  const shareText = `I'm "${personality.name}" ${personality.emoji} - "${personality.tagline}"\n\nAre we sleep compatible? Take the quiz 😉\n\n${shareUrl || 'mattresswizard.com/sleepstyle'}`;
+
   const handleCopyLink = () => {
     if (shareUrl) {
       navigator.clipboard.writeText(shareUrl);
       toast({
         title: "Link copied!",
-        description: "Share your Sleep Style on dating apps 💕",
+        description: "Share your sleep style with your matches 😉",
       });
     }
   };
 
-  const handleDownloadImage = async () => {
+  const handleWhatsAppShare = () => {
+    const url = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+    window.open(url, '_blank');
+  };
+
+  const handleSMSShare = () => {
+    const url = `sms:?body=${encodeURIComponent(shareText)}`;
+    window.location.href = url;
+  };
+
+  const handleNativeShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${personality.name} ${personality.emoji}`,
+          text: shareText,
+          url: shareUrl,
+        });
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    }
+  };
+
+  const handleDownloadImage = async (format: 'square' | 'story' = 'square') => {
     if (!resultRef.current) return;
 
     try {
       const canvas = await html2canvas(resultRef.current, {
         backgroundColor: '#000000',
         scale: 2,
+        width: format === 'story' ? 1080 : 1080,
+        height: format === 'story' ? 1920 : 1080,
       });
       
       const link = document.createElement('a');
-      link.download = `my-sleep-style-${personality.id}.png`;
+      link.download = `sleep-style-${personality.id}-${format}.png`;
       link.href = canvas.toDataURL();
       link.click();
 
       toast({
         title: "Image downloaded!",
-        description: "Share it on your dating profile 📱",
+        description: format === 'story' ? "Perfect for Instagram Stories! 📱" : "Share it on your dating apps 📱",
       });
     } catch (error) {
       console.error('Error generating image:', error);
@@ -147,34 +175,44 @@ export const SleepStyleResult = ({ personality, onShare, shareUrl }: SleepStyleR
       </div>
 
       {/* Action Buttons */}
-      <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={handleDownloadImage}
-        >
-          <Download className="h-4 w-4 mr-2" />
-          Download Image
-        </Button>
+      <div className="mt-6 space-y-3">
+        <div className="flex flex-wrap gap-3">
+          <Button onClick={() => handleDownloadImage('square')} variant="outline" className="flex-1">
+            <Download className="mr-2 h-4 w-4" />
+            Square (Instagram)
+          </Button>
+          <Button onClick={() => handleDownloadImage('story')} variant="outline" className="flex-1">
+            <Download className="mr-2 h-4 w-4" />
+            Story (1080x1920)
+          </Button>
+        </div>
+        
+        <div className="flex flex-wrap gap-3">
+          <Button onClick={handleWhatsAppShare} variant="outline" className="flex-1">
+            <MessageCircle className="mr-2 h-4 w-4" />
+            WhatsApp
+          </Button>
+          <Button onClick={handleSMSShare} variant="outline" className="flex-1">
+            <Smartphone className="mr-2 h-4 w-4" />
+            Text
+          </Button>
+          {shareUrl && (
+            <Button onClick={handleCopyLink} variant="outline" className="flex-1">
+              <Link2 className="mr-2 h-4 w-4" />
+              Copy Link
+            </Button>
+          )}
+        </div>
 
-        {shareUrl && (
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={handleCopyLink}
+        {navigator.share && (
+          <Button 
+            onClick={handleNativeShare} 
+            className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600"
           >
-            <Copy className="h-4 w-4 mr-2" />
-            Copy Link
+            <Share2 className="mr-2 h-4 w-4" />
+            Share More Ways
           </Button>
         )}
-
-        <Button
-          className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600"
-          onClick={onShare}
-        >
-          <Share2 className="h-4 w-4 mr-2" />
-          Share
-        </Button>
       </div>
 
       {/* Fun CTA */}

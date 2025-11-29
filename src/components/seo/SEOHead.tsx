@@ -6,6 +6,7 @@ interface SEOHeadProps {
   canonical?: string;
   ogImage?: string;
   ogType?: string;
+  ogUrl?: string;
 }
 
 export const SEOHead = ({
@@ -14,6 +15,7 @@ export const SEOHead = ({
   canonical,
   ogImage = "/favicon.png",
   ogType = "website",
+  ogUrl,
 }: SEOHeadProps) => {
   return (
     <Helmet>
@@ -25,6 +27,7 @@ export const SEOHead = ({
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:type" content={ogType} />
+      {ogUrl && <meta property="og:url" content={ogUrl} />}
       {ogImage && <meta property="og:image" content={ogImage} />}
       
       {/* Twitter Card */}
