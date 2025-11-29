@@ -130,9 +130,17 @@ export const ProductRecommendationCard = ({
   if (error || !product) {
     console.error('Failed to load product:', { handle, error });
     return (
-      <Card className="p-4 border-2 border-destructive/50">
-        <div className="text-sm text-destructive">
-          Unable to load product details. Please try again later.
+      <Card className="p-4 border-2 border-destructive/50 bg-destructive/5">
+        <div className="flex items-start gap-3">
+          <div className="text-destructive">⚠️</div>
+          <div className="flex-1">
+            <div className="text-sm font-semibold text-destructive mb-1">
+              Product Not Found
+            </div>
+            <div className="text-xs text-muted-foreground">
+              The product "{handle}" could not be loaded. This may be a temporary issue or the product may no longer be available.
+            </div>
+          </div>
         </div>
       </Card>
     );
