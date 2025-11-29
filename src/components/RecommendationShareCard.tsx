@@ -3,7 +3,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Download, Share2, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Download, Share2, X, Mail, Link as LinkIcon, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import html2canvas from "html2canvas";
 import { SleepProfile as SleepProfileType } from "@/lib/profileGenerator";
@@ -16,6 +17,9 @@ interface RecommendationShareCardProps {
 
 export const RecommendationShareCard = ({ open, onOpenChange, profile }: RecommendationShareCardProps) => {
   const [isCapturing, setIsCapturing] = useState(false);
+  const [showEmailInput, setShowEmailInput] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isCopied, setIsCopied] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   
   const handleCapture = async () => {
@@ -58,6 +62,29 @@ export const RecommendationShareCard = ({ open, onOpenChange, profile }: Recomme
     };
     
     window.open(urls[platform], '_blank', 'width=600,height=400');
+  };
+
+  const handleCopyLink = () => {
+    const linkText = `${shareText} ${window.location.origin}`;
+    navigator.clipboard.writeText(linkText);
+    setIsCopied(true);
+    toast.success("Link copied to clipboard!");
+    setTimeout(() => setIsCopied(false), 2000);
+  };
+
+  const handleEmailResults = () => {
+    if (!email || !email.includes('@')) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+    
+    const subject = encodeURIComponent("My Perfect Mattress Recommendation");
+    const body = encodeURIComponent(`Hi!\n\nI just got my personalized mattress recommendation:\n\nSleep Position: ${profile.sleepPosition}\nFirmness: ${profile.firmness}\nTemperature: ${profile.temperaturePreference}\n\nFind your perfect mattress at ${window.location.origin}\n\nBest regards`);
+    
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    toast.success("Opening email client...");
+    setShowEmailInput(false);
+    setEmail("");
   };
   
   return (
@@ -157,15 +184,60 @@ export const RecommendationShareCard = ({ open, onOpenChange, profile }: Recomme
         
         {/* Action Buttons */}
         <div className="space-y-3 pt-2">
-          <Button
-            variant="default"
-            className="w-full"
-            onClick={handleCapture}
-            disabled={isCapturing}
-          >
-            <Download className="h-4 w-4 mr-2" />
-            {isCapturing ? "Capturing..." : "Download & Share"}
-          </Button>
+          <div className="grid grid-cols-3 gap-2">
+            <Button
+              variant="outline"
+              onClick={handleCapture}
+              disabled={isCapturing}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Download
+            </Button>
+            
+            <Button
+              variant="outline"
+              onClick={() => setShowEmailInput(!showEmailInput)}
+            >
+              <Mail className="h-4 w-4 mr-2" />
+              Email
+            </Button>
+            
+            <Button
+              variant="outline"
+              onClick={handleCopyLink}
+            >
+              {isCopied ? (
+                <Check className="h-4 w-4 mr-2" />
+              ) : (
+                <Copy className="h-4 w-4 mr-2" />
+              )}
+              {isCopied ? "Copied!" : "Copy Link"}
+            </Button>
+          </div>
+
+          {showEmailInput && (
+            <div className="flex gap-2">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyPress={(e) => e.key === "Enter" && handleEmailResults()}
+              />
+              <Button onClick={handleEmailResults}>
+                Send
+              </Button>
+            </div>
+          )}
+          
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">Share on social</span>
+            </div>
+          </div>
           
           <div className="grid grid-cols-3 gap-2">
             <Button variant="outline" onClick={() => handleShare('twitter')} className="w-full">
