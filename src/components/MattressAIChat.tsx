@@ -10,29 +10,40 @@ import { RecommendationShareCard } from "./RecommendationShareCard";
 import { analyzeChatForProfile, saveSleepProfile, SleepProfile } from "@/lib/profileGenerator";
 import { SALE_CONFIG } from "@/config/sale";
 import { Badge } from "@/components/ui/badge";
+import { ProductRecommendationCard } from "./ProductRecommendationCard";
+import { QuickReplyChips } from "./QuickReplyChips";
+import { SleepPositionSelector } from "./SleepPositionSelector";
+import { ProgressIndicator } from "./ProgressIndicator";
 
 type Message = { role: "user" | "assistant"; content: string };
 
-import { ProductRecommendationCard } from "./ProductRecommendationCard";
-
-// Convert markdown links, bold text, and product recommendations to React elements
-const renderMessageContent = (content: string) => {
+// Convert markdown links, bold text, product recommendations, and quick replies to React elements
+const renderMessageContent = (content: string, onQuickReply?: (option: string) => void, isLoading?: boolean) => {
   const lines = content.split('\n');
   const elements: React.ReactNode[] = [];
   const productRecommendations: any[] = [];
+  let quickReplyOptions: string[] = [];
 
   lines.forEach((line, lineIdx) => {
     // Trim whitespace and check for product recommendation format
     const trimmedLine = line.trim();
+    
+    // Check for quick reply format: QUICK_REPLIES:option1|option2|option3
+    if (trimmedLine.startsWith('QUICK_REPLIES:')) {
+      const optionsStr = trimmedLine.replace('QUICK_REPLIES:', '').trim();
+      quickReplyOptions = optionsStr.split('|').map(opt => opt.trim());
+      return; // Skip this line in text rendering
+    }
+    
     if (trimmedLine.startsWith('PRODUCT_RECOMMENDATION:')) {
-      // Parse: handle?params|reason|features|price
+      // Parse: handle?params|reason|features|price|matchPercentage
       const dataStr = trimmedLine.replace('PRODUCT_RECOMMENDATION:', '').trim();
       const parts = dataStr.split('|');
       
       console.log('Parsing product recommendation:', { line: trimmedLine, parts, partsLength: parts.length });
       
       if (parts.length >= 4) {
-        const [handleWithParams, reason, featuresStr, priceStr] = parts;
+        const [handleWithParams, reason, featuresStr, priceStr, matchPercentageStr] = parts;
         const [handle, queryParams] = handleWithParams.split('?');
         
         productRecommendations.push({
@@ -41,6 +52,7 @@ const renderMessageContent = (content: string) => {
           reason: reason.trim(),
           features: featuresStr.split(',').map(f => f.trim()),
           price: priceStr.trim().replace('$', ''),
+          matchPercentage: matchPercentageStr?.trim(),
         });
       } else {
         console.warn('Invalid product recommendation format:', { line: trimmedLine, parts });
@@ -93,8 +105,22 @@ const renderMessageContent = (content: string) => {
     );
   }
 
+  // Add quick reply chips if available
+  if (quickReplyOptions.length > 0 && onQuickReply) {
+    elements.push(
+      <QuickReplyChips
+        key="quick-replies"
+        options={quickReplyOptions}
+        onSelect={onQuickReply}
+        disabled={isLoading}
+      />
+    );
+  }
+
   return elements.length > 0 ? elements : content;
 };
+
+const conversationSteps = ["Sleep Position", "Preferences", "Your Match"];
 
 export const MattressAIChat = () => {
   const navigate = useNavigate();
@@ -111,6 +137,8 @@ export const MattressAIChat = () => {
   const [showActions, setShowActions] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [profile, setProfile] = useState<SleepProfile | null>(null);
+  const [showPositionSelector, setShowPositionSelector] = useState(true);
+  const [conversationStep, setConversationStep] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
@@ -142,14 +170,21 @@ export const MattressAIChat = () => {
     return () => clearTimeout(timer);
   }, [streamBuffer]);
 
-  const sendMessage = async () => {
-    if (!input.trim() || isLoading) return;
+  const sendMessage = async (messageText?: string) => {
+    const textToSend = messageText || input.trim();
+    if (!textToSend || isLoading) return;
 
-    const userMessage: Message = { role: "user", content: input };
+    setShowPositionSelector(false);
+    const userMessage: Message = { role: "user", content: textToSend };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
     setIsTyping(true);
+    
+    // Update conversation step
+    if (conversationStep < conversationSteps.length - 1) {
+      setConversationStep((prev) => prev + 1);
+    }
 
     let assistantContent = "";
     const updateAssistant = (chunk: string) => {
@@ -212,6 +247,7 @@ export const MattressAIChat = () => {
       // Check if recommendation was made
       if (assistantContent.includes('PRODUCT_RECOMMENDATION:')) {
         setShowActions(true);
+        setConversationStep(conversationSteps.length - 1);
       }
 
       setIsLoading(false);
@@ -240,6 +276,14 @@ export const MattressAIChat = () => {
     }
   };
 
+  const handleQuickReply = (option: string) => {
+    sendMessage(option);
+  };
+
+  const handlePositionSelect = (position: string) => {
+    sendMessage(position);
+  };
+
   return (
     <div className="w-full flex flex-col">
       {/* Header Badge */}
@@ -260,12 +304,20 @@ export const MattressAIChat = () => {
         </p>
       </div>
 
-      {/* Initial Centered Greeting - Only show if it's the first message */}
+      {/* Progress Indicator - Show after first message */}
+      {messages.length > 1 && (
+        <ProgressIndicator currentStep={conversationStep} steps={conversationSteps} />
+      )}
+
+      {/* Initial Centered Greeting + Visual Position Selector */}
       {messages.length === 1 && messages[0].role === "assistant" && (
         <div className="text-center mb-12 px-4 max-w-4xl mx-auto animate-fade-in">
-          <p className="text-lg md:text-xl text-foreground/80 leading-relaxed font-medium">
+          <p className="text-lg md:text-xl text-foreground/80 leading-relaxed font-medium mb-8">
             {messages[0].content}
           </p>
+          {showPositionSelector && (
+            <SleepPositionSelector onSelect={handlePositionSelect} disabled={isLoading} />
+          )}
         </div>
       )}
 
@@ -287,7 +339,11 @@ export const MattressAIChat = () => {
                   }`}
                 >
                   <div className="text-base leading-relaxed" style={{ WebkitFontSmoothing: 'antialiased' }}>
-                    {renderMessageContent(message.content)}
+                    {renderMessageContent(
+                      message.content,
+                      message.role === "assistant" && idx === messages.length - 2 ? handleQuickReply : undefined,
+                      isLoading
+                    )}
                   </div>
                 </div>
               </div>
@@ -334,7 +390,7 @@ export const MattressAIChat = () => {
               className="flex-1 border-0 bg-transparent text-base sm:text-lg placeholder:text-muted-foreground/60 focus-visible:ring-0 focus-visible:ring-offset-0 h-12 sm:h-14"
             />
             <Button 
-              onClick={sendMessage} 
+              onClick={() => sendMessage()} 
               disabled={isLoading || !input.trim()} 
               size="lg"
               className="h-12 sm:h-14 px-4 sm:px-8 rounded-full transition-transform hover:scale-105 shadow-lg font-semibold whitespace-nowrap"

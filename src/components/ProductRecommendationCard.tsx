@@ -21,6 +21,7 @@ interface ProductRecommendationCardProps {
   reason: string;
   features: string[];
   price: string;
+  matchPercentage?: string;
 }
 
 export const ProductRecommendationCard = ({
@@ -29,7 +30,9 @@ export const ProductRecommendationCard = ({
   reason,
   features,
   price,
+  matchPercentage,
 }: ProductRecommendationCardProps) => {
+  const matchScore = matchPercentage ? parseInt(matchPercentage) : null;
   const [showSizeDialog, setShowSizeDialog] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string>("");
   
@@ -135,7 +138,22 @@ export const ProductRecommendationCard = ({
   }
 
   return (
-    <Card className="p-4 hover:shadow-lg transition-shadow border-2">
+    <Card className="p-4 hover:shadow-lg transition-shadow border-2 relative">
+      {/* Match Badge */}
+      {matchScore && (
+        <div className="absolute -top-2 -right-2 z-10">
+          <div className={`px-3 py-1 rounded-full text-xs font-bold shadow-lg ${
+            matchScore >= 95 
+              ? 'bg-green-500 text-white' 
+              : matchScore >= 90 
+              ? 'bg-blue-500 text-white'
+              : 'bg-primary text-primary-foreground'
+          }`}>
+            ★ {matchScore}% MATCH
+          </div>
+        </div>
+      )}
+      
       <div className="flex gap-4">
         {/* Product Image */}
         <div className="w-20 h-20 bg-muted rounded-lg overflow-hidden flex-shrink-0">
