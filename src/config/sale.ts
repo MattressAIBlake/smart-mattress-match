@@ -3,11 +3,11 @@
 
 export const SALE_CONFIG = {
   SALE_ACTIVE: true,
-  SALE_NAME: "BLACK FRIDAY SALE",
-  DISCOUNT_PERCENT: 25,
-  SALE_END_DATE: "2025-12-02", // Cyber Monday
-  BADGE_TEXT: "25% OFF",
-  PROMO_MESSAGE: "Black Friday Event: Save 25% + Free Shipping on All Premium Mattresses"
+  SALE_NAME: "AI SHOPPER DISCOUNT",
+  DISCOUNT_PERCENT: 20,
+  SALE_END_DATE: "2025-12-31",
+  BADGE_TEXT: "20% OFF",
+  PROMO_MESSAGE: "AI Shopper Discount: Save 20% + Free Shipping on All Premium Mattresses"
 } as const;
 
 export function calculateSalePrice(originalPrice: string | number): string {
