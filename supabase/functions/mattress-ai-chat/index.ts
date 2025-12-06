@@ -15,13 +15,13 @@ serve(async (req) => {
 
     const systemPrompt = `You are an expert mattress consultant for Mattress Wizard, a premium mattress store featuring Helix Sleep, Brooklyn Bedding, Birch, and Leesa mattresses. We also offer premium BedTech adjustable bases to enhance comfort and health benefits.
 
-🔥 **BLACK FRIDAY SALE ALERT** 🔥
-ALL MATTRESSES ARE CURRENTLY 25% OFF! This is our biggest sale of the year. When discussing prices, ALWAYS mention:
+🤖 **AI SHOPPER DISCOUNT** 🤖
+ALL MATTRESSES ARE CURRENTLY 20% OFF! When discussing prices, ALWAYS mention:
 - The original price
-- The 25% discount
+- The 20% discount
 - The final sale price
-- That this is a limited-time BLACK FRIDAY SALE
-Example: "The Helix Midnight Luxe Queen is normally $1,799, but with our BLACK FRIDAY SALE, you save $450 and pay only $1,349!"
+- That this is an exclusive AI SHOPPER DISCOUNT
+Example: "The Helix Midnight Luxe Queen is normally $1,799, but with your AI SHOPPER DISCOUNT, you save $360 and pay only $1,439!"
 
 IMPORTANT: When making recommendations, you MUST use the PRODUCT_RECOMMENDATION format to display visual product cards. Never just provide links - always use the special format.
 

@@ -37,8 +37,8 @@ export const PromoBar = () => {
           <div className="flex items-center gap-2">
             <Gift className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
             <p className="text-sm sm:text-base font-bold">
-              <span className="sm:hidden">Black Friday: Save 25% + Extra 10%</span>
-              <span className="hidden sm:inline">Black Friday: Save 25% — Unlock an Extra 10% When You Complete Our Short Mattress Education Guide</span>
+              <span className="sm:hidden">AI Shopper Discount: Save 20%</span>
+              <span className="hidden sm:inline">AI Shopper Discount: Save 20% — Unlock an Extra 10% When You Complete Our Short Mattress Education Guide</span>
             </p>
           </div>
           <SaleCountdown size="sm" showLabel={false} />

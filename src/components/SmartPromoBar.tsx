@@ -39,11 +39,11 @@ export const SmartPromoBar = () => {
       <div className="bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 text-white py-3 px-4 relative animate-in slide-in-from-top duration-500">
         <div className="container mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
               <Gift className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
               <p className="text-sm sm:text-base font-bold">
-                <span className="sm:hidden">Black Friday: Save 25% + Extra 10%</span>
-                <span className="hidden sm:inline">Black Friday: Save 25% — Unlock an Extra 10% When You Complete Our Short Mattress Education Guide</span>
+                <span className="sm:hidden">AI Shopper Discount: Save 20%</span>
+                <span className="hidden sm:inline">AI Shopper Discount: Save 20% — Unlock an Extra 10% When You Complete Our Short Mattress Education Guide</span>
               </p>
             </div>
             <SaleCountdown size="sm" showLabel={false} />
