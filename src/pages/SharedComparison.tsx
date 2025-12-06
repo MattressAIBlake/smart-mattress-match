@@ -50,8 +50,8 @@ export default function SharedComparison() {
 
         setComparison(data as any);
 
-        // Increment view count
-        await supabase.rpc("increment_share_count", { profile_id: id });
+        // Increment view count using RPC function
+        await supabase.rpc("increment_comparison_views", { comparison_id: id });
       } catch (error) {
         console.error("Error fetching comparison:", error);
         toast.error("Failed to load comparison");

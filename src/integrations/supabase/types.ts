@@ -209,6 +209,10 @@ export type Database = {
       }
     }
     Functions: {
+      increment_comparison_views: {
+        Args: { comparison_id: string }
+        Returns: undefined
+      }
       increment_share_count: {
         Args: { profile_id: string }
         Returns: undefined

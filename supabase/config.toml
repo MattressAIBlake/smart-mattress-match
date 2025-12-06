@@ -8,3 +8,9 @@ verify_jwt = false
 
 [functions.shopify-webhook]
 verify_jwt = false
+
+[functions.send-comparison-email]
+verify_jwt = false
+
+[functions.create-referral-discount]
+verify_jwt = false
