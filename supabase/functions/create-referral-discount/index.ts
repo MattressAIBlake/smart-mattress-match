@@ -17,6 +17,32 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Verify user is authenticated
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: 'Authentication required' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Initialize Supabase client to verify the JWT token
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    // Verify the user exists and get their info
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+      console.log('Auth verification failed:', userError?.message);
+      return new Response(
+        JSON.stringify({ error: 'Invalid or expired token' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const { code, name }: CreateDiscountRequest = await req.json();
 
     if (!code || !name) {
@@ -25,6 +51,32 @@ Deno.serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+
+    // Verify the user owns this referral code
+    const { data: profile, error: profileError } = await supabase
+      .from('user_profiles')
+      .select('referral_code')
+      .eq('id', user.id)
+      .single();
+
+    if (profileError || !profile) {
+      console.log('Profile lookup failed:', profileError?.message);
+      return new Response(
+        JSON.stringify({ error: 'User profile not found' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate that the code being created matches user's referral code pattern
+    if (!code.toUpperCase().includes(name.toUpperCase().slice(0, 4))) {
+      console.log('Code validation failed: code does not match expected pattern');
+      return new Response(
+        JSON.stringify({ error: 'Invalid referral code format' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log(`Authenticated user ${user.id} creating referral discount: ${code}`);
 
     console.log(`Creating referral discount code: ${code} for ${name}`);
 

@@ -40,15 +40,19 @@ export default function SharedComparison() {
       if (!id) return;
 
       try {
+        // Use secure RPC function to fetch comparison by ID
+        // This prevents bulk querying of all comparisons and protects PII
         const { data, error } = await supabase
-          .from("mattress_comparisons")
-          .select("*")
-          .eq("id", id)
-          .single();
+          .rpc("get_comparison_by_id", { comparison_uuid: id });
 
         if (error) throw error;
 
-        setComparison(data as any);
+        if (!data || data.length === 0) {
+          setLoading(false);
+          return;
+        }
+
+        setComparison(data[0] as any);
 
         // Increment view count using RPC function
         await supabase.rpc("increment_comparison_views", { comparison_id: id });

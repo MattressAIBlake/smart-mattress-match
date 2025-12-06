@@ -209,6 +209,18 @@ export type Database = {
       }
     }
     Functions: {
+      get_comparison_by_id: {
+        Args: { comparison_uuid: string }
+        Returns: {
+          compared_products: Json
+          created_at: string
+          id: string
+          personal_note: string
+          profile_data: Json
+          sender_name: string
+          views_count: number
+        }[]
+      }
       increment_comparison_views: {
         Args: { comparison_id: string }
         Returns: undefined
