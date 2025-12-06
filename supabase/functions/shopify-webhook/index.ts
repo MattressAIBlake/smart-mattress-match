@@ -67,9 +67,7 @@ serve(async (req) => {
 
     // Parse the order data
     const order = JSON.parse(body);
-    console.log('Order ID:', order.id);
-    console.log('Order name:', order.name);
-    console.log('Customer email:', order.email);
+    console.log('Processing order received');
 
     // Only process paid orders
     if (topic !== 'orders/paid' && order.financial_status !== 'paid') {
@@ -107,7 +105,7 @@ serve(async (req) => {
       }
     }
 
-    console.log('Referral code found:', referralCode);
+    console.log('Referral code:', referralCode ? 'found' : 'not found');
 
     // If no referral code, nothing to process
     if (!referralCode) {
@@ -151,7 +149,7 @@ serve(async (req) => {
       );
     }
 
-    console.log('Referral processed successfully:', processData);
+    console.log('Referral processed successfully');
 
     return new Response(
       JSON.stringify({ 
@@ -168,10 +166,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('Webhook processing error:', error);
     return new Response(
-      JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined
-      }),
+      JSON.stringify({ error: 'Internal server error' }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
