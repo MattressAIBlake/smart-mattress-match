@@ -1,7 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY');
-const SITE_URL = Deno.env.get('VITE_SUPABASE_URL')?.replace('.supabase.co', '.lovable.app') || 'https://yoursite.lovable.app';
+const SITE_URL = 'https://hfdyxsxlwfogtwgjahkg.lovable.app';
+const FROM_EMAIL = Deno.env.get('SENDGRID_FROM_EMAIL') || 'noreply@mattresswizard.com';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -135,9 +136,9 @@ serve(async (req) => {
         </a>
       </div>
       
-      <p style="color: #666; font-size: 14px; text-align: center;">
-        💡 Black Friday Sale: Limited Time Offers Available
-      </p>
+        <p style="color: #666; font-size: 14px; text-align: center;">
+          💡 AI Shopper Discount: Save 20% on All Premium Mattresses
+        </p>
     </div>
     
     <div class="footer">
@@ -166,8 +167,8 @@ serve(async (req) => {
           },
         ],
         from: {
-          email: 'recommendations@yourdomain.com',
-          name: 'Mattress Finder',
+          email: FROM_EMAIL,
+          name: 'Mattress Wizard',
         },
         content: [
           {
