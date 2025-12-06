@@ -221,6 +221,17 @@ export type Database = {
           views_count: number
         }[]
       }
+      get_viral_metrics: {
+        Args: never
+        Returns: {
+          avg_referrals_per_user: number
+          profiles_shared: number
+          total_profiles_created: number
+          total_referrals_completed: number
+          total_referrers: number
+          total_shares: number
+        }[]
+      }
       increment_comparison_views: {
         Args: { comparison_id: string }
         Returns: undefined

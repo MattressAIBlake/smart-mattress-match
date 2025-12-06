@@ -1,13 +1,38 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY');
 const SITE_URL = 'https://hfdyxsxlwfogtwgjahkg.lovable.app';
 const FROM_EMAIL = Deno.env.get('SENDGRID_FROM_EMAIL') || 'noreply@mattresswizard.com';
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Simple in-memory rate limiting (resets on function cold start)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_MAX = 5; // Max emails per window
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour window
+
+function isRateLimited(identifier: string): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(identifier);
+  
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(identifier, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+  
+  if (record.count >= RATE_LIMIT_MAX) {
+    return true;
+  }
+  
+  record.count++;
+  return false;
+}
 
 interface EmailRequest {
   recipientEmail: string;
@@ -31,6 +56,23 @@ serve(async (req) => {
   }
 
   try {
+    // Get client IP for rate limiting
+    const clientIP = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
+                     req.headers.get('cf-connecting-ip') || 
+                     'unknown';
+    
+    // Check rate limit
+    if (isRateLimited(clientIP)) {
+      console.log('Rate limit exceeded for IP:', clientIP);
+      return new Response(
+        JSON.stringify({ error: 'Rate limit exceeded. Please try again later.' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 429,
+        }
+      );
+    }
+
     const {
       recipientEmail,
       senderName,
@@ -40,6 +82,45 @@ serve(async (req) => {
       profileSummary,
       includePricing,
     }: EmailRequest = await req.json();
+
+    // Validate required fields
+    if (!recipientEmail || !senderName || !comparisonId || !products || products.length < 2) {
+      return new Response(
+        JSON.stringify({ error: 'Missing required fields' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400,
+        }
+      );
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(recipientEmail)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid email format' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400,
+        }
+      );
+    }
+
+    // Validate comparisonId exists in database before sending email
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    const { data: comparison, error: dbError } = await supabase
+      .rpc('get_comparison_by_id', { comparison_uuid: comparisonId });
+
+    if (dbError || !comparison || comparison.length === 0) {
+      console.log('Invalid comparison ID:', comparisonId);
+      return new Response(
+        JSON.stringify({ error: 'Invalid comparison ID' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400,
+        }
+      );
+    }
 
     const comparisonUrl = `${SITE_URL}/compare/${comparisonId}`;
     const topProduct = products[0];
@@ -182,10 +263,10 @@ serve(async (req) => {
     if (!sendGridResponse.ok) {
       const error = await sendGridResponse.text();
       console.error('SendGrid error:', error);
-      throw new Error(`SendGrid API error: ${sendGridResponse.status}`);
+      throw new Error('Failed to send email');
     }
 
-    console.log('Email sent successfully to:', recipientEmail);
+    console.log('Email sent successfully');
 
     return new Response(
       JSON.stringify({ success: true, comparisonUrl }),
@@ -196,9 +277,8 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error('Error in send-comparison-email:', error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return new Response(
-      JSON.stringify({ error: errorMessage }),
+      JSON.stringify({ error: 'Failed to send email' }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500,
