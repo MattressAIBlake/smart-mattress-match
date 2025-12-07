@@ -368,30 +368,61 @@ PRODUCT_RECOMMENDATION:brooklyn-aurora-luxe?size=Queen|Best cooling hybrid for h
 
 PRODUCT_RECOMMENDATION:leesa-legend?size=Queen|Luxury dual-coil for side sleepers|Zoned micro-coils,Merino wool,Pressure relief|1687|93
 
-Available products in store (ALL have Size options):
+Available products in store (EXACT HANDLES - USE THESE EXACTLY):
+
+HELIX MATTRESSES:
 - helix-midnight-luxe (Has Size, Cooling, Support options - use params)
-- helix-sunset (Has Size option only)
-- helix-moonlight (Has Size option only)
-- helix-dusk (Has Size option only)
-- helix-twilight (Has Size option only)
-- helix-dawn (Has Size option only)
-- helix-plus (Has Size option only)
-- brooklyn-aurora-luxe (Has Size option only)
-- brooklyn-signature (Has Size option only)
-- brooklyn-plank-firm-luxe (Has Size option only)
-- brooklyn-sedona-elite (Has Size option only)
-- brooklyn-titan-plus-luxe (Has Size option only)
-- brooklyn-essential (Has Size option only)
-- leesa-legend (Has Size option only)
-- leesa-original (Has Size option only)
-- leesa-studio (Has Size option only)
-- birch-natural (Has Size option only)
-- bt6500-adjustable-bed-base (BedTech base, has Size option)
-- bt3000-adjustable-bed-base (BedTech base, has Size option)
-- bt2500-adjustable-bed-base (BedTech base, has Size option)
-- bt2000-adjustable-bed-base (BedTech base, has Size option)
-- bthu-adjustable-bed-base (BedTech base, has Size option)
-- btx5-adjustable-bed-base (BedTech base, has Size option)
+- helix-midnight (Standard Helix Midnight, Size only)
+- helix-midnight-elite (Elite version, Size only)
+- helix-sunset (Size only)
+- helix-sunset-elite (Size only)
+- helix-sunset-luxe (Size, Cooling, Support options)
+- helix-moonlight (Size only)
+- helix-moonlight-elite (Size only)
+- helix-moonlight-luxe (Size, Cooling, Support options)
+- helix-dusk (Size only)
+- helix-dusk-elite (Size only)
+- helix-dusk-luxe (Size, Cooling, Support options)
+- helix-twilight (Size only)
+- helix-twilight-elite (Size only)
+- helix-dawn (Size only)
+- helix-dawn-elite (Size only)
+- helix-dawn-luxe (Size, Cooling, Support options)
+- helix-plus (Standard Plus for 230+ lbs, Size only)
+- helix-plus-elite (Elite Plus for 230+ lbs, Size only)
+- helix-plus-luxe (Luxe Plus for 230+ lbs, Size, Cooling, Support options)
+- spartan-mattress (Athletic recovery mattress, Size only)
+
+BROOKLYN BEDDING MATTRESSES:
+- brooklyn-aurora-luxe (Premier cooling hybrid, Size only)
+- brooklyn-signature-hybrid (Best value hybrid, Size only)
+- brooklyn-bedding-plank-firm-luxe (Ultra-firm flippable, Size only)
+- brooklyn-bedding-sedona-elite (Ultra-luxury hybrid, Size only)
+- brooklyn-bedding-titan-plus-luxe (For 250-500+ lbs, Size only)
+- brooklyn-bedding-essential (Budget-friendly option, Size only)
+- plank-firm-mattress (Standard Plank, Size only)
+- titan-mattress (Standard Titan, Size only)
+
+BIRCH MATTRESSES (Organic):
+- birch-natural-mattress (Organic latex hybrid, Size only)
+- birch-luxe-natural (Upgraded with Euro-top, Size only)
+
+LEESA MATTRESSES:
+- leesa-legend (Luxury dual-coil hybrid, Size only)
+- leesa-original (10" all-foam classic, Size only)
+- leesa-studio (Affordable hybrid, Size only)
+- leesa-hybrid (Hybrid mattress, Size only)
+- leesa-reserve-hybrid (Premium hybrid, Size only)
+
+BEDTECH ADJUSTABLE BASES:
+- bt6500-adjustable-bed-base (Ultimate luxury base, Size only)
+- bt3000-adjustable-bed-base (Premium features base, Size only)
+- bt2500-adjustable-bed-base (Advanced comfort base, Size only)
+- bt2000-adjustable-bed-base (Essential plus base, Size only)
+- bthu-adjustable-bed-base (Essential foundation base, Size only)
+- btx5-adjustable-bed-base (Smart value base, Size only)
+
+CRITICAL: Always use the EXACT handle as listed above. Do NOT modify handles or use abbreviated versions.
 
 ## RECOMMENDATION APPROACH
 
